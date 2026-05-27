@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { Check, ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, Building2, ArrowRight, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -14,130 +14,137 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.55, delay, ease },
 });
 
+/* ── Pricing tiers ─────────────────────────────────────────── */
 const plans = [
   {
     name: 'Starter',
     arabicName: 'المبتدئ',
-    price: { monthly: 299, annual: 249 },
-    description: 'Perfect for individual hosts with 1–5 properties.',
-    arabicDescription: 'مثالي للمضيفين الأفراد ذوي 1–5 عقارات.',
+    range_en: '1 – 7 properties',
+    range_ar: '1 – 7 عقارات',
+    pricePerUnit: 54,           // SAR per property per month
+    exampleProps: 5,
+    description_en: 'Perfect for independent hosts getting started with short-term rentals.',
+    description_ar: 'مثالي للمضيفين المستقلين الذين يبدأون في تأجير العقارات قصيرة الأمد.',
     color: '#7C69E8',
-    accentClass: 'from-violet-500/10 to-violet-500/5',
-    borderClass: 'border-violet-100',
-    features: [
-      'Up to 5 properties',
-      'Channel Manager (3 OTAs)',
+    popular: false,
+    cta_en: 'Start Free Trial',
+    cta_ar: 'ابدأ التجربة المجانية',
+    features_en: [
+      'Up to 7 properties',
+      'Channel Manager (all OTAs)',
       'Automated guest messaging',
       'Availability calendar',
       'Basic analytics',
-      'Email support',
+      'Guest verification (Absher)',
+      'Email & chat support',
       'Mobile app access',
     ],
-    arabicFeatures: [
-      'حتى 5 عقارات',
-      'مدير القنوات (3 OTAs)',
+    features_ar: [
+      'حتى 7 عقارات',
+      'مدير القنوات (جميع OTAs)',
       'مراسلة ضيوف مؤتمتة',
       'تقويم التوفر',
       'تحليلات أساسية',
-      'دعم عبر البريد الإلكتروني',
+      'التحقق من الضيوف (أبشر)',
+      'دعم عبر البريد والدردشة',
       'الوصول عبر التطبيق المحمول',
     ],
-    cta: 'Start Free Trial',
-    arabicCta: 'ابدأ التجربة المجانية',
-    popular: false,
   },
   {
     name: 'Growth',
     arabicName: 'النمو',
-    price: { monthly: 799, annual: 649 },
-    description: 'For growing property managers with 6–50 units.',
-    arabicDescription: 'لمديري العقارات النامين ذوي 6–50 وحدة.',
+    range_en: '8 – 15 properties',
+    range_ar: '8 – 15 عقاراً',
+    pricePerUnit: 25,
+    exampleProps: 10,
+    description_en: 'For growing operators who need full automation and compliance tools.',
+    description_ar: 'للمشغّلين الناميين الذين يحتاجون إلى أتمتة كاملة وأدوات الامتثال.',
     color: '#25A4E8',
-    accentClass: 'from-blue-500/10 to-blue-500/5',
-    borderClass: 'border-blue-200',
-    features: [
-      'Up to 50 properties',
-      'Unlimited OTA channels',
-      'Guest verification (Absher, Ejar)',
+    popular: true,
+    cta_en: 'Start Free Trial',
+    cta_ar: 'ابدأ التجربة المجانية',
+    features_en: [
+      '8 to 15 properties',
+      'All Starter features',
       'Smart lock automation',
       'Revenue analytics & insights',
       'Owner portal',
-      'Payment collection',
+      'Payment collection (ANB)',
       'Housekeeping & maintenance',
       'Direct booking website',
       'ZATCA-compliant invoicing',
+      'Team task management',
       'Priority support',
     ],
-    arabicFeatures: [
-      'حتى 50 عقاراً',
-      'قنوات OTA غير محدودة',
-      'التحقق من الضيوف (أبشر، إيجار)',
+    features_ar: [
+      '8 إلى 15 عقاراً',
+      'جميع مميزات المبتدئ',
       'أتمتة القفل الذكي',
       'تحليلات الإيرادات والرؤى',
       'بوابة المالك',
-      'تحصيل المدفوعات',
+      'تحصيل المدفوعات (ANB)',
       'التنظيف والصيانة',
       'موقع الحجز المباشر',
       'فواتير متوافقة مع ZATCA',
+      'إدارة مهام الفريق',
       'دعم ذو أولوية',
     ],
-    cta: 'Start Free Trial',
-    arabicCta: 'ابدأ التجربة المجانية',
-    popular: true,
   },
   {
     name: 'Enterprise',
     arabicName: 'المؤسسات',
-    price: { monthly: null, annual: null },
-    description: 'For large property managers with 50+ units.',
-    arabicDescription: 'لمديري العقارات الكبار ذوي أكثر من 50 وحدة.',
+    range_en: '15+ properties',
+    range_ar: 'أكثر من 15 عقاراً',
+    pricePerUnit: null,
+    exampleProps: null,
+    description_en: 'Custom pricing for large portfolios. We tailor a plan to your exact needs.',
+    description_ar: 'أسعار مخصصة للمحافظ الكبيرة. نصمم خطة تناسب احتياجاتك تماماً.',
     color: '#0F172A',
-    accentClass: 'from-slate-500/10 to-slate-500/5',
-    borderClass: 'border-slate-200',
-    features: [
+    popular: false,
+    cta_en: 'Contact Sales',
+    cta_ar: 'تواصل مع المبيعات',
+    features_en: [
       'Unlimited properties',
       'All Growth features',
-      'Custom integrations',
       'Dedicated account manager',
+      'Custom integrations & API',
       'White-label owner portal',
       'Custom reporting',
-      'API access',
       'Multi-brand support',
+      'Ejar & Tawuniya integration',
       'SLA guarantee',
-      'Onboarding training',
+      'Onboarding & training',
     ],
-    arabicFeatures: [
+    features_ar: [
       'عقارات غير محدودة',
       'جميع مميزات النمو',
-      'تكاملات مخصصة',
       'مدير حساب مخصص',
+      'تكاملات مخصصة والوصول إلى API',
       'بوابة مالك ذات علامة بيضاء',
       'تقارير مخصصة',
-      'الوصول إلى API',
       'دعم متعدد العلامات التجارية',
-      'ضمان SLA',
-      'تدريب على التأهيل',
+      'تكامل إيجار وتعاونية',
+      'ضمان مستوى الخدمة SLA',
+      'تأهيل وتدريب',
     ],
-    cta: 'Contact Sales',
-    arabicCta: 'تواصل مع المبيعات',
-    popular: false,
   },
 ];
 
+/* ── FAQ ───────────────────────────────────────────────────── */
 const faqsEn = [
-  { q: 'Is there a free trial?', a: 'Yes. All plans include a 14-day free trial with no credit card required. You can start immediately and decide which plan works best for you.' },
-  { q: 'Can I upgrade or downgrade my plan?', a: 'Yes. You can upgrade or downgrade at any time. Upgrades take effect immediately; downgrades apply at the next billing cycle.' },
-  { q: 'How is billing calculated for multiple properties?', a: 'Your plan allows a set number of properties. If you need more, simply upgrade to a higher tier. We never charge per-booking fees.' },
-  { q: 'Do you offer contracts in Arabic?', a: 'Yes. All our service agreements and invoices are available in Arabic and English.' },
-  { q: 'Is ZATCA compliance included?', a: 'Yes. Growth and Enterprise plans include full ZATCA-compliant e-invoicing built into the platform. No additional setup required.' },
+  { q: 'How does per-property pricing work?', a: 'You pay a flat rate for each property you manage. Starter hosts (1–7 properties) pay 54 SAR per property per month. Growth operators (8–15 properties) pay 25 SAR per property per month. Add a new property anytime and it\'s billed at the rate for your tier.' },
+  { q: 'What happens if I cross a tier threshold?', a: 'Great news — your rate drops. If you start with 7 properties at 54 SAR each and add an 8th, your entire portfolio moves to the Growth tier at 25 SAR per property. You save more as you grow.' },
+  { q: 'Is there a free trial?', a: 'Yes. All plans include a 14-day free trial with no credit card required. You can start immediately and invite your whole team.' },
+  { q: 'Do you offer contracts in Arabic?', a: 'Yes. All service agreements, invoices, and in-app content are available in both Arabic and English.' },
+  { q: 'Is ZATCA e-invoicing included?', a: 'Yes. Growth and Enterprise plans include full ZATCA Phase 2 compliant e-invoicing built directly into the platform. No extra setup required.' },
 ];
 
 const faqsAr = [
-  { q: 'هل هناك فترة تجريبية مجانية؟', a: 'نعم. تتضمن جميع الخطط تجربة مجانية لمدة 14 يوماً بدون بطاقة ائتمان. يمكنك البدء فوراً وتحديد الخطة الأنسب لك.' },
-  { q: 'هل يمكنني الترقية أو التخفيض في خطتي؟', a: 'نعم. يمكنك الترقية أو التخفيض في أي وقت. تسري الترقيات فوراً؛ وتُطبَّق عمليات التخفيض في دورة الفوترة التالية.' },
-  { q: 'كيف يُحسَب الفواتير للعقارات المتعددة؟', a: 'تتيح خطتك عدداً محدداً من العقارات. إذا كنت بحاجة إلى المزيد، ما عليك سوى الترقية إلى مستوى أعلى. لا نفرض أبداً رسوماً لكل حجز.' },
-  { q: 'هل تقدمون العقود باللغة العربية؟', a: 'نعم. جميع اتفاقيات الخدمة والفواتير الخاصة بنا متاحة باللغتين العربية والإنجليزية.' },
-  { q: 'هل الامتثال لـ ZATCA مدرج؟', a: 'نعم. تتضمن خطتا النمو والمؤسسات الفوترة الإلكترونية المتوافقة مع ZATCA بشكل كامل داخل المنصة. لا يلزم أي إعداد إضافي.' },
+  { q: 'كيف يعمل التسعير بالعقار؟', a: 'تدفع سعراً ثابتاً لكل عقار تديره. أصحاب المبتدئين (1–7 عقارات) يدفعون 54 ريالاً لكل عقار شهرياً. مشغّلو النمو (8–15 عقاراً) يدفعون 25 ريالاً لكل عقار شهرياً. أضف عقاراً جديداً في أي وقت وسيُحتسب بسعر فئتك.' },
+  { q: 'ماذا يحدث إذا تجاوزت حد الفئة؟', a: 'أخبار رائعة — ينخفض سعرك. إذا بدأت بـ7 عقارات بـ54 ريالاً لكل منها وأضفت العقار الثامن، تنتقل محفظتك بأكملها إلى فئة النمو بسعر 25 ريالاً لكل عقار. كلما نمت وفّرت أكثر.' },
+  { q: 'هل هناك فترة تجريبية مجانية؟', a: 'نعم. تتضمن جميع الخطط تجربة مجانية لمدة 14 يوماً بدون بطاقة ائتمان. يمكنك البدء فوراً ودعوة فريقك بالكامل.' },
+  { q: 'هل تقدمون العقود باللغة العربية؟', a: 'نعم. جميع اتفاقيات الخدمة والفواتير ومحتوى التطبيق متاحة باللغتين العربية والإنجليزية.' },
+  { q: 'هل الفوترة الإلكترونية لـ ZATCA مدرجة؟', a: 'نعم. تتضمن خطتا النمو والمؤسسات الفوترة الإلكترونية المتوافقة مع المرحلة الثانية من ZATCA مباشرةً داخل المنصة. لا يلزم أي إعداد إضافي.' },
 ];
 
 function FAQItem({ q, a }: { q: string; a: string }) {
@@ -175,59 +182,68 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 export default function PricingPageClient() {
   const { t, isAr } = useLanguage();
-  const [annual, setAnnual] = useState(false);
-
   const faqs = isAr ? faqsAr : faqsEn;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero */}
+
+      {/* ── Hero ──────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#EFF8FF] via-white to-white py-20 md:py-28 text-center">
         <div className="absolute inset-0 dot-grid opacity-25" />
         <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[#25A4E8] opacity-[0.06] blur-3xl" />
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-[#7C69E8] opacity-[0.06] blur-3xl" />
 
         <div className="relative max-w-3xl mx-auto px-4 md:px-8">
-          <motion.h1 {...fadeUp(0)} className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0F172A] mb-5 leading-tight">
-            {isAr
-              ? <><span className="gradient-text">{`أسعار بسيطة`}</span>{` وشفافة`}</>
-              : <>Simple, Transparent{' '}<span className="gradient-text">Pricing</span></>}
-          </motion.h1>
-          <motion.p {...fadeUp(0.08)} className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-10">
-            {t.pricing.pageSubtitle}
-          </motion.p>
-
-          {/* Billing toggle */}
-          <motion.div {...fadeUp(0.14)} className="inline-flex items-center gap-4 bg-slate-100 rounded-2xl p-1.5">
-            <button
-              onClick={() => setAnnual(false)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${!annual ? 'bg-white shadow-sm text-[#0F172A]' : 'text-slate-500'}`}
-            >
-              {isAr ? 'شهري' : 'Monthly'}
-            </button>
-            <button
-              onClick={() => setAnnual(true)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${annual ? 'bg-white shadow-sm text-[#0F172A]' : 'text-slate-500'}`}
-            >
-              {isAr ? 'سنوي' : 'Annual'}
-              <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[11px] font-bold rounded-full">
-                {isAr ? 'وفر 20%' : 'Save 20%'}
-              </span>
-            </button>
+          <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 border border-blue-200 mb-5">
+            <Building2 size={12} />
+            {isAr ? 'تسعير شفاف بالعقار' : 'Per-property transparent pricing'}
           </motion.div>
+          <motion.h1 {...fadeUp(0.06)} className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0F172A] mb-5 leading-tight">
+            {isAr
+              ? <><span className="gradient-text">ادفع فقط</span> لما تديره</>
+              : <>Pay only for what<br /><span className="gradient-text">you manage</span></>}
+          </motion.h1>
+          <motion.p {...fadeUp(0.12)} className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            {isAr
+              ? 'سعر ثابت لكل عقار، شهرياً. لا رسوم حجز، لا مفاجآت. كلما كبرت محفظتك، انخفض سعرك.'
+              : 'A flat rate per property, per month. No per-booking fees, no surprises. Your rate drops as your portfolio grows.'}
+          </motion.p>
         </div>
       </section>
 
-      {/* Plans */}
+      {/* ── Tier explainer strip ──────────────────────────── */}
+      <section className="py-8 bg-white border-b border-slate-100">
+        <div className="max-w-4xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-0">
+            {[
+              { range: isAr ? '1 – 7 عقارات' : '1 – 7 props',   rate: isAr ? '54 ريال/عقار' : '54 SAR/prop', color: '#7C69E8' },
+              { range: isAr ? '8 – 15 عقاراً' : '8 – 15 props', rate: isAr ? '25 ريال/عقار' : '25 SAR/prop', color: '#25A4E8' },
+              { range: isAr ? '+15 عقاراً'   : '15+ props',      rate: isAr ? 'تواصل معنا'    : 'Contact us',  color: '#0F172A' },
+            ].map((tier, i) => (
+              <div key={i} className="flex items-center">
+                <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: tier.color }} />
+                  <span className="text-sm font-semibold text-slate-600">{tier.range}</span>
+                  <ArrowRight size={13} className="text-slate-300" />
+                  <span className="text-sm font-extrabold" style={{ color: tier.color }}>{tier.rate}</span>
+                </div>
+                {i < 2 && <ArrowRight size={16} className="text-slate-200 mx-2 shrink-0 hidden sm:block" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Plan cards ───────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-3 gap-6 items-start">
             {plans.map((plan, index) => {
-              const displayName     = isAr ? plan.arabicName : plan.name;
-              const displayDesc     = isAr ? plan.arabicDescription : plan.description;
-              const displayFeatures = isAr ? plan.arabicFeatures : plan.features;
-              const displayCta      = isAr ? plan.arabicCta : plan.cta;
-              const price = annual ? plan.price.annual : plan.price.monthly;
+              const displayName     = isAr ? plan.arabicName     : plan.name;
+              const displayRange    = isAr ? plan.range_ar       : plan.range_en;
+              const displayDesc     = isAr ? plan.description_ar : plan.description_en;
+              const displayFeatures = isAr ? plan.features_ar    : plan.features_en;
+              const displayCta      = isAr ? plan.cta_ar         : plan.cta_en;
 
               return (
                 <motion.div
@@ -236,69 +252,83 @@ export default function PricingPageClient() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1, ease }}
-                  className={`relative rounded-3xl p-8 border-2 ${plan.popular
-                    ? 'border-[#25A4E8] shadow-2xl shadow-blue-500/15 md:scale-105'
-                    : 'border-slate-100 shadow-sm'
+                  className={`relative rounded-3xl p-8 border-2 ${
+                    plan.popular
+                      ? 'border-[#25A4E8] shadow-2xl shadow-blue-500/15 md:scale-105'
+                      : 'border-slate-100 shadow-sm'
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
                       <span className="px-4 py-1.5 bg-[#25A4E8] text-white text-xs font-bold rounded-full shadow-lg">
-                        {t.pricing.mostPopular}
+                        {isAr ? 'الأكثر شيوعاً' : 'Most Popular'}
                       </span>
                     </div>
                   )}
 
+                  {/* Header */}
                   <div className="mb-6">
-                    <h2 className="text-xl font-bold text-[#0F172A] mb-1">{displayName}</h2>
-                    <p className="text-slate-500 text-sm mb-5">{displayDesc}</p>
+                    {/* Property range badge */}
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold mb-3 uppercase tracking-wide"
+                      style={{ backgroundColor: `${plan.color}14`, color: plan.color }}
+                    >
+                      <Building2 size={10} />
+                      {displayRange}
+                    </span>
 
-                    {price != null ? (
-                      <div>
-                        <div className="flex items-baseline gap-1">
-                          <AnimatePresence mode="wait">
-                            <motion.span
-                              key={price}
-                              initial={{ opacity: 0, y: -6 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: 6 }}
-                              transition={{ duration: 0.2 }}
-                              className="text-4xl font-bold"
-                              style={{ color: plan.color }}
-                            >
-                              {price}
-                            </motion.span>
-                          </AnimatePresence>
-                          <span className="text-slate-400 text-sm ml-1">
-                            SAR {t.pricing.perMonth}
+                    <h2 className="text-xl font-bold text-[#0F172A] mb-1">{displayName}</h2>
+                    <p className="text-slate-500 text-sm mb-5 leading-relaxed">{displayDesc}</p>
+
+                    {/* Price display */}
+                    {plan.pricePerUnit != null ? (
+                      <div className="bg-slate-50 rounded-2xl p-4">
+                        <div className="flex items-baseline gap-1.5 mb-1">
+                          <span className="text-4xl font-extrabold" style={{ color: plan.color }}>
+                            {plan.pricePerUnit}
                           </span>
+                          <div className="text-slate-400 text-sm leading-tight">
+                            <p className="font-semibold">{isAr ? 'ريال' : 'SAR'}</p>
+                            <p>{isAr ? 'لكل عقار / شهرياً' : 'per property / mo'}</p>
+                          </div>
                         </div>
-                        {annual && (
-                          <p className="text-xs text-green-600 font-medium mt-1">
-                            {isAr ? `وفر ${(plan.price.monthly! - price) * 12} ريال سنوياً` : `Save ${(plan.price.monthly! - price) * 12} SAR/year`}
+                        {plan.exampleProps != null && (
+                          <p className="text-[11px] text-slate-400 mt-2 border-t border-slate-200 pt-2">
+                            {isAr
+                              ? `مثال: ${plan.exampleProps} عقارات × ${plan.pricePerUnit} = ${plan.exampleProps * plan.pricePerUnit} ريال/شهر`
+                              : `e.g. ${plan.exampleProps} props × ${plan.pricePerUnit} = ${plan.exampleProps * plan.pricePerUnit} SAR/mo`}
                           </p>
                         )}
                       </div>
                     ) : (
-                      <div>
-                        <p className="text-3xl font-bold text-[#0F172A]">{t.pricing.custom}</p>
-                        <p className="text-xs text-slate-400 mt-1">{t.pricing.customDesc}</p>
+                      <div className="bg-slate-50 rounded-2xl p-4">
+                        <p className="text-2xl font-extrabold text-[#0F172A] mb-1">
+                          {isAr ? 'سعر مخصص' : 'Custom quote'}
+                        </p>
+                        <p className="text-[12px] text-slate-400 leading-snug">
+                          {isAr ? 'تسعير مُصمَّم لمحفظتك الكبيرة' : 'Tailored for your large portfolio'}
+                        </p>
                       </div>
                     )}
                   </div>
 
+                  {/* CTA */}
                   <Link
                     href={plan.name === 'Enterprise' ? '/contact' : '/demo'}
-                    className={`block w-full text-center py-3 rounded-xl font-semibold text-sm mb-8 transition-all ${
+                    className={`flex items-center justify-center gap-2 w-full text-center py-3 rounded-xl font-semibold text-sm mb-8 transition-all ${
                       plan.popular
                         ? 'bg-[#25A4E8] text-white hover:bg-[#1A8FD1] shadow-lg shadow-blue-500/25'
-                        : 'border-2 hover:bg-slate-50'
+                        : plan.name === 'Enterprise'
+                          ? 'bg-[#0F172A] text-white hover:bg-slate-800'
+                          : 'border-2 hover:bg-slate-50'
                     }`}
-                    style={!plan.popular ? { borderColor: plan.color, color: plan.color } : {}}
+                    style={!plan.popular && plan.name !== 'Enterprise' ? { borderColor: plan.color, color: plan.color } : {}}
                   >
+                    {plan.name === 'Enterprise' && <Phone size={14} />}
                     {displayCta}
                   </Link>
 
+                  {/* Feature list */}
                   <ul className="space-y-3">
                     {displayFeatures.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
@@ -319,15 +349,40 @@ export default function PricingPageClient() {
         </div>
       </section>
 
-      {/* Trust bar */}
-      <section className="py-10 bg-slate-50 border-y border-slate-100">
+      {/* ── How it scales callout ─────────────────────────── */}
+      <section className="py-10 bg-gradient-to-r from-blue-50 to-violet-50 border-y border-blue-100">
+        <div className="max-w-4xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-start">
+            <div className="w-12 h-12 rounded-2xl bg-[#25A4E8] flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/25">
+              <Building2 size={22} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-[#0F172A] mb-1">
+                {isAr ? 'ينخفض سعرك كلما نمت' : 'Your rate drops as you grow'}
+              </h3>
+              <p className="text-sm text-slate-600">
+                {isAr
+                  ? 'عند إضافة عقارك الثامن، تنتقل محفظتك بأكملها إلى سعر 25 ريالاً — لا حاجة لخطة منفصلة.'
+                  : 'When you add your 8th property, your entire portfolio moves to the 25 SAR rate automatically — no plan change needed.'}
+              </p>
+            </div>
+            <Link href="/demo"
+              className="shrink-0 flex items-center gap-2 px-5 py-2.5 bg-[#25A4E8] text-white font-bold text-sm rounded-xl hover:bg-[#1A8FD1] transition-colors shadow-lg shadow-blue-500/20">
+              {isAr ? 'احجز عرضاً' : 'Book a demo'} <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Trust bar ─────────────────────────────────────── */}
+      <section className="py-10 bg-white border-b border-slate-100">
         <div className="max-w-4xl mx-auto px-4 md:px-8">
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {[
-              { label: isAr ? 'تجربة مجانية 14 يوماً' : '14-day free trial', icon: '✅' },
-              { label: isAr ? 'بدون بطاقة ائتمان' : 'No credit card required', icon: '💳' },
-              { label: isAr ? 'إلغاء في أي وقت' : 'Cancel anytime', icon: '🔓' },
-              { label: isAr ? 'متوافق مع ZATCA' : 'ZATCA compliant', icon: '🇸🇦' },
+              { label: isAr ? 'تجربة مجانية 14 يوماً' : '14-day free trial',      icon: '✅' },
+              { label: isAr ? 'بدون بطاقة ائتمان'    : 'No credit card required', icon: '💳' },
+              { label: isAr ? 'إلغاء في أي وقت'      : 'Cancel anytime',          icon: '🔓' },
+              { label: isAr ? 'متوافق مع ZATCA'       : 'ZATCA compliant',         icon: '🇸🇦' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-2 text-sm text-slate-600">
                 <span>{item.icon}</span>
@@ -336,15 +391,14 @@ export default function PricingPageClient() {
             ))}
           </div>
           <p className="text-center text-slate-400 text-xs mt-6">
-            {t.pricing.sarNote}{' '}
             {isAr
-              ? <><Link href="/contact" className="text-[#25A4E8] font-semibold hover:underline">تواصل مع فريقنا</Link>.</>
-              : <><Link href="/contact" className="text-[#25A4E8] font-semibold hover:underline">Contact our team</Link> for a custom quote.</>}
+              ? <>جميع الأسعار بالريال السعودي (SAR)، تشمل ضريبة القيمة المضافة. للمحافظ الكبيرة جداً، <Link href="/contact" className="text-[#25A4E8] font-semibold hover:underline">تواصل مع فريقنا</Link>.</>
+              : <>All prices in Saudi Riyal (SAR), VAT inclusive. For very large portfolios, <Link href="/contact" className="text-[#25A4E8] font-semibold hover:underline">contact our team</Link> for a custom quote.</>}
           </p>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* ── FAQ ───────────────────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 md:px-8">
           <motion.div {...fadeUp()} className="text-center mb-12">
@@ -364,7 +418,7 @@ export default function PricingPageClient() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ───────────────────────────────────────────── */}
       <section className="py-20 relative overflow-hidden bg-gradient-to-br from-[#25A4E8] to-[#7C69E8]">
         <div className="absolute inset-0 dot-grid opacity-10" />
         <div className="relative max-w-4xl mx-auto px-4 md:px-8 text-center">
@@ -386,6 +440,7 @@ export default function PricingPageClient() {
           </motion.div>
         </div>
       </section>
+
     </div>
   );
 }

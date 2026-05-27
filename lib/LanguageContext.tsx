@@ -13,14 +13,14 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  lang: 'en',
+  lang: 'ar',
   setLang: () => {},
-  t: translations.en,
-  isAr: false,
+  t: translations.ar,
+  isAr: true,
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('en');
+  const [lang, setLangState] = useState<Lang>('ar');
 
   const setLang = (l: Lang) => {
     setLangState(l);
@@ -31,6 +31,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('stayhub-lang') as Lang | null;
+    // Default is Arabic; only override if user has an explicit saved preference
     if (saved === 'ar' || saved === 'en') setLangState(saved);
   }, []);
 
