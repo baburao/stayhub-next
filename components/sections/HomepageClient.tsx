@@ -15,22 +15,35 @@ import { useLanguage } from '@/lib/LanguageContext';
 const OTA_LOGOS = ['Airbnb', 'Booking.com', 'Agoda', 'Expedia', 'Google', 'Gathern', 'AJAAR'];
 
 const AUTOMATION_STEPS_EN = [
-  { icon: CalendarCheck, label: 'Booking Received',      color: '#25A4E8' },
-  { icon: MessageSquare, label: 'Guest Communication',   color: '#7C69E8' },
-  { icon: BadgeCheck,    label: 'ID Verification',       color: '#25A4E8' },
-  { icon: Banknote,      label: 'Payment Collected',     color: '#7C69E8' },
-  { icon: Lock,          label: 'Smart Lock Access',     color: '#25A4E8' },
-  { icon: Brush,         label: 'Housekeeping Assigned', color: '#7C69E8' },
-  { icon: Star,          label: 'Review Follow-up',      color: '#25A4E8' },
+  { num: '01', title: 'Booking received',    desc: 'Reservations flow into StayHub from every channel.',      color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
+  { num: '02', title: 'Guest messaging',     desc: 'WhatsApp and SMS are sent at key moments.',               color: '#14c7c4', bg: 'rgba(20,199,196,0.12)' },
+  { num: '03', title: 'Identity verified',   desc: 'Guests verify through Absher before check-in.',           color: '#1473f2', bg: 'rgba(20,115,242,0.12)' },
+  { num: '04', title: 'Payment collected',   desc: 'Paylinks and virtual cards secure the stay.',             color: '#4f33eb', bg: 'rgba(79,51,235,0.12)'  },
+  { num: '05', title: 'Access granted',      desc: 'Smart-lock access codes are created automatically.',      color: '#ff851c', bg: 'rgba(255,133,28,0.12)' },
+  { num: '06', title: 'Task created',        desc: 'Housekeeping starts after checkout.',                     color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
+  { num: '07', title: 'Review requested',    desc: 'Guests receive a follow-up to improve ratings.',          color: '#f04580', bg: 'rgba(240,69,128,0.12)' },
 ];
 const AUTOMATION_STEPS_AR = [
-  { icon: CalendarCheck, label: 'استلام الحجز',          color: '#25A4E8' },
-  { icon: MessageSquare, label: 'التواصل مع الضيف',      color: '#7C69E8' },
-  { icon: BadgeCheck,    label: 'التحقق من الهوية',      color: '#25A4E8' },
-  { icon: Banknote,      label: 'تحصيل الدفع',          color: '#7C69E8' },
-  { icon: Lock,          label: 'الوصول بالقفل الذكي',  color: '#25A4E8' },
-  { icon: Brush,         label: 'تكليف التنظيف',        color: '#7C69E8' },
-  { icon: Star,          label: 'متابعة التقييم',       color: '#25A4E8' },
+  { num: '01', title: 'استلام الحجز',        desc: 'تصل الحجوزات إلى StayHub من كل قناة.',                   color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
+  { num: '02', title: 'مراسلة الضيف',        desc: 'تُرسَل رسائل واتساب وSMS في اللحظات الحرجة.',            color: '#14c7c4', bg: 'rgba(20,199,196,0.12)' },
+  { num: '03', title: 'التحقق من الهوية',    desc: 'يتحقق الضيوف عبر أبشر قبل تسجيل الوصول.',               color: '#1473f2', bg: 'rgba(20,115,242,0.12)'  },
+  { num: '04', title: 'تحصيل الدفع',         desc: 'تربط روابط الدفع والبطاقات الافتراضية الإقامة.',          color: '#4f33eb', bg: 'rgba(79,51,235,0.12)'  },
+  { num: '05', title: 'منح الوصول',          desc: 'تُنشأ رموز الأقفال الذكية تلقائياً.',                    color: '#ff851c', bg: 'rgba(255,133,28,0.12)' },
+  { num: '06', title: 'إنشاء المهمة',        desc: 'يبدأ التنظيف بعد تسجيل المغادرة.',                      color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
+  { num: '07', title: 'طلب التقييم',         desc: 'يتلقى الضيوف متابعة لتحسين التقييمات.',                  color: '#f04580', bg: 'rgba(240,69,128,0.12)' },
+];
+
+const OUTCOMES_EN = [
+  { title: 'Save time',        desc: 'Reduce manual work by up to 80%' },
+  { title: 'Increase revenue', desc: 'More bookings and upsells' },
+  { title: 'Delight guests',   desc: 'Faster responses and smoother check-ins' },
+  { title: 'Stay compliant',   desc: 'Digital records for every reservation' },
+];
+const OUTCOMES_AR = [
+  { title: 'توفير الوقت',      desc: 'تقليل العمل اليدوي حتى 80%' },
+  { title: 'زيادة الإيرادات',  desc: 'المزيد من الحجوزات والبيع الإضافي' },
+  { title: 'إسعاد الضيوف',     desc: 'ردود أسرع وتسجيل وصول أكثر سلاسة' },
+  { title: 'البقاء ملتزماً',   desc: 'سجلات رقمية لكل حجز' },
 ];
 
 const FEATURES_EN = [
@@ -375,6 +388,7 @@ export default function HomepageClient() {
   const { t, isAr } = useLanguage();
   const features = isAr ? FEATURES_AR : FEATURES_EN;
   const automationSteps = isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN;
+  const outcomes = isAr ? OUTCOMES_AR : OUTCOMES_EN;
   const compliance = isAr ? COMPLIANCE_ITEMS_AR : COMPLIANCE_ITEMS_EN;
   const testimonials = isAr ? TESTIMONIALS_AR : TESTIMONIALS_EN;
   const faqs = isAr ? FAQS_AR : FAQS_EN;
@@ -547,47 +561,105 @@ export default function HomepageClient() {
       </section>
 
       {/* ── 4. AUTOMATION WORKFLOW ──────────────────────────── */}
-      <section className="py-24 bg-gradient-to-b from-[#EFF8FF] to-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
-          <motion.div {...fadeUp()} className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-widest rounded-full border border-blue-200 mb-5">
-              <Zap size={11} /> {isAr ? 'الأتمتة الكاملة' : 'Full Automation'}
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0F172A] mb-4">
-              {isAr ? 'رحلة الضيف بالكامل على الطيار الآلي' : 'The Entire Guest Journey on Autopilot'}
-            </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              {isAr
-                ? 'من لحظة الحجز إلى طلب التقييم — كل خطوة مؤتمتة ومتصلة.'
-                : 'From the moment a booking lands to the review request — every step automated and connected.'}
-            </p>
-          </motion.div>
+      <section className="py-20 md:py-24 overflow-hidden" style={{ background: 'linear-gradient(135deg, #121447 0%, #4733c7 100%)' }}>
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
 
-          {/* Steps — horizontal on desktop, vertical on mobile */}
-          <div className="relative">
-            <div className="hidden md:block absolute top-9 left-[calc(100%/14)] right-[calc(100%/14)] h-0.5 bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] opacity-20 z-0" />
-            <div className="grid grid-cols-2 md:grid-cols-7 gap-4 md:gap-2">
-              {automationSteps.map((step, i) => (
-                <motion.div key={i} {...fadeUp(i * 0.08)} className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-3 shadow-lg"
-                    style={{ background: `linear-gradient(135deg, ${step.color}22, ${step.color}44)`, border: `1.5px solid ${step.color}33` }}>
-                    <step.icon size={22} style={{ color: step.color }} />
-                  </div>
-                  {i < automationSteps.length - 1 && (
-                    <div className="hidden md:block absolute top-8 start-[calc(50%+32px)] end-0 h-0.5" style={{ background: `linear-gradient(to right, ${step.color}50, transparent)` }} />
-                  )}
-                  <span className="text-xs font-bold text-[#0F172A] leading-tight">{step.label}</span>
-                  <span className="w-5 h-5 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center text-[9px] font-bold text-slate-400 mt-2">{i + 1}</span>
-                </motion.div>
-              ))}
-            </div>
+          {/* ── Header row: headline + integration panel ── */}
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start mb-12">
+
+            {/* Left: label + headline + subtitle */}
+            <motion.div {...fadeUp(0)} className="flex-1">
+              <p className="text-[#14c7c4] text-xs font-extrabold uppercase tracking-widest mb-4">
+                {isAr ? 'تدفق الأتمتة' : 'AUTOMATION FLOW'}
+              </p>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-5 max-w-2xl">
+                {isAr
+                  ? 'من الحجز إلى تسجيل المغادرة، كل خطوة تسير من تلقاء نفسها.'
+                  : 'From booking to checkout, every step can run itself.'}
+              </h2>
+              <p className="text-[#d6e0ff] text-lg leading-relaxed max-w-xl">
+                {isAr
+                  ? 'يربط StayHub الرسائل والتحقق والمدفوعات والأقفال الذكية والتنظيف وطلبات التقييم في رحلة ضيف متواصلة.'
+                  : 'StayHub connects messages, verification, payments, smart locks, housekeeping, and review requests into one continuous guest journey.'}
+              </p>
+            </motion.div>
+
+            {/* Right: integration chip panel */}
+            <motion.div
+              {...fadeUp(0.12)}
+              className="shrink-0 w-full lg:w-[360px] bg-white/10 border border-white/18 rounded-xl p-6"
+            >
+              <p className="text-white font-bold text-lg mb-4">
+                {isAr ? 'تكاملات قوية' : 'Powerful integrations'}
+              </p>
+              <div className="flex flex-col gap-2.5">
+                <div className="flex gap-2.5 flex-wrap">
+                  {[
+                    { label: isAr ? 'واتساب' : 'WhatsApp', color: '#0aad7a' },
+                    { label: 'SMS',                          color: '#14c7c4' },
+                    { label: 'Tuya',                         color: '#ff851c' },
+                  ].map((chip) => (
+                    <span key={chip.label} className="px-3.5 py-2 bg-white/90 rounded-lg text-xs font-semibold" style={{ color: chip.color }}>
+                      {chip.label}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2.5 flex-wrap">
+                  {[
+                    { label: 'TTLock', color: '#0aad7a' },
+                    { label: 'ANB',    color: '#14c7c4' },
+                    { label: isAr ? 'أبشر' : 'Absher', color: '#4f33eb' },
+                  ].map((chip) => (
+                    <span key={chip.label} className="px-3.5 py-2 bg-white/90 rounded-lg text-xs font-semibold" style={{ color: chip.color }}>
+                      {chip.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
 
-          <motion.div {...fadeUp(0.5)} className="mt-12 text-center">
-            <Link href="/features/automated-messaging" className="inline-flex items-center gap-2 text-[#25A4E8] font-bold hover:gap-3 transition-all text-sm">
-              {isAr ? 'اكتشف الأتمتة الكاملة' : 'Explore full automation'} <ArrowRight size={14} />
-            </Link>
+          {/* ── 7 step cards ── */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
+            {automationSteps.map((step, i) => (
+              <motion.div
+                key={i}
+                {...fadeUp(i * 0.07)}
+                className="bg-white rounded-xl p-4 flex flex-col gap-3 border border-[#d6def0]"
+              >
+                {/* Numbered icon */}
+                <div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: step.bg }}
+                >
+                  <span className="text-lg font-extrabold leading-none" style={{ color: step.color }}>
+                    {step.num}
+                  </span>
+                </div>
+                <p className="font-bold text-[#081133] text-[15px] leading-snug">{step.title}</p>
+                <p className="text-[#5c6687] text-[12px] leading-relaxed">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* ── Outcome rail ── */}
+          <motion.div
+            {...fadeUp(0.4)}
+            className="bg-white/10 border border-white/16 rounded-xl px-6 py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+          >
+            {outcomes.map((outcome, i) => (
+              <div key={i} className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-[rgba(20,199,196,0.12)]">
+                  <span className="text-sm font-extrabold text-[#14c7c4]">OK</span>
+                </div>
+                <div>
+                  <p className="font-bold text-white text-base leading-snug">{outcome.title}</p>
+                  <p className="text-[#d6deff] text-[13px] leading-snug mt-0.5">{outcome.desc}</p>
+                </div>
+              </div>
+            ))}
           </motion.div>
+
         </div>
       </section>
 
