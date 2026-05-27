@@ -130,12 +130,18 @@ const FEATURE_CATEGORIES_AR = [
 ];
 
 const INTEGRATIONS = [
-  { slug: 'airbnb',                  en: 'Airbnb',                  ar: 'Airbnb',                  color: '#FF5A5F', badge_en: 'OTA',    badge_ar: 'OTA' },
-  { slug: 'booking-com',             en: 'Booking.com',             ar: 'Booking.com',             color: '#003580', badge_en: 'OTA',    badge_ar: 'OTA' },
-  { slug: 'agoda',                   en: 'Agoda',                   ar: 'أجودا',                   color: '#E31837', badge_en: 'OTA',    badge_ar: 'OTA' },
-  { slug: 'expedia',                 en: 'Expedia',                 ar: 'إكسبيديا',                color: '#0066B2', badge_en: 'OTA',    badge_ar: 'OTA' },
-  { slug: 'google-vacation-rentals', en: 'Google Vacation Rentals', ar: 'Google Vacation Rentals', color: '#4285F4', badge_en: 'Search', badge_ar: 'بحث' },
-  { slug: 'gathern',                 en: 'Gathern',                 ar: 'غثرن',                    color: '#00A651', badge_en: 'Local',  badge_ar: 'محلي' },
+  { slug: 'airbnb',                  en: 'Airbnb',                  ar: 'Airbnb',    logo: '/logos/airbnb.webp',                  badge_en: 'OTA',     badge_ar: 'OTA' },
+  { slug: 'booking-com',             en: 'Booking.com',             ar: 'Booking',   logo: '/logos/booking-com.webp',             badge_en: 'OTA',     badge_ar: 'OTA' },
+  { slug: 'agoda',                   en: 'Agoda',                   ar: 'أجودا',     logo: '/logos/agoda.webp',                   badge_en: 'OTA',     badge_ar: 'OTA' },
+  { slug: 'vrbo',                    en: 'Vrbo',                    ar: 'Vrbo',      logo: '/logos/vrbo.webp',                    badge_en: 'OTA',     badge_ar: 'OTA' },
+  { slug: 'google-vacation-rentals', en: 'Google Vacation Rentals', ar: 'Google',   logo: '/logos/google-vacation-rentals.webp', badge_en: 'Search',  badge_ar: 'بحث' },
+  { slug: 'gathern',                 en: 'Gathern',                 ar: 'غثرن',      logo: '/logos/gathern.webp',                 badge_en: 'Local',   badge_ar: 'محلي' },
+  { slug: 'aqar',                    en: 'AQAR',                    ar: 'عقار',      logo: '/logos/aqar.webp',                    badge_en: 'Local',   badge_ar: 'محلي' },
+  { slug: 'pricelabs',               en: 'PriceLabs',               ar: 'PriceLabs', logo: '/logos/pricelabs.webp',               badge_en: 'Pricing', badge_ar: 'تسعير' },
+  { slug: 'tuya',                    en: 'Tuya',                    ar: 'Tuya',      logo: '/logos/tuya.webp',                    badge_en: 'IoT',     badge_ar: 'إنترنت الأشياء' },
+  { slug: 'ttlock',                  en: 'TTLock',                  ar: 'TTLock',    logo: '/logos/ttlock.webp',                  badge_en: 'Locks',   badge_ar: 'أقفال' },
+  { slug: 'qoyod',                   en: 'Qoyod',                   ar: 'قيود',      logo: '/logos/qoyod.webp',                   badge_en: 'Finance', badge_ar: 'مالية' },
+  { slug: 'daftra',                  en: 'Daftra',                  ar: 'دفترة',     logo: '/logos/daftra.webp',                  badge_en: 'Finance', badge_ar: 'مالية' },
 ];
 
 const SOLUTIONS = [
@@ -620,15 +626,14 @@ export default function Navbar() {
                         {INTEGRATIONS.map((intg) => (
                           <Link key={intg.slug} href={`/integrations/${intg.slug}`}
                             className="group flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-all">
-                            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-extrabold shrink-0 shadow-sm"
-                              style={{ backgroundColor: intg.color }}>
-                              {(isAr ? intg.ar : intg.en).charAt(0)}
+                            <div className="w-9 h-9 rounded-xl border border-slate-100 bg-white flex items-center justify-center shrink-0 p-1">
+                              <Image src={intg.logo} alt={intg.en} width={28} height={28} className="object-contain w-full h-full" />
                             </div>
                             <div>
                               <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
                                 {isAr ? intg.ar : intg.en}
                               </p>
-                              <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${intg.color}14`, color: intg.color }}>
+                              <span className="text-[9.5px] font-bold text-slate-400">
                                 {isAr ? intg.badge_ar : intg.badge_en}
                               </span>
                             </div>
@@ -763,7 +768,10 @@ export default function Navbar() {
                           ))}
                           {key === 'integrations' && INTEGRATIONS.map(intg => (
                             <Link key={intg.slug} href={`/integrations/${intg.slug}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 text-sm text-slate-700 font-medium">
-                              <div className="w-5 h-5 rounded-md shrink-0" style={{ backgroundColor: intg.color }} />{isAr ? intg.ar : intg.en}
+                              <div className="w-6 h-6 rounded-md border border-slate-100 bg-white flex items-center justify-center shrink-0 p-0.5">
+                                <Image src={intg.logo} alt={intg.en} width={20} height={20} className="object-contain w-full h-full" />
+                              </div>
+                              {isAr ? intg.ar : intg.en}
                             </Link>
                           ))}
                           {key === 'resources' && resources.map(res => (

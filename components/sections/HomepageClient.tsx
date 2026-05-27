@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,7 +13,28 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 /* ─── data ─────────────────────────────────────────────── */
 
-const OTA_LOGOS = ['Airbnb', 'Booking.com', 'Agoda', 'Expedia', 'Google', 'Gathern', 'AJAAR'];
+/* All integration logos — group A = channels/OTAs, group B = tools/local */
+const LOGOS_ROW_A = [
+  { src: '/logos/airbnb.webp',                 name: 'Airbnb' },
+  { src: '/logos/vrbo.webp',                   name: 'Vrbo' },
+  { src: '/logos/agoda.webp',                  name: 'Agoda' },
+  { src: '/logos/booking-com.webp',            name: 'Booking.com' },
+  { src: '/logos/pricelabs.webp',              name: 'PriceLabs' },
+  { src: '/logos/google-vacation-rentals.webp',name: 'Google Vacation Rentals' },
+  { src: '/logos/aqar.webp',                   name: 'AQAR' },
+  { src: '/logos/gathern.webp',                name: 'Gathern' },
+];
+const LOGOS_ROW_B = [
+  { src: '/logos/tuya.webp',    name: 'Tuya' },
+  { src: '/logos/ttlock.webp',  name: 'TTLock' },
+  { src: '/logos/odoo.webp',    name: 'Odoo' },
+  { src: '/logos/daftra.webp',  name: 'Daftra' },
+  { src: '/logos/qoyod.webp',   name: 'Qoyod' },
+  { src: '/logos/shomoos.webp', name: 'Shomoos' },
+  { src: '/logos/elm.webp',     name: 'ELM' },
+  { src: '/logos/sdaia.webp',   name: 'SDAIA' },
+  { src: '/logos/nic.webp',     name: 'NIC' },
+];
 
 const AUTOMATION_STEPS_EN = [
   { num: '01', title: 'Booking received',    desc: 'Reservations flow into StayHub from every channel.',      color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
@@ -499,17 +521,28 @@ export default function HomepageClient() {
       </section>
 
       {/* ── 2. TRUST BAR ────────────────────────────────────── */}
-      <section className="py-10 bg-white border-y border-slate-100">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
-          <p className="text-center text-xs text-slate-400 uppercase tracking-widest font-bold mb-6">
-            {isAr ? 'يعمل مع جميع المنصات الرئيسية' : 'Works with all major platforms'}
-          </p>
-          <div className="overflow-hidden">
-            <div className="animate-marquee flex gap-6 w-max">
-              {[...OTA_LOGOS, ...OTA_LOGOS].map((ch, i) => (
-                <span key={i} className="px-5 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 whitespace-nowrap">{ch}</span>
-              ))}
-            </div>
+      <section className="py-10 bg-white border-y border-slate-100 overflow-hidden">
+        <p className="text-center text-xs text-slate-400 uppercase tracking-widest font-bold mb-6 px-4">
+          {isAr ? 'يعمل مع جميع المنصات الرئيسية' : 'Works with all major platforms'}
+        </p>
+        {/* Row A — OTA channels, scrolls right→left */}
+        <div className="relative mb-3">
+          <div className="animate-marquee flex gap-4 w-max">
+            {[...LOGOS_ROW_A, ...LOGOS_ROW_A].map((lg, i) => (
+              <div key={i} className="flex items-center justify-center bg-white border border-slate-100 rounded-xl shadow-sm w-[140px] h-14 px-4 shrink-0">
+                <Image src={lg.src} alt={lg.name} width={100} height={36} className="object-contain max-h-9 w-auto" />
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Row B — tools / local / Saudi partners, scrolls left→right */}
+        <div className="relative">
+          <div className="animate-marquee-reverse flex gap-4 w-max">
+            {[...LOGOS_ROW_B, ...LOGOS_ROW_B].map((lg, i) => (
+              <div key={i} className="flex items-center justify-center bg-white border border-slate-100 rounded-xl shadow-sm w-[140px] h-14 px-4 shrink-0">
+                <Image src={lg.src} alt={lg.name} width={100} height={36} className="object-contain max-h-9 w-auto" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -593,27 +626,28 @@ export default function HomepageClient() {
                 {isAr ? 'تكاملات قوية' : 'Powerful integrations'}
               </p>
               <div className="flex flex-col gap-2.5">
-                <div className="flex gap-2.5 flex-wrap">
-                  {[
-                    { label: isAr ? 'واتساب' : 'WhatsApp', color: '#0aad7a' },
-                    { label: 'SMS',                          color: '#14c7c4' },
-                    { label: 'Tuya',                         color: '#ff851c' },
-                  ].map((chip) => (
-                    <span key={chip.label} className="px-3.5 py-2 bg-white/90 rounded-lg text-xs font-semibold" style={{ color: chip.color }}>
-                      {chip.label}
-                    </span>
-                  ))}
+                <div className="flex gap-2 flex-wrap">
+                  {/* WhatsApp text chip */}
+                  <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#0aad7a]">
+                    <Image src="/icons/whatsapp.svg" alt="WhatsApp" width={14} height={14} className="shrink-0" />
+                    {isAr ? 'واتساب' : 'WhatsApp'}
+                  </span>
+                  <span className="px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#14c7c4]">SMS</span>
+                  {/* Tuya logo chip */}
+                  <span className="flex items-center px-2 py-1.5 bg-white/90 rounded-lg">
+                    <Image src="/logos/tuya.webp" alt="Tuya" width={48} height={20} className="object-contain h-5 w-auto" />
+                  </span>
                 </div>
-                <div className="flex gap-2.5 flex-wrap">
-                  {[
-                    { label: 'TTLock', color: '#0aad7a' },
-                    { label: 'ANB',    color: '#14c7c4' },
-                    { label: isAr ? 'أبشر' : 'Absher', color: '#4f33eb' },
-                  ].map((chip) => (
-                    <span key={chip.label} className="px-3.5 py-2 bg-white/90 rounded-lg text-xs font-semibold" style={{ color: chip.color }}>
-                      {chip.label}
-                    </span>
-                  ))}
+                <div className="flex gap-2 flex-wrap">
+                  {/* TTLock logo chip */}
+                  <span className="flex items-center px-2 py-1.5 bg-white/90 rounded-lg">
+                    <Image src="/logos/ttlock.webp" alt="TTLock" width={60} height={20} className="object-contain h-5 w-auto" />
+                  </span>
+                  <span className="px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#14c7c4]">ANB</span>
+                  {/* Absher logo */}
+                  <span className="flex items-center px-2 py-1.5 bg-white/90 rounded-lg">
+                    <Image src="/logos/absher.png" alt="Absher" width={60} height={20} className="object-contain h-5 w-auto" />
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -879,26 +913,32 @@ export default function HomepageClient() {
               {isAr ? 'كل OTA رئيسي، أقفال ذكية، بوابات دفع، وأدوات محاسبة.' : 'Every major OTA, smart locks, payment gateways, and accounting tools.'}
             </p>
           </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { name: 'Airbnb', badge: isAr ? 'OTA' : 'OTA', color: '#FF5A5F' },
-              { name: 'Booking.com', badge: isAr ? 'OTA' : 'OTA', color: '#003580' },
-              { name: 'Agoda', badge: isAr ? 'OTA' : 'OTA', color: '#E3392E' },
-              { name: 'Expedia', badge: isAr ? 'OTA' : 'OTA', color: '#FFC20E' },
-              { name: 'Gathern', badge: isAr ? 'محلي' : 'Local', color: '#2D8653' },
-              { name: 'Google Vacation Rentals', badge: isAr ? 'بحث' : 'Search', color: '#4285F4' },
+              { src: '/logos/airbnb.webp',                  name: 'Airbnb',                   badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'airbnb' },
+              { src: '/logos/booking-com.webp',             name: 'Booking.com',               badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'booking-com' },
+              { src: '/logos/agoda.webp',                   name: 'Agoda',                     badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'agoda' },
+              { src: '/logos/vrbo.webp',                    name: 'Vrbo',                      badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'vrbo' },
+              { src: '/logos/google-vacation-rentals.webp', name: 'Google Vacation Rentals',   badge_en: 'Search',  badge_ar: 'بحث',         slug: 'google-vacation-rentals' },
+              { src: '/logos/gathern.webp',                 name: 'Gathern',                   badge_en: 'Local',   badge_ar: 'محلي',        slug: 'gathern' },
+              { src: '/logos/aqar.webp',                    name: 'AQAR',                      badge_en: 'Local',   badge_ar: 'محلي',        slug: 'aqar' },
+              { src: '/logos/pricelabs.webp',               name: 'PriceLabs',                 badge_en: 'Pricing', badge_ar: 'تسعير',       slug: 'pricelabs' },
+              { src: '/logos/tuya.webp',                    name: 'Tuya',                      badge_en: 'IoT',     badge_ar: 'إنترنت الأشياء', slug: 'tuya' },
+              { src: '/logos/ttlock.webp',                  name: 'TTLock',                    badge_en: 'Locks',   badge_ar: 'أقفال',       slug: 'ttlock' },
+              { src: '/logos/qoyod.webp',                   name: 'Qoyod',                     badge_en: 'Finance', badge_ar: 'مالية',       slug: 'qoyod' },
+              { src: '/logos/daftra.webp',                  name: 'Daftra',                    badge_en: 'Finance', badge_ar: 'مالية',       slug: 'daftra' },
             ].map((intg, i) => (
-              <motion.div key={i} {...fadeUp(i * 0.07)}>
-                <Link href={`/integrations/${intg.name.toLowerCase().replace(/[^a-z]+/g, '-')}`}
-                  className="group flex items-center gap-4 bg-white rounded-2xl p-5 border border-slate-100 hover:border-blue-200 hover:shadow-lg transition-all">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-sm shrink-0" style={{ backgroundColor: intg.color }}>
-                    {intg.name.charAt(0)}
+              <motion.div key={i} {...fadeUp(i * 0.05)}>
+                <Link href={`/integrations/${intg.slug}`}
+                  className="group flex items-center gap-3 bg-white rounded-2xl p-4 border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all h-full">
+                  <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-1.5">
+                    <Image src={intg.src} alt={intg.name} width={40} height={40} className="object-contain w-full h-full" />
                   </div>
-                  <div>
-                    <p className="font-bold text-[#0F172A] text-sm group-hover:text-[#25A4E8] transition-colors">{intg.name}</p>
-                    <span className="text-xs font-semibold" style={{ color: intg.color }}>{intg.badge}</span>
+                  <div className="min-w-0">
+                    <p className="font-bold text-[#0F172A] text-sm group-hover:text-[#25A4E8] transition-colors truncate">{intg.name}</p>
+                    <span className="text-[11px] font-semibold text-slate-400">{isAr ? intg.badge_ar : intg.badge_en}</span>
                   </div>
-                  <ArrowRight size={14} className="ms-auto text-slate-300 group-hover:text-[#25A4E8] transition-colors" />
+                  <ArrowRight size={12} className="ms-auto text-slate-200 group-hover:text-[#25A4E8] transition-colors shrink-0" />
                 </Link>
               </motion.div>
             ))}
