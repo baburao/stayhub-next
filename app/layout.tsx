@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
-import { Manrope, Noto_Kufi_Arabic } from 'next/font/google';
+import { Manrope, Tajawal } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FloatingCTA from '@/components/ui/FloatingCTA';
+import DemoModal from '@/components/ui/DemoModal';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { DemoModalProvider } from '@/lib/DemoModalContext';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -13,11 +15,11 @@ const manrope = Manrope({
   weight: ['400', '500', '600', '700', '800'],
 });
 
-const notoKufiArabic = Noto_Kufi_Arabic({
+const tajawal = Tajawal({
   subsets: ['arabic'],
   variable: '--font-arabic',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['200', '300', '400', '500', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -41,13 +43,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${manrope.variable} ${notoKufiArabic.variable}`}>
-      <body className="min-h-screen flex flex-col antialiased">
+    <html lang="en" className={`${manrope.variable} ${tajawal.variable}`}>
+      <body className="min-h-screen flex flex-col antialiased" suppressHydrationWarning>
         <LanguageProvider>
-          <Navbar />
-          <main className="flex-1 pt-16">{children}</main>
-          <Footer />
-          <FloatingCTA />
+          <DemoModalProvider>
+            <Navbar />
+            <main className="flex-1 pt-16">{children}</main>
+            <Footer />
+            <FloatingCTA />
+            <DemoModal />
+          </DemoModalProvider>
         </LanguageProvider>
       </body>
     </html>

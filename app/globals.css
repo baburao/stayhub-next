@@ -8,7 +8,7 @@
   --color-brand-navy: #0F172A;
   --color-brand-bg: #EFF8FF;
   --font-sans: 'Manrope', system-ui, sans-serif;
-  --font-arabic: 'Noto Kufi Arabic', system-ui, sans-serif;
+  --font-arabic: 'Tajawal', system-ui, sans-serif;
 }
 
 @layer base {
@@ -22,15 +22,25 @@
     margin: 0;
   }
 
-  /* Arabic — Noto Kufi Arabic activates automatically when lang switches to ar */
+  /* Arabic — Tajawal activates automatically when lang switches to ar */
   html[lang="ar"] body,
   html[lang="ar"] * {
-    font-family: var(--font-arabic), 'Noto Kufi Arabic', system-ui, sans-serif !important;
-    letter-spacing: 0 !important; /* Kufi has its own spacing */
+    font-family: var(--font-arabic), 'Tajawal', system-ui, sans-serif !important;
+    letter-spacing: 0 !important;
   }
 }
 
 @layer utilities {
+  /* Site-wide container — change max-width here to resize all sections at once */
+  .container-site {
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: 2rem;
+  }
+  @media (max-width: 768px) {
+    .container-site { padding-inline: 1rem; }
+  }
+
   .gradient-text {
     background: linear-gradient(135deg, #25A4E8, #7C69E8);
     -webkit-background-clip: text;

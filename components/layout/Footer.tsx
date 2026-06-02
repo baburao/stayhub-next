@@ -118,7 +118,7 @@ export default function Footer() {
     <footer className="bg-[#0A1628] text-white">
       {/* Mini CTA strip */}
       <div className="border-b border-white/5 bg-gradient-to-r from-[#25A4E8]/10 to-[#7C69E8]/10">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm font-semibold text-white/80">
             {isAr ? '🚀 هل أنت مستعد لأتمتة أعمالك؟ ابدأ اليوم.' : '🚀 Ready to automate your hospitality business? Start today.'}
           </p>
@@ -134,7 +134,7 @@ export default function Footer() {
       </div>
 
       {/* Main footer grid */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-14 pb-10">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-14 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-white/8">
 
           {/* Brand column — spans 2 */}

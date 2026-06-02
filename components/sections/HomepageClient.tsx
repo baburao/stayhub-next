@@ -1,40 +1,19 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight, Globe, Shield, MessageSquare, BarChart2, CreditCard,
   Brush, Link2, Calendar, CheckCircle2, Star, Zap, TrendingUp,
   Lock, Users, DollarSign, Smartphone, Building2, ChevronDown,
   CalendarCheck, BadgeCheck, Banknote, Sparkles, RefreshCw,
+  ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import { useDemoModal } from '@/lib/DemoModalContext';
 
 /* ─── data ─────────────────────────────────────────────── */
-
-/* All integration logos — group A = channels/OTAs, group B = tools/local */
-const LOGOS_ROW_A = [
-  { src: '/logos/airbnb.webp',                 name: 'Airbnb' },
-  { src: '/logos/vrbo.webp',                   name: 'Vrbo' },
-  { src: '/logos/agoda.webp',                  name: 'Agoda' },
-  { src: '/logos/booking-com.webp',            name: 'Booking.com' },
-  { src: '/logos/pricelabs.webp',              name: 'PriceLabs' },
-  { src: '/logos/google-vacation-rentals.webp',name: 'Google Vacation Rentals' },
-  { src: '/logos/aqar.webp',                   name: 'AQAR' },
-  { src: '/logos/gathern.webp',                name: 'Gathern' },
-];
-const LOGOS_ROW_B = [
-  { src: '/logos/tuya.webp',    name: 'Tuya' },
-  { src: '/logos/ttlock.webp',  name: 'TTLock' },
-  { src: '/logos/odoo.webp',    name: 'Odoo' },
-  { src: '/logos/daftra.webp',  name: 'Daftra' },
-  { src: '/logos/qoyod.webp',   name: 'Qoyod' },
-  { src: '/logos/shomoos.webp', name: 'Shomoos' },
-  { src: '/logos/elm.webp',     name: 'ELM' },
-  { src: '/logos/sdaia.webp',   name: 'SDAIA' },
-  { src: '/logos/nic.webp',     name: 'NIC' },
-];
 
 const AUTOMATION_STEPS_EN = [
   { num: '01', title: 'Booking received',    desc: 'Reservations flow into StayHub from every channel.',      color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
@@ -189,6 +168,96 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+/* ─── 3-D glassy feature card ───────────────────────────── */
+type Feature = (typeof FEATURES_EN)[0];
+
+function FeatureCard3D({ f, isAr }: { f: Feature; isAr: boolean }) {
+  const ref   = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt]         = useState({ x: 0, y: 0 });
+  const [hovered, setHovered]   = useState(false);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    const nx = (e.clientX - left) / width  - 0.5;   // −0.5 … 0.5
+    const ny = (e.clientY - top)  / height - 0.5;
+    setTilt({ x: -ny * 16, y: nx * 16 });
+  };
+
+  const onLeave = () => { setTilt({ x: 0, y: 0 }); setHovered(false); };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={onLeave}
+      className="shrink-0 w-[272px]"
+      style={{
+        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${hovered ? 'scale(1.05) translateZ(12px)' : 'scale(1)'}`,
+        transition: hovered ? 'transform 0.08s linear' : 'transform 0.55s cubic-bezier(0.23,1,0.32,1)',
+        willChange: 'transform',
+      }}
+    >
+      <Link
+        href={f.href}
+        className="flex flex-col h-full min-h-[250px] rounded-2xl p-7 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(145deg, rgba(255,255,255,0.92) 0%, rgba(246,248,255,0.88) 100%)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: hovered ? `1.5px solid ${f.color}40` : '1.5px solid rgba(226,232,240,0.9)',
+          boxShadow: hovered
+            ? `0 24px 64px ${f.color}22, 0 8px 24px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.95)`
+            : '0 2px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)',
+          transition: 'border 0.25s ease, box-shadow 0.25s ease',
+        }}
+      >
+        {/* Glossy top highlight */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+        {/* Glass sheen upper-left */}
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white/40 to-transparent pointer-events-none rounded-t-2xl" />
+
+        {/* Icon */}
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 relative z-10 transition-transform duration-300"
+          style={{
+            background: `linear-gradient(135deg, ${f.color}18 0%, ${f.color}08 100%)`,
+            transform: hovered ? 'scale(1.12) translateZ(4px)' : 'scale(1)',
+            color: f.color,
+          }}
+        >
+          <f.icon size={24} />
+        </div>
+
+        {/* Category */}
+        <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400 mb-2 block relative z-10">
+          {f.cat}
+        </span>
+
+        {/* Title */}
+        <h3
+          className="font-bold mb-3 text-base leading-snug relative z-10 transition-colors duration-200"
+          style={{ color: hovered ? f.color : '#0F172A' }}
+        >
+          {f.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-slate-500 text-sm leading-relaxed flex-1 relative z-10">{f.desc}</p>
+
+        {/* Learn more */}
+        <div
+          className="mt-5 flex items-center gap-1.5 text-[11px] font-bold relative z-10 transition-all duration-250"
+          style={{ opacity: hovered ? 1 : 0, color: f.color, transform: hovered ? 'translateX(4px)' : 'translateX(0)' }}
+        >
+          {isAr ? 'اكتشف المزيد' : 'Learn more'} <ArrowRight size={11} />
+        </div>
+      </Link>
+    </div>
+  );
+}
+
 /* ─── dashboard showcase (tabbed) ──────────────────────── */
 
 const DASH_TABS_EN = ['Analytics', 'Calendar', 'Inbox'] as const;
@@ -218,13 +287,14 @@ const INBOX_MSGS_AR = [
 ];
 
 function DashboardShowcase({ isAr }: { isAr: boolean }) {
+  const { openModal } = useDemoModal();
   const [activeTab, setActiveTab] = useState<DashTab>(0);
   const tabs = isAr ? DASH_TABS_AR : DASH_TABS_EN;
   const inboxMsgs = isAr ? INBOX_MSGS_AR : INBOX_MSGS;
 
   return (
     <section className="py-24 bg-gradient-to-br from-[#0F172A] to-[#1E2D4E]">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Left copy */}
           <motion.div {...fadeUp()}>
@@ -257,9 +327,9 @@ function DashboardShowcase({ isAr }: { isAr: boolean }) {
                 </div>
               ))}
             </div>
-            <Link href="/demo" className="inline-flex items-center gap-2 px-6 py-3 bg-[#25A4E8] text-white font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/30 text-sm">
+            <button onClick={openModal} className="inline-flex items-center gap-2 px-6 py-3 bg-[#25A4E8] text-white font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/30 text-sm">
               {isAr ? 'شاهد العرض التوضيحي' : 'See it in action'} <ArrowRight size={14} />
-            </Link>
+            </button>
           </motion.div>
 
           {/* Right — tabbed mock dashboard */}
@@ -408,7 +478,38 @@ function DashboardShowcase({ isAr }: { isAr: boolean }) {
 
 export default function HomepageClient() {
   const { t, isAr } = useLanguage();
+  const { openModal } = useDemoModal();
   const features = isAr ? FEATURES_AR : FEATURES_EN;
+
+  /* ── Feature carousel ── */
+  const featureTrackRef = useRef<HTMLDivElement>(null);
+  const isPausedRef     = useRef(false);
+
+  const scrollFeatures = (dir: 'left' | 'right') => {
+    const el = featureTrackRef.current;
+    if (!el) return;
+    if (dir === 'right') {
+      if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 60) {
+        // seamless loop: jump to start instantly, then continue
+        el.style.scrollBehavior = 'auto';
+        el.scrollLeft = 0;
+        requestAnimationFrame(() => { el.style.scrollBehavior = ''; });
+      } else {
+        el.scrollBy({ left: 310, behavior: 'smooth' });
+      }
+    } else {
+      el.scrollBy({ left: -310, behavior: 'smooth' });
+    }
+  };
+
+  /* auto-scroll every 3.2 s, pauses on hover */
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!isPausedRef.current) scrollFeatures('right');
+    }, 3200);
+    return () => clearInterval(id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const automationSteps = isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN;
   const outcomes = isAr ? OUTCOMES_AR : OUTCOMES_EN;
   const compliance = isAr ? COMPLIANCE_ITEMS_AR : COMPLIANCE_ITEMS_EN;
@@ -419,183 +520,435 @@ export default function HomepageClient() {
     <div className="bg-white overflow-x-hidden">
 
       {/* ── 1. HERO ─────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-br from-[#EFF8FF] via-white to-[#F3F0FF] py-28 md:py-36">
-        <div className="absolute inset-0 dot-grid opacity-40 pointer-events-none" />
-        <div className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full opacity-[0.12] pointer-events-none" style={{ background: 'radial-gradient(circle, #25A4E8, transparent 65%)' }} />
-        <div className="absolute -bottom-28 -left-28 w-[500px] h-[500px] rounded-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle, #7C69E8, transparent 65%)' }} />
+      <section className="relative min-h-screen flex items-center bg-white overflow-hidden">
 
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 w-full">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-widest rounded-full border border-blue-200 mb-8">
+        {/* Right-side bg panel */}
+        <div
+          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[48%] bg-[#f5f6f8] pointer-events-none hidden md:block`}
+        />
+
+        <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full py-24 md:py-0">
+          <div className={`grid md:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen`}>
+
+            {/* ── LEFT: copy ── */}
+            <motion.div
+              initial={{ opacity: 0, x: isAr ? 40 : -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              className={`${isAr ? 'text-right' : 'text-left'} py-20 md:py-28 order-2 md:order-1`}
+            >
+              {/* Badge */}
+              <motion.span
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#f0fdf4] text-[#15803d] text-xs font-bold uppercase tracking-widest rounded-full border border-[#bbf7d0] mb-8"
+              >
                 <Sparkles size={12} />
                 {isAr ? 'منصة الضيافة الذكية في السعودية' : "Saudi Arabia's Smart Hospitality Platform"}
-              </span>
-            </motion.div>
+              </motion.span>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#0F172A] leading-[1.07] tracking-tight mb-6"
-            >
-              {isAr ? (
-                <>نظام التشغيل{' '}<span className="gradient-text">لأعمال الضيافة</span></>
-              ) : (
-                <>The Operating System for{' '}<span className="gradient-text">Hospitality Businesses</span></>
-              )}
-            </motion.h1>
+              {/* Headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 28 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="text-5xl md:text-6xl lg:text-[70px] font-extrabold text-[#0F172A] leading-[1.05] tracking-tight mb-6"
+              >
+                {isAr ? (
+                  <>
+                    نظام التشغيل
+                    <br />
+                    <span className="relative inline-block">
+                      <span className="relative z-[1]">لأعمال</span>
+                      <span className="absolute inset-x-0 bottom-1 h-[6px] bg-[#bef264] rounded-full z-[0]" />
+                    </span>
+                    {' '}الضيافة
+                  </>
+                ) : (
+                  <>
+                    The Operating
+                    <br />
+                    <span className="relative inline-block">
+                      <span className="relative z-[1]">System</span>
+                      <span className="absolute inset-x-0 bottom-1 h-[6px] bg-[#bef264] rounded-full z-[0]" />
+                    </span>
+                    {' '}for
+                    <br />
+                    Hospitality Businesses
+                  </>
+                )}
+              </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-10"
-            >
-              {isAr
-                ? 'وزّع عقاراتك على جميع المنصات، أتمت رحلة الضيف، واحمِ ممتلكاتك — كل ذلك من منصة واحدة.'
-                : 'Distribute across every platform, automate the entire guest journey, and protect your properties — all from one platform.'}
-            </motion.p>
+              {/* Sub-headline */}
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.22 }}
+                className="text-slate-500 text-base md:text-lg max-w-[380px] mb-10 leading-relaxed"
+              >
+                {isAr
+                  ? 'رؤى مبنية على البيانات لمديري العقارات ومضيفي الإيجارات السياحية في المملكة.'
+                  : 'Data-driven automation for property managers and vacation rental hosts across Saudi Arabia.'}
+              </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="flex flex-wrap justify-center gap-4 mb-14"
-            >
-              <Link href="/demo" className="inline-flex items-center gap-2 px-8 py-4 bg-[#25A4E8] text-white font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/30 hover:scale-[1.03] text-sm">
-                {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'} <ArrowRight size={15} />
-              </Link>
-              <Link href="/features" className="inline-flex items-center gap-2 px-8 py-4 border-2 border-slate-200 text-[#0F172A] font-semibold rounded-xl hover:border-[#25A4E8] hover:text-[#25A4E8] transition-all text-sm">
-                {isAr ? 'استكشف المميزات' : 'Explore Features'}
-              </Link>
-            </motion.div>
+              {/* CTA row */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.32 }}
+                className={`flex items-center gap-8 mb-12 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}
+              >
+                <button
+                  onClick={openModal}
+                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#0F172A] text-white font-bold rounded-full hover:bg-slate-800 transition-all text-sm shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                >
+                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
+                  <ArrowRight size={15} />
+                </button>
+              </motion.div>
 
-            {/* Floating stat chips */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="flex flex-wrap justify-center gap-3 mb-10">
-              {STATS.map((s, i) => (
-                <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-slate-200/70 shadow-sm">
-                  <span className="text-base font-extrabold text-[#25A4E8]">{s.value}</span>
-                  <span className="text-xs text-slate-500 font-medium">{isAr ? s.ar : s.en}</span>
-                </div>
-              ))}
-            </motion.div>
+              {/* Divider */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.44 }}
+                className="w-full h-px bg-slate-100 mb-6"
+              />
 
-            {/* Floating UI cards */}
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.7 }}
-              className="relative mx-auto max-w-3xl bg-white/70 backdrop-blur-xl rounded-3xl border border-slate-200/60 shadow-2xl shadow-blue-100/40 p-6 md:p-8"
-            >
-              {/* Mock dashboard header */}
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-3 h-3 rounded-full bg-red-400" />
-                <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                <div className="w-3 h-3 rounded-full bg-green-400" />
-                <div className="flex-1 mx-3 h-7 bg-slate-100 rounded-lg flex items-center px-3">
-                  <span className="text-xs text-slate-400">app.stayhub.sa/dashboard</span>
-                </div>
-              </div>
-              {/* Mock metrics row */}
-              <div className="grid grid-cols-3 gap-3 mb-4">
-                {[
-                  { label: isAr ? 'الإيرادات (هذا الشهر)' : 'Revenue (This Month)', value: 'SAR 84,200', trend: '+18%', color: '#25A4E8' },
-                  { label: isAr ? 'معدل الإشغال' : 'Occupancy Rate', value: '91%', trend: '+6%', color: '#7C69E8' },
-                  { label: isAr ? 'حجوزات نشطة' : 'Active Bookings', value: '47', trend: '+3', color: '#25A4E8' },
-                ].map((m, i) => (
-                  <div key={i} className="bg-slate-50 rounded-xl p-3 text-left">
-                    <p className="text-[10px] text-slate-400 mb-1">{m.label}</p>
-                    <p className="text-base font-extrabold text-[#0F172A]">{m.value}</p>
-                    <p className="text-[10px] font-semibold" style={{ color: m.color }}>{m.trend} ↑</p>
+              {/* Trusted logos strip */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.52 }}
+              >
+                <div className={`flex items-center justify-between mb-5 ${isAr ? 'flex-row-reverse' : ''}`}>
+                  <p className="text-xs text-slate-400 leading-relaxed max-w-[220px]">
+                    {isAr
+                      ? 'نُقدّم خدماتنا لمئات المشغّلين الرائدين في المملكة العربية السعودية.'
+                      : 'We provide our services to many worldwide leading companies.'}
+                  </p>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
+                      <ArrowRight size={12} className={`text-slate-500 ${isAr ? '' : 'rotate-180'}`} />
+                    </button>
+                    <button className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
+                      <ArrowRight size={12} className={`text-slate-500 ${isAr ? 'rotate-180' : ''}`} />
+                    </button>
                   </div>
-                ))}
-              </div>
-              {/* Mock OTA sync row */}
-              <div className="flex items-center gap-3 bg-green-50 border border-green-100 rounded-xl px-4 py-3">
-                <RefreshCw size={14} className="text-green-500 animate-spin" style={{ animationDuration: '3s' }} />
-                <span className="text-xs font-semibold text-green-700">
-                  {isAr ? 'متزامن مع' : 'Synced with'}{' '}
-                </span>
-                <div className="flex gap-2">
-                  {['Airbnb', 'Booking.com', 'Gathern'].map(ch => (
-                    <span key={ch} className="px-2 py-0.5 bg-white rounded-md text-[10px] font-bold text-slate-600 border border-slate-200">{ch}</span>
+                </div>
+                <div className={`flex items-center gap-8 ${isAr ? 'flex-row-reverse' : ''}`}>
+                  {[
+                    { src: '/logos/airbnb.webp',     name: 'Airbnb' },
+                    { src: '/logos/booking-com.webp', name: 'Booking' },
+                    { src: '/logos/gathern.webp',     name: 'Gathern' },
+                  ].map((logo) => (
+                    <Image
+                      key={logo.name}
+                      src={logo.src}
+                      alt={logo.name}
+                      width={90}
+                      height={30}
+                      className="h-6 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-80 transition-all"
+                    />
                   ))}
                 </div>
-                <span className="ms-auto text-[10px] text-green-600 font-semibold">● {isAr ? 'مباشر' : 'Live'}</span>
-              </div>
+              </motion.div>
             </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* ── 2. TRUST BAR ────────────────────────────────────── */}
-      <section className="py-10 bg-white border-y border-slate-100 overflow-hidden">
-        <p className="text-center text-xs text-slate-400 uppercase tracking-widest font-bold mb-6 px-4">
-          {isAr ? 'يعمل مع جميع المنصات الرئيسية' : 'Works with all major platforms'}
-        </p>
-        {/* Row A — OTA channels, scrolls right→left */}
-        <div className="relative mb-3">
-          <div className="animate-marquee flex gap-4 w-max">
-            {[...LOGOS_ROW_A, ...LOGOS_ROW_A].map((lg, i) => (
-              <div key={i} className="flex items-center justify-center bg-white border border-slate-100 rounded-xl shadow-sm w-[140px] h-14 px-4 shrink-0">
-                <Image src={lg.src} alt={lg.name} width={100} height={36} className="object-contain max-h-9 w-auto" />
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Row B — tools / local / Saudi partners, scrolls left→right */}
-        <div className="relative">
-          <div className="animate-marquee-reverse flex gap-4 w-max">
-            {[...LOGOS_ROW_B, ...LOGOS_ROW_B].map((lg, i) => (
-              <div key={i} className="flex items-center justify-center bg-white border border-slate-100 rounded-xl shadow-sm w-[140px] h-14 px-4 shrink-0">
-                <Image src={lg.src} alt={lg.name} width={100} height={36} className="object-contain max-h-9 w-auto" />
-              </div>
-            ))}
+            {/* ── RIGHT: Floating mockup cards ── */}
+            <div className="relative h-[600px] hidden md:block order-1 md:order-2">
+
+              {/* Top-right circular icon badge */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className={`absolute top-10 ${isAr ? 'left-2' : 'right-2'} w-14 h-14 rounded-full bg-[#0F172A] flex items-center justify-center shadow-xl z-10`}
+              >
+                <BarChart2 size={22} className="text-[#bef264]" />
+              </motion.div>
+
+              {/* Card 1 — top area, dashboard metrics */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className={`absolute top-0 ${isAr ? 'left-16 right-0' : 'right-16 left-0'} bg-white rounded-3xl border border-slate-100 shadow-2xl shadow-slate-200/70 overflow-hidden`}
+                style={{ height: '295px' }}
+              >
+                <div className="h-full p-5 flex flex-col">
+                  {/* Browser chrome */}
+                  <div className="flex items-center gap-1.5 mb-4">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                    <div className="flex-1 mx-2 h-5 bg-slate-100 rounded-lg flex items-center px-2.5">
+                      <span className="text-[9px] text-slate-400">app.stayhub.sa/dashboard</span>
+                    </div>
+                  </div>
+                  {/* Metric grid */}
+                  <div className="grid grid-cols-2 gap-2 mb-3 flex-1">
+                    {[
+                      { label: 'RevPAR',     value: 'SAR 312', delta: '+22%', color: '#25A4E8' },
+                      { label: isAr ? 'الإشغال' : 'Occupancy', value: '89%',     delta: '+7%',  color: '#7C69E8' },
+                      { label: 'ADR',        value: 'SAR 481', delta: '+14%', color: '#25A4E8' },
+                      { label: isAr ? 'حجوزات' : 'Bookings',   value: '124',     delta: '+31%', color: '#10B981' },
+                    ].map((m, i) => (
+                      <div key={i} className="bg-slate-50 rounded-xl p-3">
+                        <p className="text-[9px] text-slate-400 mb-0.5">{m.label}</p>
+                        <p className="font-extrabold text-[#0F172A] text-sm leading-tight">{m.value}</p>
+                        <p className="text-[9px] font-bold mt-0.5" style={{ color: m.color }}>{m.delta} ↑</p>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Sync bar */}
+                  <div className="flex items-center gap-2 bg-green-50 rounded-xl px-3 py-2">
+                    <RefreshCw size={11} className="text-green-500 animate-spin" style={{ animationDuration: '3s' }} />
+                    <span className="text-[10px] font-semibold text-green-700">{isAr ? 'متزامن مع جميع القنوات' : 'Synced with all channels'}</span>
+                    <span className="ms-auto text-[10px] font-bold text-green-500">● {isAr ? 'مباشر' : 'Live'}</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 2 — bottom area, bookings list, overlaps card 1 */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className={`absolute bottom-0 ${isAr ? 'right-16 left-0' : 'left-16 right-0'} bg-[#0F172A] rounded-3xl shadow-2xl shadow-slate-900/25 overflow-hidden z-10`}
+                style={{ height: '255px' }}
+              >
+                <div className="h-full p-5 flex flex-col">
+                  <div className={`flex items-center justify-between mb-4 ${isAr ? 'flex-row-reverse' : ''}`}>
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                      {isAr ? 'حجوزات اليوم' : "Today's Bookings"}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[10px] font-bold text-green-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                      {isAr ? 'مباشر' : 'Live'}
+                    </span>
+                  </div>
+                  <div className="space-y-2.5 flex-1">
+                    {[
+                      { from: isAr ? 'محمد أ.'  : 'Mohammed A.', ch: 'Airbnb',  color: '#FF5A5F', time: '2:00 PM' },
+                      { from: isAr ? 'سارة ك.'  : 'Sara K.',     ch: 'Booking', color: '#003580', time: '4:30 PM' },
+                      { from: isAr ? 'نورة ز.'  : 'Nora Z.',     ch: 'Gathern', color: '#00A651', time: '6:00 PM' },
+                    ].map((b, i) => (
+                      <div key={i} className={`flex items-center gap-3 p-2.5 rounded-xl bg-white/5 border border-white/5 ${isAr ? 'flex-row-reverse' : ''}`}>
+                        <div
+                          className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                          style={{ backgroundColor: b.color }}
+                        >
+                          {b.from.charAt(0)}
+                        </div>
+                        <div className={`flex-1 min-w-0 ${isAr ? 'text-right' : ''}`}>
+                          <p className="text-white text-[11px] font-semibold truncate">{b.from}</p>
+                          <p className="text-slate-500 text-[10px]">{b.ch}</p>
+                        </div>
+                        <span className="text-[10px] text-slate-400 font-medium shrink-0">{b.time}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Floating stat chip — revenue uplift */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.55, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className={`absolute top-[42%] -translate-y-1/2 ${isAr ? '-right-4' : '-left-4'} bg-white rounded-2xl shadow-2xl shadow-slate-200/80 p-4 z-20 w-52 border border-slate-100`}
+              >
+                <p className="text-[#65a30d] text-xs font-extrabold mb-0.5">+24.0%</p>
+                <p className="font-bold text-[#0F172A] text-[13px] leading-snug mb-2">
+                  {isAr ? 'زيادة في إيرادات العقار' : "Increase of the property's revenue"}
+                </p>
+                <div className="w-full bg-slate-100 rounded-full h-1.5 mb-1.5">
+                  <div className="bg-[#bef264] h-1.5 rounded-full" style={{ width: '74%' }} />
+                </div>
+                <p className="text-slate-400 text-[10px]">(+2.8% / {isAr ? 'شهر' : 'Month'})</p>
+              </motion.div>
+
+              {/* Floating rating chip */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.68, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className={`absolute bottom-[20%] ${isAr ? 'left-2' : 'right-2'} bg-[#0F172A] rounded-2xl shadow-2xl p-4 z-20 w-52`}
+              >
+                <div className={`flex items-center gap-3 ${isAr ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-11 h-11 rounded-xl bg-[#25A4E8] flex items-center justify-center text-white font-extrabold text-base shrink-0 shadow-lg shadow-blue-500/30">
+                    9.8
+                  </div>
+                  <div className={isAr ? 'text-right' : ''}>
+                    <p className="text-white font-bold text-[12px] leading-tight">{isAr ? 'تقييم العملاء الإجمالي' : 'Overall clients rate'}</p>
+                    <p className="text-slate-400 text-[10px] mt-0.5">{isAr ? 'أكثر من 500+ مشغّل' : 'More than 500+ operators'}</p>
+                  </div>
+                </div>
+              </motion.div>
+
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── 3. PROBLEM SECTION ──────────────────────────────── */}
-      <section className="py-24 bg-[#0F172A]">
-        <div className="max-w-5xl mx-auto px-4 md:px-8">
-          <motion.div {...fadeUp()} className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 text-white/70 text-xs font-bold uppercase tracking-widest rounded-full border border-white/10 mb-5">
-              {isAr ? 'التحدي' : 'The Challenge'}
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-5">
-              {isAr ? 'إدارة عقاراتك يجب ألا تكون هكذا' : "Managing your rentals shouldn't feel like this"}
-            </h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+      <section className="py-20 md:py-28 bg-[#ECEEF5]">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+
+          {/* Title */}
+          <motion.div {...fadeUp()} className={`mb-10 ${isAr ? 'text-right' : ''}`}>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0F172A] leading-[1.1] max-w-2xl">
               {isAr
-                ? 'معظم مشغّلي الضيافة السعوديين يديرون 5+ تطبيقات، ويردون على رسائل واتساب على مدار الساعة، ويدخلون بيانات يدوياً في جداول بيانات — كل يوم.'
-                : 'Most Saudi hospitality operators juggle 5+ apps, answer WhatsApp messages around the clock, and manually enter data into spreadsheets — every single day.'}
-            </p>
+                ? 'إدارة عقاراتك يجب ألا تكون هكذا'
+                : "Managing your rentals shouldn't feel like this"}
+            </h2>
           </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(isAr ? [
-              '5 تطبيقات مفتوحة في نفس الوقت',
-              'حجوزات مزدوجة من منصات غير متزامنة',
-              'رسائل واتساب لا تنتهي مع فريق التنظيف',
-              'ملاك يتصلون لطلب تقارير الأداء',
-              'فواتير يدوية غير متوافقة مع زاتكا',
-              'لا رؤية في الوقت الفعلي لأداء العقارات',
-            ] : [
-              '5+ apps open at all times',
-              'Double bookings from out-of-sync channels',
-              'Endless WhatsApp threads with cleaning teams',
-              'Owners calling to ask for performance reports',
-              'Manual invoices not compliant with ZATCA',
-              'No real-time visibility into property performance',
-            ]).map((pain, i) => (
-              <motion.div key={i} {...fadeUp(i * 0.07)} className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-2xl p-5">
-                <span className="text-red-400 mt-0.5 shrink-0 text-lg">✕</span>
-                <p className="text-slate-300 text-sm font-medium">{pain}</p>
-              </motion.div>
-            ))}
+
+          {/* ── Bento grid: 4 cols × 2 rows ── */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+
+            {/* ── ROW 1 ── */}
+
+            {/* Card 1 — large (2-col), scattered apps visual */}
+            <motion.div
+              {...fadeUp(0.05)}
+              className="col-span-2 bg-white rounded-3xl p-7 relative overflow-hidden flex flex-col justify-end min-h-[220px]"
+            >
+              {/* Soft blob bg */}
+              <div
+                className="absolute -top-10 -right-10 w-64 h-64 pointer-events-none"
+                style={{ background: 'radial-gradient(circle at 60% 40%, #DBEAFE 0%, transparent 65%)', borderRadius: '60% 40% 50% 60% / 55% 45% 55% 45%' }}
+              />
+              {/* Floating app tags (decorative) */}
+              <div className={`absolute top-6 ${isAr ? 'left-6' : 'right-6'} flex flex-col gap-2 items-end`}>
+                {[
+                  { name: 'Airbnb',       bg: '#FFF1F1', border: '#FECACA', text: '#DC2626' },
+                  { name: 'Booking.com',  bg: '#EFF6FF', border: '#BFDBFE', text: '#1D4ED8' },
+                  { name: 'WhatsApp',     bg: '#F0FDF4', border: '#BBF7D0', text: '#15803D' },
+                  { name: 'Excel',        bg: '#F0FDF4', border: '#A7F3D0', text: '#059669' },
+                  { name: '+5 more tabs', bg: '#F8FAFC', border: '#E2E8F0', text: '#64748B' },
+                ].map((app, i) => (
+                  <span
+                    key={i}
+                    className="text-[10px] font-bold px-2.5 py-1 rounded-lg border leading-none"
+                    style={{ backgroundColor: app.bg, borderColor: app.border, color: app.text, opacity: 0.75 + i * 0.05 }}
+                  >
+                    {app.name}
+                  </span>
+                ))}
+              </div>
+              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <p className="font-bold text-[#0F172A] text-lg leading-snug max-w-[220px]">
+                {isAr ? '5 تطبيقات مفتوحة في نفس الوقت' : '5+ apps open at all times'}
+              </p>
+              <p className="text-slate-400 text-sm mt-1.5 max-w-[220px] leading-relaxed">
+                {isAr ? 'تبديل مستمر بين منصات متعددة يومياً' : 'Constant switching between platforms every day'}
+              </p>
+            </motion.div>
+
+            {/* Card 2 */}
+            <motion.div
+              {...fadeUp(0.1)}
+              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+            >
+              <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-orange-50 pointer-events-none" />
+              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+                {isAr ? 'حجوزات مزدوجة من منصات غير متزامنة' : 'Double bookings from out-of-sync channels'}
+              </p>
+            </motion.div>
+
+            {/* Card 3 */}
+            <motion.div
+              {...fadeUp(0.15)}
+              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+            >
+              <div className="absolute top-4 left-4 w-14 h-14 rounded-full bg-green-50 pointer-events-none" />
+              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+                {isAr ? 'رسائل واتساب لا تنتهي مع فريق التنظيف' : 'Endless WhatsApp threads with cleaning teams'}
+              </p>
+            </motion.div>
+
+            {/* ── ROW 2 ── */}
+
+            {/* Card 4 */}
+            <motion.div
+              {...fadeUp(0.2)}
+              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+            >
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-violet-50 pointer-events-none" />
+              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+                {isAr ? 'ملاك يتصلون لطلب تقارير الأداء' : 'Owners calling to ask for performance reports'}
+              </p>
+            </motion.div>
+
+            {/* Card 5 */}
+            <motion.div
+              {...fadeUp(0.25)}
+              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+            >
+              <div className="absolute top-3 right-3 w-20 h-20 rounded-full bg-yellow-50 pointer-events-none" />
+              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+                {isAr ? 'فواتير يدوية غير متوافقة مع زاتكا' : 'Manual invoices not compliant with ZATCA'}
+              </p>
+            </motion.div>
+
+            {/* Card 6 — ghost chart visual */}
+            <motion.div
+              {...fadeUp(0.3)}
+              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+            >
+              {/* Organic blob */}
+              <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 bg-slate-100 pointer-events-none"
+                style={{ borderRadius: '58% 42% 48% 52% / 52% 46% 54% 48%' }}
+              />
+              {/* Ghost bar chart */}
+              <div className="absolute top-5 left-1/2 -translate-x-1/2 flex items-end gap-1 opacity-[0.18]">
+                {[45, 68, 38, 74, 52, 82, 48].map((h, i) => (
+                  <div key={i} className="w-3.5 rounded-t bg-slate-500" style={{ height: `${h * 0.9}px` }} />
+                ))}
+              </div>
+              {/* Question marks */}
+              <div className="absolute top-4 right-5 text-slate-300 text-2xl font-black select-none leading-none opacity-40">?</div>
+              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+                {isAr ? 'لا رؤية في الوقت الفعلي لأداء العقارات' : 'No real-time visibility into property performance'}
+              </p>
+            </motion.div>
+
+            {/* Card 7 — CTA card (lavender) */}
+            <motion.div
+              {...fadeUp(0.35)}
+              className="rounded-3xl p-6 flex flex-col justify-between min-h-[220px]"
+              style={{ backgroundColor: '#C4BEF0' }}
+            >
+              <p className="font-bold text-[#1a1550] text-[15px] leading-snug">
+                {isAr
+                  ? '«StayHub» — هو المنصة التي تحل جميع هذه المشاكل وتحقق النتائج.'
+                  : '"StayHub" — the platform that solves all of this and delivers results.'}
+              </p>
+              <button
+                onClick={openModal}
+                className="inline-flex items-center justify-center gap-2 w-full py-3 bg-[#0F172A] text-white font-bold rounded-full text-sm hover:bg-slate-700 transition-colors mt-4"
+              >
+                {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
+                <ArrowRight size={13} />
+              </button>
+            </motion.div>
+
           </div>
-          <motion.div {...fadeUp(0.4)} className="mt-10 text-center">
-            <p className="text-2xl font-bold text-white">
-              {isAr ? 'StayHub يحل كل هذا.' : 'StayHub solves all of it.'}
-            </p>
-          </motion.div>
         </div>
       </section>
 
       {/* ── 4. AUTOMATION WORKFLOW ──────────────────────────── */}
       <section className="py-20 md:py-24 overflow-hidden" style={{ background: 'linear-gradient(135deg, #121447 0%, #4733c7 100%)' }}>
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
 
           {/* ── Header row: headline + integration panel ── */}
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start mb-12">
@@ -634,19 +987,19 @@ export default function HomepageClient() {
                   </span>
                   <span className="px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#14c7c4]">SMS</span>
                   {/* Tuya logo chip */}
-                  <span className="flex items-center px-2 py-1.5 bg-white/90 rounded-lg">
-                    <Image src="/logos/tuya.webp" alt="Tuya" width={48} height={20} className="object-contain h-5 w-auto" />
+                  <span className="flex items-center px-2 py-2 bg-white/90 rounded-lg">
+                    <Image src="/logos/tuya.webp" alt="Tuya" width={64} height={28} className="object-contain h-7 w-auto" />
                   </span>
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   {/* TTLock logo chip */}
-                  <span className="flex items-center px-2 py-1.5 bg-white/90 rounded-lg">
-                    <Image src="/logos/ttlock.webp" alt="TTLock" width={60} height={20} className="object-contain h-5 w-auto" />
+                  <span className="flex items-center px-2 py-2 bg-white/90 rounded-lg">
+                    <Image src="/logos/ttlock.webp" alt="TTLock" width={80} height={28} className="object-contain h-7 w-auto" />
                   </span>
                   <span className="px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#14c7c4]">ANB</span>
                   {/* Absher logo */}
-                  <span className="flex items-center px-2 py-1.5 bg-white/90 rounded-lg">
-                    <Image src="/logos/absher.png" alt="Absher" width={60} height={20} className="object-contain h-5 w-auto" />
+                  <span className="flex items-center px-2 py-2 bg-white/90 rounded-lg">
+                    <Image src="/logos/absher.png" alt="Absher" width={80} height={28} className="object-contain h-7 w-auto" />
                   </span>
                 </div>
               </div>
@@ -697,43 +1050,101 @@ export default function HomepageClient() {
         </div>
       </section>
 
-      {/* ── 5. FEATURE ECOSYSTEM ────────────────────────────── */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <motion.div {...fadeUp()} className="text-center mb-14">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-violet-100 text-violet-700 border border-violet-200 mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-              {isAr ? 'منظومة المميزات' : 'Feature Ecosystem'}
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0F172A] mb-4">
-              {isAr ? 'كل ما تحتاجه في مكان واحد' : 'Everything you need, in one place'}
-            </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              {isAr ? 'لا تكامل خارجي. لا بيانات متفرقة. منصة واحدة متكاملة لعملياتك.' : 'No external stitching. No fragmented data. One integrated platform for your entire operation.'}
-            </p>
+      {/* ── 5. FEATURE ECOSYSTEM — glassy carousel ──────────── */}
+      <section className="py-24 relative"
+        style={{ background: 'linear-gradient(135deg, #F5F3FF 0%, #EFF8FF 45%, #F0F4FF 100%)', overflow: 'clip' }}>
+        {/* Ambient blobs */}
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-25 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #7C69E8, transparent 70%)' }} />
+        <div className="absolute bottom-0 -left-24 w-[400px] h-[400px] rounded-full opacity-20 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #25A4E8, transparent 70%)' }} />
+
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+
+          {/* Header row: badge + title + arrows */}
+          <motion.div {...fadeUp()} className={`flex flex-col md:flex-row md:items-end gap-6 justify-between mb-12 ${isAr ? 'flex-row-reverse' : ''}`}>
+            <div className={isAr ? 'text-right' : ''}>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-violet-100 text-violet-700 border border-violet-200 mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+                {isAr ? 'منظومة المميزات' : 'Feature Ecosystem'}
+              </span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0F172A] mb-3">
+                {isAr ? 'كل ما تحتاجه في مكان واحد' : 'Everything you need, in one place'}
+              </h2>
+              <p className="text-slate-500 text-base max-w-xl">
+                {isAr ? 'لا تكامل خارجي. لا بيانات متفرقة. منصة واحدة متكاملة.' : 'No external stitching. No fragmented data. One integrated platform.'}
+              </p>
+            </div>
+
+            {/* Arrow controls */}
+            <div className={`flex items-center gap-3 shrink-0 ${isAr ? 'flex-row-reverse' : ''}`}>
+              <Link href="/features" className="hidden md:inline-flex items-center gap-1.5 text-sm font-bold text-[#25A4E8] hover:gap-2.5 transition-all me-4">
+                {isAr ? 'عرض الكل' : 'View all'} <ArrowRight size={14} />
+              </Link>
+              <button
+                onClick={() => scrollFeatures(isAr ? 'right' : 'left')}
+                className="w-11 h-11 rounded-full border-2 border-white/70 bg-white/60 backdrop-blur-sm flex items-center justify-center text-slate-500 hover:border-[#25A4E8] hover:text-[#25A4E8] transition-all shadow-sm"
+                aria-label="Previous"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                onClick={() => scrollFeatures(isAr ? 'left' : 'right')}
+                className="w-11 h-11 rounded-full bg-[#0F172A] flex items-center justify-center text-white hover:bg-[#25A4E8] transition-all shadow-lg shadow-slate-900/20"
+                aria-label="Next"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {features.map((f, i) => (
-              <motion.div key={i} {...fadeUp(i * 0.05)}>
-                <Link href={f.href} className="group block bg-white rounded-2xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 h-full">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: `${f.color}15`, color: f.color }}>
-                    <f.icon size={20} />
+
+          {/* Track wrapper */}
+          <div className="relative"
+            onMouseEnter={() => { isPausedRef.current = true; }}
+            onMouseLeave={() => { isPausedRef.current = false; }}
+          >
+            {/* Edge fades — subtle, won't cover hovered cards */}
+            <div className={`absolute ${isAr ? 'right-0' : 'left-0'} top-0 bottom-0 w-10 z-10 pointer-events-none`}
+              style={{ background: isAr ? 'linear-gradient(to left, #F5F3FF, transparent)' : 'linear-gradient(to right, #F5F3FF, transparent)' }} />
+            <div className={`absolute ${isAr ? 'left-0' : 'right-0'} top-0 bottom-0 w-16 z-10 pointer-events-none`}
+              style={{ background: isAr ? 'linear-gradient(to right, #F5F3FF, transparent)' : 'linear-gradient(to left, #F5F3FF, transparent)' }} />
+
+            {/* Scrollable track
+                py-10 gives 40px vertical room inside the overflow clip boundary
+                so the scale(1.05) transform doesn't get clipped at top/bottom     */}
+            <div
+              ref={featureTrackRef}
+              className="flex gap-5 overflow-x-scroll py-10 -my-4"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
+            >
+              {features.map((f, i) => (
+                <FeatureCard3D key={i} f={f} isAr={isAr} />
+              ))}
+
+              {/* "View all" end card */}
+              <div className="shrink-0 w-[200px] flex items-center justify-center">
+                <Link
+                  href="/features"
+                  className="group flex flex-col items-center justify-center gap-4 w-full h-full min-h-[250px] rounded-2xl p-6 text-center transition-all duration-300"
+                  style={{
+                    background: 'rgba(255,255,255,0.5)',
+                    border: '1.5px dashed rgba(124,105,232,0.3)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#7C69E8'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.8)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(124,105,232,0.3)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.5)'; }}
+                >
+                  <div className="w-12 h-12 rounded-full border-2 border-[#7C69E8]/40 flex items-center justify-center group-hover:scale-110 transition-transform group-hover:border-[#7C69E8] group-hover:bg-violet-50">
+                    <ArrowRight size={18} className="text-[#7C69E8]" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1 block">{f.cat}</span>
-                  <h3 className="font-bold text-[#0F172A] mb-2 group-hover:text-[#25A4E8] transition-colors text-sm">{f.title}</h3>
-                  <p className="text-slate-500 text-xs leading-relaxed">{f.desc}</p>
-                  <div className="mt-4 flex items-center gap-1 text-[11px] font-bold text-[#25A4E8] opacity-0 group-hover:opacity-100 transition-opacity">
-                    {isAr ? 'اكتشف المزيد' : 'Learn more'} <ArrowRight size={11} />
-                  </div>
+                  <span className="text-sm font-bold text-[#7C69E8] leading-snug">
+                    {isAr ? 'عرض جميع المميزات' : 'View all features'}
+                  </span>
                 </Link>
-              </motion.div>
-            ))}
+              </div>
+            </div>
           </div>
-          <motion.div {...fadeUp(0.3)} className="mt-8 text-center">
-            <Link href="/features" className="inline-flex items-center gap-2 text-[#25A4E8] font-bold hover:gap-3 transition-all">
-              {isAr ? 'عرض جميع المميزات' : 'View all features'} <ArrowRight size={16} />
-            </Link>
-          </motion.div>
+
         </div>
       </section>
 
@@ -742,7 +1153,7 @@ export default function HomepageClient() {
 
       {/* ── 7. SECURITY & COMPLIANCE ────────────────────────── */}
       <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <motion.div {...fadeUp()} className="text-center mb-14">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-widest rounded-full border border-green-200 mb-5">
               🇸🇦 {isAr ? 'مبني للسوق السعودي' : 'Built for Saudi Arabia'}
@@ -772,7 +1183,7 @@ export default function HomepageClient() {
 
       {/* ── 8. REVENUE ENGINE ───────────────────────────────── */}
       <section className="py-24 bg-gradient-to-br from-[#EFF8FF] to-[#F3F0FF]">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Stats grid */}
             <motion.div {...fadeUp()} className="grid grid-cols-2 gap-4">
@@ -811,7 +1222,7 @@ export default function HomepageClient() {
 
       {/* ── 9. OWNER PORTAL ─────────────────────────────────── */}
       <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div {...fadeUp()}>
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-violet-100 text-violet-700 text-xs font-bold uppercase tracking-widest rounded-full border border-violet-200 mb-6">
@@ -868,7 +1279,7 @@ export default function HomepageClient() {
 
       {/* ── 10. BRANDING & DIRECT BOOKING ───────────────────── */}
       <section className="py-24 bg-[#EFF8FF]">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 text-center">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 text-center">
           <motion.div {...fadeUp()} className="mb-12">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-widest rounded-full border border-blue-200 mb-5">
               <Sparkles size={11} /> {isAr ? 'العلامة التجارية والحجز المباشر' : 'Branding & Direct Booking'}
@@ -904,7 +1315,7 @@ export default function HomepageClient() {
 
       {/* ── 11. INTEGRATIONS ────────────────────────────────── */}
       <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <motion.div {...fadeUp()} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#0F172A] mb-4">
               {isAr ? 'يتصل بمنصاتك الحالية' : 'Connects with your existing platforms'}
@@ -931,8 +1342,8 @@ export default function HomepageClient() {
               <motion.div key={i} {...fadeUp(i * 0.05)}>
                 <Link href={`/integrations/${intg.slug}`}
                   className="group flex items-center gap-3 bg-white rounded-2xl p-4 border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all h-full">
-                  <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-1.5">
-                    <Image src={intg.src} alt={intg.name} width={40} height={40} className="object-contain w-full h-full" />
+                  <div className="w-16 h-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-2">
+                    <Image src={intg.src} alt={intg.name} width={52} height={52} className="object-contain w-full h-full" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-bold text-[#0F172A] text-sm group-hover:text-[#25A4E8] transition-colors truncate">{intg.name}</p>
@@ -953,7 +1364,7 @@ export default function HomepageClient() {
 
       {/* ── 12. TESTIMONIALS ────────────────────────────────── */}
       <section className="py-24 bg-[#EFF8FF]">
-        <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <motion.div {...fadeUp()} className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#0F172A] mb-3">
               {isAr ? 'مشغّلون سعوديون يثقون بـ StayHub' : 'Saudi operators trust StayHub'}
@@ -1013,12 +1424,12 @@ export default function HomepageClient() {
                 : 'Join 500+ Saudi operators running their properties smarter with StayHub. No setup fees. Cancel anytime.'}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/demo" className="px-10 py-4 bg-white text-[#25A4E8] font-extrabold rounded-xl hover:bg-blue-50 transition-colors shadow-2xl text-sm">
+              <button onClick={openModal} className="px-10 py-4 bg-white text-[#25A4E8] font-extrabold rounded-xl hover:bg-blue-50 transition-colors shadow-2xl text-sm">
                 {isAr ? 'احجز عرضاً تجريبياً مجانياً' : 'Book a Free Demo'}
-              </Link>
-              <Link href="/pricing" className="px-10 py-4 border-2 border-white/50 text-white font-bold rounded-xl hover:bg-white/10 hover:border-white transition-colors text-sm">
+              </button>
+              <button onClick={openModal} className="px-10 py-4 border-2 border-white/50 text-white font-bold rounded-xl hover:bg-white/10 hover:border-white transition-colors text-sm">
                 {isAr ? 'عرض الأسعار' : 'View Pricing'}
-              </Link>
+              </button>
             </div>
             <p className="text-white/50 text-xs mt-6">
               {isAr ? '14 يوم تجربة مجانية · لا بطاقة ائتمان مطلوبة' : '14-day free trial · No credit card required'}

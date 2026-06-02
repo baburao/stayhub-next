@@ -1,119 +1,282 @@
 'use client';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import {
+  Globe, Building2, BarChart2, Cpu, FileText, CreditCard, MessageSquare, ArrowRight,
+} from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { allIntegrations } from '@/data/integrations';
+import { useDemoModal } from '@/lib/DemoModalContext';
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 28 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.55, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
+
+/* ── All integrations — source of truth ─────────────────── */
+const INTEGRATIONS = [
+  /* OTA */
+  { slug: 'aqar',                    en: 'AQAR',                  ar: 'عقار',              logo: '/logos/aqar.webp',                     cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#1B5E93' },
+  { slug: 'ejar-ota',                en: 'Ejar',                  ar: 'إيجار',             logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#1C7C54' },
+  { slug: 'airbnb',                  en: 'Airbnb',                ar: 'Airbnb',            logo: '/logos/airbnb.webp',                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#FF5A5F' },
+  { slug: 'booking-com',             en: 'Booking.com',           ar: 'Booking.com',       logo: '/logos/booking-com.webp',              cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#003580' },
+  { slug: 'agoda',                   en: 'AGODA',                 ar: 'أجودا',             logo: '/logos/agoda.webp',                    cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#E31837' },
+  { slug: 'google-vacation-rentals', en: 'Google VR',             ar: 'Google VR',         logo: '/logos/google-vacation-rentals.webp',  cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#4285F4' },
+  { slug: 'qotoon',                  en: 'Qotoon',                ar: 'قطون',              logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#7C4DFF' },
+  { slug: 'attiude',                 en: 'Attiude',               ar: 'Attiude',           logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#00897B' },
+  { slug: 'almosafer',               en: 'Almosafer',             ar: 'المسافر',           logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#0D47A1' },
+  { slug: 'darent',                  en: 'Darent',                ar: 'دارنت',             logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#546E7A' },
+  { slug: 'gathern',                 en: 'Gathern',               ar: 'غثرن',              logo: '/logos/gathern.webp',                  cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#00A651' },
+  /* Government */
+  { slug: 'absher',                  en: 'Absher',                ar: 'أبشر',              logo: '/logos/absher.png',                    cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#00695C' },
+  { slug: 'shmoos',                  en: 'Shmoos',                ar: 'شموس',              logo: '/logos/shomoos.webp',                  cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1565C0' },
+  { slug: 'mot',                     en: 'Ministry of Tourism',   ar: 'وزارة السياحة',    logo: null,                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#6A1B9A' },
+  { slug: 'ejar-gov',                en: 'Ejar',                  ar: 'إيجار',             logo: null,                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1C7C54' },
+  /* Dynamic Pricing */
+  { slug: 'pricelabs',               en: 'PriceLabs',             ar: 'PriceLabs',         logo: '/logos/pricelabs.webp',                cat: 'Pricing',       badge_en: 'Pricing',      badge_ar: 'تسعير',        soon: false, color: '#E65100' },
+  /* Smart Home */
+  { slug: 'tuya',                    en: 'Tuya',                  ar: 'Tuya',              logo: '/logos/tuya.webp',                     cat: 'Smart Home',    badge_en: 'Smart Home',   badge_ar: 'منزل ذكي',     soon: false, color: '#FF6F00' },
+  { slug: 'ttlock',                  en: 'TTLock',                ar: 'TTLock',            logo: '/logos/ttlock.webp',                   cat: 'Smart Home',    badge_en: 'Smart Home',   badge_ar: 'منزل ذكي',     soon: false, color: '#37474F' },
+  /* Accounting */
+  { slug: 'odoo',                    en: 'Odoo',                  ar: 'Odoo',              logo: '/logos/odoo.webp',                     cat: 'Accounting',    badge_en: 'Accounting',   badge_ar: 'محاسبة',       soon: false, color: '#714B67' },
+  { slug: 'quyood',                  en: 'Quyood',                ar: 'قيود',              logo: '/logos/qoyod.webp',                    cat: 'Accounting',    badge_en: 'Accounting',   badge_ar: 'محاسبة',       soon: false, color: '#1A73E8' },
+  { slug: 'daftra',                  en: 'Daftra',                ar: 'دفترة',             logo: '/logos/daftra.webp',                   cat: 'Accounting',    badge_en: 'Accounting',   badge_ar: 'محاسبة',       soon: false, color: '#00796B' },
+  /* Bank */
+  { slug: 'anb',                     en: 'ANB',                   ar: 'البنك العربي',     logo: null,                                   cat: 'Bank',          badge_en: 'Bank',         badge_ar: 'بنك',          soon: false, color: '#B71C1C' },
+  /* Communication */
+  { slug: 'whatsapp',                en: 'WhatsApp',              ar: 'واتساب',            logo: '/icons/whatsapp.svg',                  cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#25D366' },
+  { slug: 'vfirst-sms',              en: 'VFirst SMS',            ar: 'VFirst SMS',        logo: null,                                   cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#5C6BC0' },
+];
+
+/* ── Category tabs ──────────────────────────────────────── */
+const CATS = [
+  { key: 'All',          en: 'All',              ar: 'الكل',              icon: Globe,         color: '#25A4E8' },
+  { key: 'OTA',          en: 'OTA',              ar: 'OTA',               icon: Globe,         color: '#FF5A5F' },
+  { key: 'Government',   en: 'Government',       ar: 'حكومي',             icon: Building2,     color: '#10B981' },
+  { key: 'Pricing',      en: 'Dynamic Pricing',  ar: 'تسعير ديناميكي',   icon: BarChart2,     color: '#F59E0B' },
+  { key: 'Smart Home',   en: 'Smart Home',       ar: 'منزل ذكي',          icon: Cpu,           color: '#6366F1' },
+  { key: 'Accounting',   en: 'Accounting',       ar: 'محاسبة',            icon: FileText,      color: '#7C69E8' },
+  { key: 'Bank',         en: 'Bank',             ar: 'بنك',               icon: CreditCard,    color: '#0F172A' },
+  { key: 'Communication',en: 'Communication',    ar: 'تواصل',             icon: MessageSquare, color: '#25D366' },
+];
+
+/* ── Integration card ───────────────────────────────────── */
+function IntegrationCard({ intg, isAr }: { intg: typeof INTEGRATIONS[0]; isAr: boolean }) {
+  const name   = isAr ? intg.ar   : intg.en;
+  const badge  = isAr ? intg.badge_ar : intg.badge_en;
+
+  return (
+    <Link
+      href={`/integrations/${intg.slug}`}
+      className={`group flex items-center gap-4 bg-white rounded-2xl p-5 border transition-all duration-200 h-full
+        ${intg.soon
+          ? 'border-dashed border-slate-200 hover:border-slate-300 cursor-default opacity-75 pointer-events-none'
+          : 'border-slate-100 hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5'
+        }`}
+    >
+      {/* Logo / letter avatar */}
+      <div
+        className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border border-slate-100 bg-white p-1.5 transition-transform group-hover:scale-105"
+      >
+        {intg.logo ? (
+          <Image src={intg.logo} alt={intg.en} width={44} height={44} className="object-contain w-full h-full" />
+        ) : (
+          <span
+            className="text-lg font-extrabold"
+            style={{ color: intg.color }}
+          >
+            {intg.en.slice(0, 2).toUpperCase()}
+          </span>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <p className="font-bold text-[#0F172A] text-sm group-hover:text-[#25A4E8] transition-colors leading-tight truncate">
+            {name}
+          </p>
+          {intg.soon && (
+            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 uppercase tracking-wide shrink-0">
+              {isAr ? 'قريباً' : 'Soon'}
+            </span>
+          )}
+        </div>
+        <span
+          className="text-[11px] font-semibold"
+          style={{ color: intg.color }}
+        >
+          {badge}
+        </span>
+      </div>
+
+      <ArrowRight
+        size={14}
+        className="shrink-0 text-slate-200 group-hover:text-[#25A4E8] transition-colors"
+      />
+    </Link>
+  );
+}
 
 export default function IntegrationsPageClient() {
   const { t, isAr } = useLanguage();
+  const { openModal }    = useDemoModal();
+  const [activeTab, setActiveTab] = useState('All');
+
+  const filtered = activeTab === 'All'
+    ? INTEGRATIONS
+    : INTEGRATIONS.filter(i => i.cat === activeTab);
+
+  const activeCat = CATS.find(c => c.key === activeTab)!;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero */}
+
+      {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#EFF8FF] via-white to-white py-20 md:py-28 text-center">
-        <div className="absolute inset-0 dot-grid opacity-25" />
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[#7C69E8] opacity-[0.06] blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-[#25A4E8] opacity-[0.06] blur-3xl" />
+        <div className="absolute inset-0 dot-grid opacity-25 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[#7C69E8] opacity-[0.06] blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-[#25A4E8] opacity-[0.06] blur-3xl pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-4 md:px-8">
           <motion.div {...fadeUp(0)}>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-violet-100 text-violet-700 border border-violet-200 mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-              {t.integrations.pageBadge}
+              {isAr ? 'جميع التكاملات' : 'All Integrations'}
             </span>
           </motion.div>
           <motion.h1 {...fadeUp(0.08)} className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0F172A] mb-5 leading-tight">
             {isAr
               ? <>{`انشر في كل مكان.`}<br /><span className="gradient-text">{`أدر من مكان واحد.`}</span></>
-              : <>List Everywhere.{' '}<span className="gradient-text">Manage from One Place.</span></>}
+              : <>List Everywhere.{' '}<span className="gradient-text">Manage from One Place.</span></>
+            }
           </motion.h1>
           <motion.p {...fadeUp(0.15)} className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
             {t.integrations.pageSubtitle}
           </motion.p>
-        </div>
-      </section>
 
-      {/* Integrations Grid */}
-      <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-4 md:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allIntegrations.map((integration, index) => {
-              const displayBadge = isAr ? (integration.arBadge ?? integration.badge) : integration.badge;
-              const stats = isAr ? (integration.arStats ?? integration.stats) : integration.stats;
-              return (
-                <motion.div
-                  key={integration.slug}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: (index % 3) * 0.08, ease }}
-                >
-                  <Link
-                    href={`/integrations/${integration.slug}`}
-                    className="group flex flex-col bg-white rounded-2xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all hover:-translate-y-1 h-full"
-                  >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-sm transition-transform group-hover:scale-110"
-                        style={{ backgroundColor: integration.color }}
-                      >
-                        {integration.name.charAt(0)}
-                      </div>
-                      <div>
-                        <h2 className="font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors text-lg">
-                          {integration.name}
-                        </h2>
-                        <span className="text-xs font-semibold" style={{ color: integration.color }}>
-                          {displayBadge}
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-4 flex-1">{integration.tagline}</p>
-                    <div className="flex gap-4 mb-4">
-                      {(stats as Array<{ value: string; label: string; arLabel?: string }>).slice(0, 2).map((stat, i) => (
-                        <div key={i}>
-                          <p className="text-lg font-bold" style={{ color: integration.color }}>{stat.value}</p>
-                          <p className="text-xs text-slate-400">{isAr && stat.arLabel ? stat.arLabel : stat.label}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-1 text-xs font-semibold text-[#25A4E8] opacity-0 group-hover:opacity-100 transition-all">
-                      {t.buttons.viewIntegration} →
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Coming soon */}
-          <motion.div {...fadeUp(0.2)} className="mt-12">
-            <p className="text-center text-sm text-slate-400 uppercase tracking-widest font-semibold mb-6">
-              {t.integrations.comingSoon}
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {['Almosafer', 'Darent', 'AJAAR', 'Airbnb for Work'].map((ch) => (
-                <span key={ch} className="px-5 py-2.5 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-sm font-semibold text-slate-400">
-                  {ch}
-                </span>
-              ))}
-            </div>
+          {/* Stats row */}
+          <motion.div {...fadeUp(0.22)} className="flex flex-wrap justify-center gap-8 mt-10">
+            {[
+              { value: '22+', label: isAr ? 'تكامل نشط' : 'Active integrations' },
+              { value: '7',   label: isAr ? 'فئات' : 'Categories' },
+              { value: '2-way', label: isAr ? 'مزامنة في الوقت الفعلي' : 'Real-time sync' },
+            ].map((s, i) => (
+              <div key={i} className="text-center">
+                <p className="text-3xl font-extrabold gradient-text">{s.value}</p>
+                <p className="text-sm text-slate-500 mt-0.5">{s.label}</p>
+              </div>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── Category tabs + grid ─────────────────────────── */}
+      <section className="py-16 bg-white">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+
+          {/* Tabs */}
+          <motion.div {...fadeUp(0)} className="flex flex-wrap gap-2 mb-10 justify-center">
+            {CATS.map((cat) => {
+              const isActive = activeTab === cat.key;
+              const label = isAr ? cat.ar : cat.en;
+              const count = cat.key === 'All' ? INTEGRATIONS.length : INTEGRATIONS.filter(i => i.cat === cat.key).length;
+              return (
+                <button
+                  key={cat.key}
+                  onClick={() => setActiveTab(cat.key)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                    isActive
+                      ? 'text-white shadow-lg shadow-blue-500/20 border-transparent'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-[#25A4E8]'
+                  }`}
+                  style={isActive ? { backgroundColor: cat.color, borderColor: cat.color } : {}}
+                >
+                  <cat.icon size={13} />
+                  {label}
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                    isActive ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-500'
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </motion.div>
+
+          {/* Category header */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              {activeTab !== 'All' && (
+                <div className="mb-8 flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: `${activeCat.color}18` }}
+                  >
+                    <activeCat.icon size={16} style={{ color: activeCat.color }} />
+                  </div>
+                  <div>
+                    <p className="font-extrabold text-[#0F172A] text-lg">{isAr ? activeCat.ar : activeCat.en}</p>
+                    <p className="text-sm text-slate-400">
+                      {filtered.length} {isAr ? 'تكاملات' : 'integrations'}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Grid */}
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {filtered.map((intg, i) => (
+                  <motion.div
+                    key={intg.slug}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: (i % 8) * 0.04, ease }}
+                  >
+                    <IntegrationCard intg={intg} isAr={isAr} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* ── Missing integration CTA ──────────────────────── */}
+      <section className="py-10 bg-slate-50 border-y border-slate-100">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-start">
+          <div>
+            <p className="font-bold text-[#0F172A] text-sm">
+              {isAr ? 'تكامل مفقود؟' : 'Missing an integration?'}
+            </p>
+            <p className="text-slate-500 text-sm">
+              {isAr ? 'أخبرنا وسنضيفه لقائمة الأولويات.' : "Tell us and we'll add it to our priority list."}
+            </p>
+          </div>
+          <button
+            onClick={openModal}
+            className="flex items-center gap-2 px-6 py-3 bg-[#25A4E8] text-white text-sm font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/20 shrink-0"
+          >
+            {isAr ? 'اطلب تكاملاً' : 'Request an integration'}
+            <ArrowRight size={14} />
+          </button>
+        </div>
+      </section>
+
+      {/* ── CTA ─────────────────────────────────────────── */}
       <section className="py-20 relative overflow-hidden bg-gradient-to-br from-[#25A4E8] to-[#7C69E8]">
-        <div className="absolute inset-0 dot-grid opacity-10" />
+        <div className="absolute inset-0 dot-grid opacity-10 pointer-events-none" />
         <div className="relative max-w-4xl mx-auto px-4 md:px-8 text-center">
           <motion.div {...fadeUp()}>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -123,9 +286,12 @@ export default function IntegrationsPageClient() {
               {t.integrations.connectDesc}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/demo" className="px-8 py-4 bg-white text-[#25A4E8] font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
+              <button
+                onClick={openModal}
+                className="px-8 py-4 bg-white text-[#25A4E8] font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
+              >
                 {t.buttons.bookDemoShort}
-              </Link>
+              </button>
               <Link href="/pricing" className="px-8 py-4 border-2 border-white/60 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors">
                 {t.buttons.viewPricing}
               </Link>
@@ -133,6 +299,7 @@ export default function IntegrationsPageClient() {
           </motion.div>
         </div>
       </section>
+
     </div>
   );
 }

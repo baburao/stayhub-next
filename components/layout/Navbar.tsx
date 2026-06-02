@@ -9,139 +9,255 @@ import {
   Globe, Calendar, FileText, Shield, Lock, MessageSquare,
   CreditCard, Brush, Wrench, BarChart2, DollarSign, Link2, Smartphone, Share2,
   BookOpen, LifeBuoy, Code2, Award, Zap, Building2, Users, ArrowRight, Play,
-  CheckCircle2, Star, Layers, Cpu, Sparkles,
+  CheckCircle2, Star, Layers, Cpu, Sparkles, RefreshCw, TrendingUp,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useLanguage } from '@/lib/LanguageContext';
+import { useDemoModal } from '@/lib/DemoModalContext';
 
 /* ── feature categories ─────────────────────────────────── */
 const FEATURE_CATEGORIES_EN = [
   {
-    label: 'Distribution',
-    desc: 'Sync listings across all channels',
+    label: 'Channel Manager',
+    desc: 'List on every major OTA',
     color: '#25A4E8',
     icon: Globe,
     items: [
-      { slug: 'channel-manager',        label: 'Channel Manager',        desc: 'Sync all OTAs from one place',      icon: Globe,    isNew: false },
-      { slug: 'availability-calendar',  label: 'Availability Calendar',  desc: 'Visual multi-property calendar',    icon: Calendar, isNew: false },
-      { slug: 'reservation-management', label: 'Reservation Management', desc: 'Centralize all bookings',           icon: FileText, isNew: false },
+      { slug: 'channel-manager/aqar',    label: 'AQAR',         desc: 'Saudi local OTA platform',         icon: Building2,  isNew: false },
+      { slug: 'channel-manager/ejar',    label: 'Ejar',         desc: 'Government rental platform',       icon: FileText,   isNew: false },
+      { slug: 'channel-manager/airbnb',  label: 'Airbnb',       desc: 'Global short-term rental OTA',     icon: Globe,      isNew: false },
+      { slug: 'channel-manager/booking', label: 'Booking.com',  desc: 'World\'s largest OTA platform',   icon: Globe,      isNew: false },
+      { slug: 'channel-manager/agoda',   label: 'AGODA',        desc: 'Asia-Pacific OTA leader',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/google',  label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/qotoon',  label: 'Qotoon',       desc: 'Saudi rental platform',            icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/attiude', label: 'Attiude',      desc: 'Coming soon',                      icon: Globe,      isNew: true  },
     ],
   },
   {
-    label: 'Guest Experience',
-    desc: 'Delight guests at every touchpoint',
+    label: 'PMS',
+    desc: 'Run your full property operation',
     color: '#7C69E8',
-    icon: Users,
+    icon: Layers,
     items: [
-      { slug: 'guest-verification',  label: 'Guest Verification',  desc: 'ID, deposit & signed contracts',   icon: Shield,       isNew: false },
-      { slug: 'automated-messaging', label: 'Automated Messaging', desc: 'Guest comms on autopilot',         icon: MessageSquare, isNew: false },
-      { slug: 'guest-app',           label: 'Guest App',           desc: 'Mobile guest experience',          icon: Smartphone,   isNew: true  },
+      { slug: 'unified-calendar',        label: 'Unified Calendar',    desc: 'All properties in one view',       icon: Calendar,      isNew: false },
+      { slug: 'unified-inbox',           label: 'Unified Inbox',       desc: 'All guest messages in one place',  icon: MessageSquare, isNew: false },
+      { slug: 'channel-management',      label: 'Channel Management',  desc: 'Manage all OTA connections',       icon: Globe,         isNew: false },
+      { slug: 'task-management',         label: 'Task Management',     desc: 'Assign and track team tasks',      icon: CheckCircle2,  isNew: false },
+      { slug: 'housekeeping-management', label: 'Housekeeping',        desc: 'Auto-assign cleaning tasks',       icon: Brush,         isNew: false },
+      { slug: 'direct-booking-website',  label: 'Direct Booking',      desc: 'Commission-free reservations',     icon: Link2,         isNew: false },
     ],
   },
   {
-    label: 'Operations',
-    desc: 'Run your team without WhatsApp',
+    label: 'Automation',
+    desc: 'Automate the full guest journey',
     color: '#F59E0B',
-    icon: Cpu,
+    icon: Zap,
     items: [
-      { slug: 'smart-lock-automation',   label: 'Smart Lock Automation', desc: 'Keyless entry management',         icon: Lock,  isNew: false },
-      { slug: 'housekeeping-management', label: 'Housekeeping',          desc: 'Auto-assign cleaning tasks',       icon: Brush, isNew: false },
-      { slug: 'maintenance-management',  label: 'Maintenance',           desc: 'Track & resolve issues fast',      icon: Wrench, isNew: false },
+      { slug: 'guest-journey',         label: 'Guest Journey',  desc: '7-step automated guest flow',      icon: Zap,           isNew: false },
+      { slug: 'automated-messaging',   label: 'WhatsApp',       desc: 'Guest comms on autopilot',         icon: MessageSquare, isNew: false },
+      { slug: 'sms-notifications',     label: 'SMS',            desc: 'Automated SMS via VFirst',         icon: Smartphone,    isNew: false },
+      { slug: 'tuya-integration',      label: 'Tuya',           desc: 'Smart home & IoT automation',      icon: Cpu,           isNew: false },
+      { slug: 'ttlock-integration',    label: 'TTLock',         desc: 'Smart lock door access',           icon: Lock,          isNew: false },
     ],
   },
   {
-    label: 'Revenue & Finance',
-    desc: 'Maximize earnings, stay compliant',
+    label: 'Owners & Finance',
+    desc: 'Full financial transparency',
     color: '#10B981',
-    icon: BarChart2,
+    icon: DollarSign,
     items: [
-      { slug: 'revenue-analytics',  label: 'Revenue Analytics',  desc: 'RevPAR, ADR, occupancy',          icon: BarChart2, isNew: false },
-      { slug: 'payment-collection', label: 'Payment Collection', desc: 'ZATCA-compliant invoicing',       icon: CreditCard, isNew: false },
-      { slug: 'owner-portal',       label: 'Owner Portal',       desc: 'Financial transparency',          icon: DollarSign, isNew: false },
+      { slug: 'expenses-model',     label: 'Expenses Model', desc: 'Track all property costs',          icon: CreditCard, isNew: false },
+      { slug: 'vat-model',          label: 'VAT Model',      desc: 'Saudi VAT & ZATCA compliance',      icon: FileText,   isNew: false },
+      { slug: 'owner-portal',       label: 'Owner Portal',   desc: 'Branded portals per owner',         icon: Users,      isNew: false },
+      { slug: 'extras-upsells',     label: 'Extra',          desc: 'Upsells & add-on services',         icon: Star,       isNew: false },
+      { slug: 'payout',             label: 'Payout',         desc: 'Owner disbursements & splits',      icon: DollarSign, isNew: false },
+      { slug: 'pay-link',           label: 'Pay Link',       desc: 'Send payment links to guests',      icon: Link2,      isNew: false },
+    ],
+  },
+  {
+    label: 'Damage Protection',
+    desc: 'Protect your properties & income',
+    color: '#EF4444',
+    icon: Shield,
+    items: [
+      { slug: 'security-deposit',   label: 'Security Deposit',    desc: 'Automated deposit collection',    icon: Shield,       isNew: false },
+      { slug: 'guest-verification', label: 'Absher Verification', desc: 'ID check before every check-in', icon: CheckCircle2, isNew: false },
+      { slug: 'e-sign-contracts',   label: 'E-Sign Contract',     desc: 'Legally binding agreements',     icon: FileText,     isNew: false },
+      { slug: 'tawuniya',           label: 'Tawuniya',            desc: 'Property insurance — soon',      icon: Shield,       isNew: true  },
     ],
   },
   {
     label: 'Branding',
-    desc: 'Own your bookings, own your brand',
+    desc: 'Own your brand & direct bookings',
     color: '#EC4899',
     icon: Sparkles,
     items: [
-      { slug: 'direct-booking-website', label: 'Direct Booking Website', desc: 'Commission-free bookings', icon: Link2,  isNew: false },
-      { slug: 'referral-links',         label: 'Referral Links',         desc: 'Grow via referrals',       icon: Share2, isNew: true  },
+      { slug: 'guest-app',              label: 'Branded App',     desc: 'White-label guest mobile app',    icon: Smartphone,    isNew: false },
+      { slug: 'website-builder',        label: 'Website Builder', desc: 'Your own branded booking site',   icon: Code2,         isNew: false },
+      { slug: 'referral-links',         label: 'Referral Link',   desc: 'Grow via ambassador referrals',   icon: Share2,        isNew: false },
+      { slug: 'whatsapp-sms',           label: 'WhatsApp & SMS',  desc: 'Guest comms under your brand',    icon: MessageSquare, isNew: false },
+    ],
+  },
+  {
+    label: 'CRM',
+    desc: 'Know and grow your guests',
+    color: '#6366F1',
+    icon: Users,
+    items: [
+      { slug: 'guest-profiles',    label: 'Guest Profile',      desc: 'Complete guest history & data',   icon: Users,  isNew: false },
+      { slug: 'segmentation',      label: 'Segmentation',       desc: 'Target the right guests',         icon: Layers, isNew: false },
+      { slug: 'coupons-discounts', label: 'Coupons / Discount', desc: 'Loyalty and promo tools',         icon: Star,   isNew: false },
+      { slug: 'campaigns',         label: 'Campaigns',          desc: 'WhatsApp & SMS marketing',        icon: Zap,    isNew: false },
     ],
   },
 ];
 
 const FEATURE_CATEGORIES_AR = [
   {
-    label: 'التوزيع',
-    desc: 'زامن القوائم عبر جميع القنوات',
+    label: 'مدير القنوات',
+    desc: 'سرد على كل منصة OTA رئيسية',
     color: '#25A4E8',
     icon: Globe,
     items: [
-      { slug: 'channel-manager',        label: 'مدير القنوات',        desc: 'مزامنة جميع OTAs من مكان واحد',   icon: Globe,    isNew: false },
-      { slug: 'availability-calendar',  label: 'تقويم التوفر',        desc: 'تقويم مرئي متعدد العقارات',       icon: Calendar, isNew: false },
-      { slug: 'reservation-management', label: 'إدارة الحجوزات',      desc: 'مركزة جميع الحجوزات',            icon: FileText, isNew: false },
+      { slug: 'channel-manager/aqar',    label: 'عقار',         desc: 'منصة إيجار سعودية محلية',          icon: Building2,  isNew: false },
+      { slug: 'channel-manager/ejar',    label: 'إيجار',        desc: 'منصة الإيجار الحكومية',            icon: FileText,   isNew: false },
+      { slug: 'channel-manager/airbnb',  label: 'Airbnb',       desc: 'أكبر منصة إيجار قصير المدى',      icon: Globe,      isNew: false },
+      { slug: 'channel-manager/booking', label: 'Booking.com',  desc: 'أكبر منصة حجز في العالم',         icon: Globe,      isNew: false },
+      { slug: 'channel-manager/agoda',   label: 'AGODA',        desc: 'رائدة منطقة آسيا والمحيط الهادئ', icon: Globe,      isNew: false },
+      { slug: 'channel-manager/google',  label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/qotoon',  label: 'قطون',         desc: 'منصة إيجار سعودية',               icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/attiude', label: 'Attiude',      desc: 'قريباً',                           icon: Globe,      isNew: true  },
     ],
   },
   {
-    label: 'تجربة الضيف',
-    desc: 'أسعد ضيوفك في كل نقطة اتصال',
+    label: 'نظام إدارة العقارات',
+    desc: 'أدر عمليات عقاراتك بالكامل',
     color: '#7C69E8',
-    icon: Users,
+    icon: Layers,
     items: [
-      { slug: 'guest-verification',  label: 'التحقق من الضيوف', desc: 'هوية، وديعة وعقود',             icon: Shield,       isNew: false },
-      { slug: 'automated-messaging', label: 'الرسائل الآلية',   desc: 'تواصل الضيوف بشكل تلقائي',     icon: MessageSquare, isNew: false },
-      { slug: 'guest-app',           label: 'تطبيق الضيوف',    desc: 'تجربة ضيف على الجوال',          icon: Smartphone,   isNew: true  },
+      { slug: 'unified-calendar',        label: 'التقويم الموحد',      desc: 'جميع العقارات في نظرة واحدة',     icon: Calendar,      isNew: false },
+      { slug: 'unified-inbox',           label: 'صندوق الوارد الموحد', desc: 'رسائل الضيوف في مكان واحد',       icon: MessageSquare, isNew: false },
+      { slug: 'channel-management',      label: 'إدارة القنوات',       desc: 'إدارة جميع تكاملات OTA',         icon: Globe,         isNew: false },
+      { slug: 'task-management',         label: 'إدارة المهام',        desc: 'تعيين مهام الفريق وتتبعها',      icon: CheckCircle2,  isNew: false },
+      { slug: 'housekeeping-management', label: 'التدبير المنزلي',     desc: 'تعيين مهام التنظيف تلقائياً',   icon: Brush,         isNew: false },
+      { slug: 'direct-booking-website',  label: 'الحجز المباشر',       desc: 'حجوزات بدون عمولة',              icon: Link2,         isNew: false },
     ],
   },
   {
-    label: 'العمليات',
-    desc: 'أدر فريقك بدون واتساب',
+    label: 'الأتمتة',
+    desc: 'أتمت رحلة الضيف بالكامل',
     color: '#F59E0B',
-    icon: Cpu,
+    icon: Zap,
     items: [
-      { slug: 'smart-lock-automation',   label: 'أتمتة الأقفال الذكية', desc: 'إدارة الدخول بدون مفتاح',      icon: Lock,  isNew: false },
-      { slug: 'housekeeping-management', label: 'التدبير المنزلي',       desc: 'تعيين مهام التنظيف تلقائياً', icon: Brush, isNew: false },
-      { slug: 'maintenance-management',  label: 'الصيانة',              desc: 'تتبع وحل المشكلات بسرعة',     icon: Wrench, isNew: false },
+      { slug: 'guest-journey',         label: 'رحلة الضيف',  desc: 'تدفق مؤتمت من 7 خطوات',           icon: Zap,           isNew: false },
+      { slug: 'automated-messaging',   label: 'واتساب',      desc: 'تواصل الضيوف بشكل تلقائي',       icon: MessageSquare, isNew: false },
+      { slug: 'sms-notifications',     label: 'SMS',          desc: 'رسائل SMS تلقائية عبر VFirst',    icon: Smartphone,    isNew: false },
+      { slug: 'tuya-integration',      label: 'Tuya',         desc: 'أتمتة المنزل الذكي وإنترنت الأشياء', icon: Cpu,        isNew: false },
+      { slug: 'ttlock-integration',    label: 'TTLock',       desc: 'التحكم في الأقفال الذكية',        icon: Lock,          isNew: false },
     ],
   },
   {
-    label: 'الإيرادات والمالية',
-    desc: 'زد الأرباح وابقَ ملتزماً',
+    label: 'الملاك والمالية',
+    desc: 'شفافية مالية كاملة',
     color: '#10B981',
-    icon: BarChart2,
+    icon: DollarSign,
     items: [
-      { slug: 'revenue-analytics',  label: 'تحليلات الإيرادات', desc: 'رؤى RevPAR وADR والإشغال',  icon: BarChart2, isNew: false },
-      { slug: 'payment-collection', label: 'تحصيل المدفوعات',  desc: 'فوترة متوافقة مع زاتكا',    icon: CreditCard, isNew: false },
-      { slug: 'owner-portal',       label: 'بوابة المالك',      desc: 'الشفافية المالية للملاك',   icon: DollarSign, isNew: false },
+      { slug: 'expenses-model',     label: 'نموذج المصروفات',    desc: 'تتبع جميع تكاليف العقارات',       icon: CreditCard, isNew: false },
+      { slug: 'vat-model',          label: 'نموذج ضريبة القيمة', desc: 'الامتثال لزاتكا وضريبة القيمة',  icon: FileText,   isNew: false },
+      { slug: 'owner-portal',       label: 'بوابة المالك',       desc: 'بوابات مخصصة لكل مالك',          icon: Users,      isNew: false },
+      { slug: 'extras-upsells',     label: 'إضافات',             desc: 'خدمات وإضافات مدفوعة للضيوف',    icon: Star,       isNew: false },
+      { slug: 'payout',             label: 'المدفوعات',          desc: 'صرف مستحقات الملاك',             icon: DollarSign, isNew: false },
+      { slug: 'pay-link',           label: 'رابط الدفع',         desc: 'إرسال روابط دفع للضيوف',         icon: Link2,      isNew: false },
+    ],
+  },
+  {
+    label: 'حماية من الأضرار',
+    desc: 'احمِ عقاراتك ودخلك',
+    color: '#EF4444',
+    icon: Shield,
+    items: [
+      { slug: 'security-deposit',   label: 'الوديعة الأمنية',     desc: 'تحصيل الودائع تلقائياً',         icon: Shield,       isNew: false },
+      { slug: 'guest-verification', label: 'التحقق عبر أبشر',    desc: 'تحقق من هوية كل ضيف',           icon: CheckCircle2, isNew: false },
+      { slug: 'e-sign-contracts',   label: 'العقد الإلكتروني',   desc: 'عقود ملزمة قانونياً عبر إيجار', icon: FileText,     isNew: false },
+      { slug: 'tawuniya',           label: 'تعاونية',             desc: 'تأمين العقارات — قريباً',        icon: Shield,       isNew: true  },
     ],
   },
   {
     label: 'العلامة التجارية',
-    desc: 'امتلك حجوزاتك وعلامتك التجارية',
+    desc: 'امتلك علامتك وحجوزاتك',
     color: '#EC4899',
     icon: Sparkles,
     items: [
-      { slug: 'direct-booking-website', label: 'موقع الحجز المباشر', desc: 'حجوزات بدون عمولة', icon: Link2,  isNew: false },
-      { slug: 'referral-links',         label: 'روابط الإحالة',      desc: 'النمو عبر الإحالات', icon: Share2, isNew: true  },
+      { slug: 'guest-app',              label: 'تطبيق مخصص',     desc: 'تطبيق جوال بعلامتك التجارية',   icon: Smartphone,    isNew: false },
+      { slug: 'website-builder',        label: 'منشئ المواقع',   desc: 'موقع حجز مباشر باسمك',         icon: Code2,         isNew: false },
+      { slug: 'referral-links',         label: 'رابط الإحالة',   desc: 'النمو عبر سفراء علامتك',       icon: Share2,        isNew: false },
+      { slug: 'whatsapp-sms',           label: 'واتساب و SMS',    desc: 'تواصل تحت علامتك التجارية',    icon: MessageSquare, isNew: false },
+    ],
+  },
+  {
+    label: 'إدارة علاقات الضيوف',
+    desc: 'اعرف ضيوفك وانمِ علاقتك بهم',
+    color: '#6366F1',
+    icon: Users,
+    items: [
+      { slug: 'guest-profiles',    label: 'ملف الضيف',           desc: 'تاريخ الضيف والبيانات الكاملة',  icon: Users,  isNew: false },
+      { slug: 'segmentation',      label: 'التقسيم',             desc: 'استهدف الضيوف المناسبين',        icon: Layers, isNew: false },
+      { slug: 'coupons-discounts', label: 'الكوبونات والخصومات', desc: 'أدوات الولاء والترويج',          icon: Star,   isNew: false },
+      { slug: 'campaigns',         label: 'الحملات',             desc: 'تسويق عبر واتساب و SMS',         icon: Zap,    isNew: false },
     ],
   },
 ];
 
 const INTEGRATIONS = [
-  { slug: 'airbnb',                  en: 'Airbnb',                  ar: 'Airbnb',    logo: '/logos/airbnb.webp',                  badge_en: 'OTA',     badge_ar: 'OTA' },
-  { slug: 'booking-com',             en: 'Booking.com',             ar: 'Booking',   logo: '/logos/booking-com.webp',             badge_en: 'OTA',     badge_ar: 'OTA' },
-  { slug: 'agoda',                   en: 'Agoda',                   ar: 'أجودا',     logo: '/logos/agoda.webp',                   badge_en: 'OTA',     badge_ar: 'OTA' },
-  { slug: 'vrbo',                    en: 'Vrbo',                    ar: 'Vrbo',      logo: '/logos/vrbo.webp',                    badge_en: 'OTA',     badge_ar: 'OTA' },
-  { slug: 'google-vacation-rentals', en: 'Google Vacation Rentals', ar: 'Google',   logo: '/logos/google-vacation-rentals.webp', badge_en: 'Search',  badge_ar: 'بحث' },
-  { slug: 'gathern',                 en: 'Gathern',                 ar: 'غثرن',      logo: '/logos/gathern.webp',                 badge_en: 'Local',   badge_ar: 'محلي' },
-  { slug: 'aqar',                    en: 'AQAR',                    ar: 'عقار',      logo: '/logos/aqar.webp',                    badge_en: 'Local',   badge_ar: 'محلي' },
-  { slug: 'pricelabs',               en: 'PriceLabs',               ar: 'PriceLabs', logo: '/logos/pricelabs.webp',               badge_en: 'Pricing', badge_ar: 'تسعير' },
-  { slug: 'tuya',                    en: 'Tuya',                    ar: 'Tuya',      logo: '/logos/tuya.webp',                    badge_en: 'IoT',     badge_ar: 'إنترنت الأشياء' },
-  { slug: 'ttlock',                  en: 'TTLock',                  ar: 'TTLock',    logo: '/logos/ttlock.webp',                  badge_en: 'Locks',   badge_ar: 'أقفال' },
-  { slug: 'qoyod',                   en: 'Qoyod',                   ar: 'قيود',      logo: '/logos/qoyod.webp',                   badge_en: 'Finance', badge_ar: 'مالية' },
-  { slug: 'daftra',                  en: 'Daftra',                  ar: 'دفترة',     logo: '/logos/daftra.webp',                  badge_en: 'Finance', badge_ar: 'مالية' },
+  /* ── OTA (order matches spreadsheet: AQAR → Ejar → Airbnb → Booking → AGODA → Google VR → Qotoon → Attiude → Soon) ── */
+  { slug: 'aqar',                    en: 'AQAR',                 ar: 'عقار',         logo: '/logos/aqar.webp',                    badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'ejar-ota',                en: 'Ejar',                 ar: 'إيجار',        logo: null,                                  badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'airbnb',                  en: 'Airbnb',               ar: 'Airbnb',       logo: '/logos/airbnb.webp',                  badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'booking-com',             en: 'Booking.com',          ar: 'Booking',      logo: '/logos/booking-com.webp',             badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'agoda',                   en: 'AGODA',                ar: 'أجودا',        logo: '/logos/agoda.webp',                   badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'google-vacation-rentals', en: 'Google VR',            ar: 'Google VR',    logo: '/logos/google-vacation-rentals.webp', badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'qotoon',                  en: 'Qotoon',               ar: 'قطون',         logo: null,                                  badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'attiude',                 en: 'Attiude',              ar: 'Attiude',      logo: null,                                  badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'almosafer',               en: 'Almosafer',            ar: 'المسافر',      logo: null,                                  badge_en: 'Soon',        badge_ar: 'قريباً' },
+  { slug: 'darent',                  en: 'Darent',               ar: 'دارنت',        logo: null,                                  badge_en: 'Soon',        badge_ar: 'قريباً' },
+  { slug: 'gathern',                 en: 'Gathern',              ar: 'غثرن',         logo: '/logos/gathern.webp',                 badge_en: 'Soon',        badge_ar: 'قريباً' },
+  /* ── Government: Absher → Shmoos → Ministry of Tourism → Ejar ── */
+  { slug: 'absher',                  en: 'Absher',               ar: 'أبشر',         logo: '/logos/absher.png',                   badge_en: 'Gov',         badge_ar: 'حكومي' },
+  { slug: 'shmoos',                  en: 'Shmoos',               ar: 'شموس',         logo: '/logos/shomoos.webp',                 badge_en: 'Gov',         badge_ar: 'حكومي' },
+  { slug: 'mot',                     en: 'Ministry of Tourism',  ar: 'وزارة السياحة',logo: null,                                  badge_en: 'Gov',         badge_ar: 'حكومي' },
+  { slug: 'ejar-gov',                en: 'Ejar',                 ar: 'إيجار',        logo: null,                                  badge_en: 'Gov',         badge_ar: 'حكومي' },
+  /* ── Dynamic Pricing ── */
+  { slug: 'pricelabs',               en: 'PriceLabs',            ar: 'PriceLabs',    logo: '/logos/pricelabs.webp',               badge_en: 'Pricing',     badge_ar: 'تسعير' },
+  /* ── Smart Home: Tuya → TTLock ── */
+  { slug: 'tuya',                    en: 'Tuya',                 ar: 'Tuya',         logo: '/logos/tuya.webp',                    badge_en: 'Smart Home',  badge_ar: 'منزل ذكي' },
+  { slug: 'ttlock',                  en: 'TTLock',               ar: 'TTLock',       logo: '/logos/ttlock.webp',                  badge_en: 'Smart Home',  badge_ar: 'منزل ذكي' },
+  /* ── Accounting: Odoo → Quyood → Daftra ── */
+  { slug: 'odoo',                    en: 'Odoo',                 ar: 'Odoo',         logo: '/logos/odoo.webp',                    badge_en: 'Accounting',  badge_ar: 'محاسبة' },
+  { slug: 'quyood',                  en: 'Quyood',               ar: 'قيود',         logo: '/logos/qoyod.webp',                   badge_en: 'Accounting',  badge_ar: 'محاسبة' },
+  { slug: 'daftra',                  en: 'Daftra',               ar: 'دفترة',        logo: '/logos/daftra.webp',                  badge_en: 'Accounting',  badge_ar: 'محاسبة' },
+  /* ── Bank: ANB ── */
+  { slug: 'anb',                     en: 'ANB',                  ar: 'البنك العربي', logo: null,                                  badge_en: 'Bank',        badge_ar: 'بنك' },
+  /* ── Communication: WhatsApp → VFirst SMS ── */
+  { slug: 'whatsapp',                en: 'WhatsApp',             ar: 'واتساب',       logo: '/icons/whatsapp.svg',                 badge_en: 'Messaging',   badge_ar: 'مراسلة' },
+  { slug: 'vfirst-sms',              en: 'VFirst SMS',           ar: 'VFirst SMS',   logo: null,                                  badge_en: 'Messaging',   badge_ar: 'مراسلة' },
+];
+
+/* ── Integration categories (7 tabs, each filters INTEGRATIONS) ── */
+const INTG_CATS = [
+  { label_en: 'OTA',             label_ar: 'OTA',               color: '#FF5A5F', icon: Globe,         desc_en: 'Major booking platforms',        desc_ar: 'منصات الحجز الكبرى',
+    slugs: ['aqar','ejar-ota','airbnb','booking-com','agoda','google-vacation-rentals','qotoon','attiude','almosafer','darent','gathern'] },
+  { label_en: 'Government',      label_ar: 'حكومي',             color: '#10B981', icon: Building2,     desc_en: 'Saudi regulatory platforms',     desc_ar: 'المنصات الحكومية السعودية',
+    slugs: ['absher','shmoos','mot','ejar-gov'] },
+  { label_en: 'Dynamic Pricing', label_ar: 'تسعير ديناميكي',    color: '#F59E0B', icon: BarChart2,     desc_en: 'Revenue & rate management',      desc_ar: 'إدارة الإيرادات والأسعار',
+    slugs: ['pricelabs'] },
+  { label_en: 'Smart Home',      label_ar: 'منزل ذكي',          color: '#6366F1', icon: Cpu,           desc_en: 'IoT & smart lock automation',    desc_ar: 'أتمتة المنزل الذكي والأقفال',
+    slugs: ['tuya','ttlock'] },
+  { label_en: 'Accounting',      label_ar: 'محاسبة',            color: '#7C69E8', icon: FileText,      desc_en: 'Finance & bookkeeping tools',    desc_ar: 'أدوات المالية والمحاسبة',
+    slugs: ['odoo','quyood','daftra'] },
+  { label_en: 'Bank',            label_ar: 'بنك',               color: '#0F172A', icon: CreditCard,    desc_en: 'Saudi banking integration',      desc_ar: 'التكامل المصرفي السعودي',
+    slugs: ['anb'] },
+  { label_en: 'Communication',   label_ar: 'تواصل',             color: '#00A651', icon: MessageSquare, desc_en: 'Messaging & SMS platforms',      desc_ar: 'منصات الرسائل والسمس',
+    slugs: ['whatsapp','vfirst-sms'] },
 ];
 
 const SOLUTIONS = [
@@ -226,12 +342,14 @@ function PromoPanel({ isAr }: { isAr: boolean }) {
 
 export default function Navbar() {
   const { lang, setLang, t, isAr } = useLanguage();
+  const { openModal } = useDemoModal();
   const [scrolled,      setScrolled]      = useState(false);
   const [mobileOpen,    setMobileOpen]    = useState(false);
   const [activeMenu,    setActiveMenu]    = useState<MenuKey>(null);
   const [mobileExpanded, setMobileExpanded] = useState<MenuKey>(null);
   const [activeCatIdx,  setActiveCatIdx]  = useState(0);
   const [activeSolIdx,  setActiveSolIdx]  = useState(0);
+  const [activeIntgIdx, setActiveIntgIdx] = useState(0);
   const pathname   = usePathname();
   const menuRef    = useRef<HTMLDivElement>(null);
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -263,7 +381,7 @@ export default function Navbar() {
         )}
         ref={menuRef}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
 
             {/* Logo */}
@@ -293,10 +411,11 @@ export default function Navbar() {
                   <ChevronDown size={13} className={clsx('transition-transform duration-200', activeMenu === key && 'rotate-180')} />
                 </button>
               ))}
-              <Link href="/pricing"
+              <button
+                onClick={openModal}
                 className="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-[#25A4E8] hover:bg-blue-50/70 transition-colors">
                 {isAr ? 'الأسعار' : 'Pricing'}
-              </Link>
+              </button>
             </nav>
 
             {/* Right actions */}
@@ -308,9 +427,9 @@ export default function Navbar() {
               <Link href="/login" className="text-sm font-semibold text-slate-600 hover:text-[#25A4E8] transition-colors px-2">
                 {isAr ? 'تسجيل الدخول' : 'Sign in'}
               </Link>
-              <Link href="/demo" className="px-5 py-2.5 bg-[#25A4E8] text-white text-sm font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/20 hover:scale-[1.03]">
+              <button onClick={openModal} className="px-5 py-2.5 bg-[#25A4E8] text-white text-sm font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/20 hover:scale-[1.03]">
                 {isAr ? 'احجز عرضاً' : 'Book a Demo'}
-              </Link>
+              </button>
             </div>
 
             {/* Mobile toggle */}
@@ -337,7 +456,7 @@ export default function Navbar() {
               onMouseEnter={() => openMenu(activeMenu)}
               onMouseLeave={closeMenu}
             >
-              <div className="max-w-7xl mx-auto px-4 md:px-8 py-6">
+              <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
 
                 {/* ── FEATURES ── */}
                 {activeMenu === 'features' && (
@@ -468,44 +587,159 @@ export default function Navbar() {
 
                 {/* ── SOLUTIONS ── */}
                 {activeMenu === 'solutions' && (
+                  <div className="flex gap-0">
+
+                    {/* COL 1 — By Portfolio Size */}
+                    <div className="flex-1 min-w-0 px-5">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400 mb-4">
+                        {isAr ? 'حسب حجم المحفظة' : 'By Portfolio Size'}
+                      </p>
+                      <div className="space-y-1">
+                        {[
+                          { slug: 'vacation-rental-hosts',      icon: Users,     color: '#25A4E8', en: 'Independent Host',    ar: 'مضيف مستقل',          desc_en: 'Perfect for 1–7 properties',        desc_ar: 'مثالي لـ 1–7 عقارات' },
+                          { slug: 'property-managers',          icon: Building2, color: '#7C69E8', en: 'Property Manager',    ar: 'مدير عقارات',          desc_en: 'Scale from 8 to 50+ units',         desc_ar: 'من 8 إلى 50+ وحدة' },
+                          { slug: 'multi-owner-operators',      icon: Layers,    color: '#10B981', en: 'Multi-Owner Operator',ar: 'مشغّل متعدد الملاك',   desc_en: 'Manage portfolios across owners',   desc_ar: 'إدارة محافظ متعددة الملاك' },
+                          { slug: 'hotels-serviced-apartments', icon: Cpu,       color: '#F59E0B', en: 'Enterprise',          ar: 'مؤسسات',               desc_en: '50+ units, dedicated support',      desc_ar: '50+ وحدة، دعم مخصص' },
+                        ].map((item) => (
+                          <Link
+                            key={item.slug}
+                            href={`/solutions/${item.slug}`}
+                            className="group flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
+                          >
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${item.color}14` }}>
+                              <item.icon size={14} style={{ color: item.color }} />
+                            </div>
+                            <div>
+                              <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
+                                {isAr ? item.ar : item.en}
+                              </p>
+                              <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                                {isAr ? item.desc_ar : item.desc_en}
+                              </p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-px bg-slate-100 self-stretch mx-1" />
+
+                    {/* COL 2 — By Need */}
+                    <div className="flex-1 min-w-0 px-5">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400 mb-4">
+                        {isAr ? 'حسب الحاجة' : 'By Need'}
+                      </p>
+                      <div className="space-y-1">
+                        {[
+                          { slug: 'vacation-rental-hosts',      icon: Zap,           color: '#25A4E8', en: 'New to PMS',              ar: 'جديد على نظام PMS',          desc_en: 'First time using property software',   desc_ar: 'أول مرة تستخدم برنامج عقاري' },
+                          { slug: 'property-managers',          icon: RefreshCw,     color: '#7C69E8', en: 'Switching Platforms',     ar: 'التحويل من منصة أخرى',       desc_en: 'Migrate from another PMS tool',        desc_ar: 'انتقل من أداة PMS أخرى' },
+                          { slug: 'multi-owner-operators',      icon: Users,         color: '#10B981', en: 'Managing for Owners',     ar: 'إدارة لصالح ملاك',           desc_en: 'Run properties on behalf of owners',   desc_ar: 'إدارة العقارات نيابةً عن الملاك' },
+                          { slug: 'hotels-serviced-apartments', icon: TrendingUp,    color: '#F59E0B', en: 'Growing Direct Bookings', ar: 'زيادة الحجوزات المباشرة',   desc_en: 'Cut OTA commissions with your brand',  desc_ar: 'خفّض عمولات OTA بعلامتك التجارية' },
+                        ].map((item) => (
+                          <Link
+                            key={item.slug}
+                            href={`/solutions/${item.slug}`}
+                            className="group flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
+                          >
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${item.color}14` }}>
+                              <item.icon size={14} style={{ color: item.color }} />
+                            </div>
+                            <div>
+                              <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
+                                {isAr ? item.ar : item.en}
+                              </p>
+                              <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                                {isAr ? item.desc_ar : item.desc_en}
+                              </p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-px bg-slate-100 self-stretch mx-1" />
+
+                    {/* COL 3 — By Property Type */}
+                    <div className="flex-1 min-w-0 px-5">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400 mb-4">
+                        {isAr ? 'حسب نوع العقار' : 'By Property Type'}
+                      </p>
+                      <div className="space-y-1">
+                        {[
+                          { slug: 'vacation-rental-hosts',      icon: Globe,      color: '#25A4E8', en: 'Vacation Rentals',          ar: 'الإيجارات السياحية',       desc_en: 'Chalets, villas & holiday homes',  desc_ar: 'شاليهات وفلل وبيوت عطلات' },
+                          { slug: 'hotels-serviced-apartments', icon: Building2,  color: '#7C69E8', en: 'Serviced Apartments',        ar: 'الشقق الفندقية',           desc_en: 'Extended stays & furnished units', desc_ar: 'إقامات طويلة ووحدات مفروشة' },
+                          { slug: 'property-managers',          icon: Star,       color: '#F59E0B', en: 'Villas & Luxury Homes',      ar: 'الفلل والمنازل الفاخرة',   desc_en: 'Premium properties, premium tools',desc_ar: 'عقارات راقية وأدوات متقدمة' },
+                          { slug: 'hotels-serviced-apartments', icon: Layers,     color: '#10B981', en: 'Hotels & Boutique',          ar: 'الفنادق والبوتيك',         desc_en: 'Full hotel operations suite',      desc_ar: 'منظومة عمليات فندقية كاملة' },
+                        ].map((item, i) => (
+                          <Link
+                            key={i}
+                            href={`/solutions/${item.slug}`}
+                            className="group flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
+                          >
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${item.color}14` }}>
+                              <item.icon size={14} style={{ color: item.color }} />
+                            </div>
+                            <div>
+                              <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
+                                {isAr ? item.ar : item.en}
+                              </p>
+                              <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                                {isAr ? item.desc_ar : item.desc_en}
+                              </p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-px bg-slate-100 self-stretch mx-1" />
+
+                    {/* RIGHT: Promo */}
+                    <div className="ps-4">
+                      <PromoPanel isAr={isAr} />
+                    </div>
+                  </div>
+                )}
+
+                {/* ── INTEGRATIONS ── */}
+                {activeMenu === 'integrations' && (
                   <div className="flex gap-5">
 
-                    {/* LEFT: Role selector */}
+                    {/* LEFT: 7 category tabs — hover to filter center */}
                     <div className="w-[210px] shrink-0">
                       <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400 px-3 mb-3">
-                        {isAr ? 'من هو لمن؟' : 'Who it\'s for'}
+                        {isAr ? 'نوع التكامل' : 'Integration type'}
                       </p>
                       <div className="space-y-0.5">
-                        {SOLUTIONS.map((sol, i) => (
+                        {INTG_CATS.map((cat, i) => (
                           <button
-                            key={sol.slug}
-                            onMouseEnter={() => setActiveSolIdx(i)}
-                            onClick={() => setActiveSolIdx(i)}
+                            key={cat.label_en}
+                            onMouseEnter={() => setActiveIntgIdx(i)}
+                            onClick={() => setActiveIntgIdx(i)}
                             className={clsx(
                               'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-start transition-all',
-                              activeSolIdx === i
+                              activeIntgIdx === i
                                 ? 'bg-white shadow-sm border border-slate-100/80 ring-1 ring-slate-100'
                                 : 'hover:bg-slate-50/80 border border-transparent'
                             )}
                           >
-                            <div
-                              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                              style={{ backgroundColor: `${sol.color}14` }}
-                            >
-                              <sol.icon size={15} style={{ color: sol.color }} />
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                              style={{ backgroundColor: `${cat.color}14` }}>
+                              <cat.icon size={14} style={{ color: cat.color }} />
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className={clsx('text-[12.5px] font-bold leading-tight truncate',
-                                activeSolIdx === i ? 'text-[#0F172A]' : 'text-slate-500')}>
-                                {isAr ? sol.ar : sol.en}
+                                activeIntgIdx === i ? 'text-[#0F172A]' : 'text-slate-500')}>
+                                {isAr ? cat.label_ar : cat.label_en}
                               </p>
                               <p className="text-[10.5px] text-slate-400 mt-0.5 leading-tight truncate">
-                                {isAr ? sol.desc_ar : sol.desc_en}
+                                {isAr ? cat.desc_ar : cat.desc_en}
                               </p>
                             </div>
-                            {activeSolIdx === i && (
-                              <ArrowRight size={12} className="text-[#25A4E8] shrink-0" />
-                            )}
+                            {activeIntgIdx === i && <ArrowRight size={12} className="text-[#25A4E8] shrink-0" />}
                           </button>
                         ))}
                       </div>
@@ -514,11 +748,11 @@ export default function Navbar() {
                     {/* Divider */}
                     <div className="w-px bg-slate-100 self-stretch" />
 
-                    {/* CENTER: Solution detail */}
+                    {/* CENTER: Filtered items for selected category */}
                     <div className="flex-1 min-w-0">
                       <AnimatePresence mode="wait">
                         <motion.div
-                          key={activeSolIdx}
+                          key={activeIntgIdx}
                           initial={{ opacity: 0, x: isAr ? -10 : 10 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: isAr ? 10 : -10 }}
@@ -526,129 +760,50 @@ export default function Navbar() {
                         >
                           <div className="flex items-center justify-between mb-4">
                             <p className="text-[10px] font-extrabold uppercase tracking-[0.12em]"
-                              style={{ color: SOLUTIONS[activeSolIdx].color }}>
-                              {isAr ? SOLUTIONS[activeSolIdx].ar : SOLUTIONS[activeSolIdx].en}
+                              style={{ color: INTG_CATS[activeIntgIdx].color }}>
+                              {isAr ? INTG_CATS[activeIntgIdx].label_ar : INTG_CATS[activeIntgIdx].label_en}
                             </p>
-                            <Link href="/solutions"
+                            <Link href="/integrations"
                               className="flex items-center gap-1 text-[11px] font-bold text-slate-400 hover:text-[#25A4E8] transition-colors">
-                              {isAr ? 'جميع الحلول' : 'All solutions'} <ArrowRight size={10} />
+                              {isAr ? 'جميع التكاملات' : 'View all'} <ArrowRight size={10} />
                             </Link>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-2 mb-5">
-                            {[
-                              { icon: Globe,    label_en: 'Channel Sync',        label_ar: 'مزامنة القنوات' },
-                              { icon: MessageSquare, label_en: 'Automated Messaging', label_ar: 'الرسائل الآلية' },
-                              { icon: Shield,   label_en: 'Guest Verification',  label_ar: 'التحقق من الضيوف' },
-                              { icon: BarChart2, label_en: 'Revenue Analytics',  label_ar: 'تحليلات الإيرادات' },
-                              { icon: CreditCard, label_en: 'ZATCA Invoicing',   label_ar: 'فوترة زاتكا' },
-                              { icon: Users,    label_en: 'Team Management',     label_ar: 'إدارة الفريق' },
-                            ].map((cap) => (
-                              <Link
-                                key={cap.label_en}
-                                href={`/solutions/${SOLUTIONS[activeSolIdx].slug}`}
-                                className="group flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
-                              >
-                                <div
-                                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                                  style={{ backgroundColor: `${SOLUTIONS[activeSolIdx].color}14` }}
-                                >
-                                  <cap.icon size={14} style={{ color: SOLUTIONS[activeSolIdx].color }} />
-                                </div>
-                                <p className="text-[12.5px] font-semibold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
-                                  {isAr ? cap.label_ar : cap.label_en}
-                                </p>
-                              </Link>
-                            ))}
+                          <div className="grid grid-cols-3 gap-2 mb-4">
+                            {INTEGRATIONS
+                              .filter(intg => INTG_CATS[activeIntgIdx].slugs.includes(intg.slug))
+                              .map((intg) => (
+                                <Link key={intg.slug} href={`/integrations/${intg.slug}`}
+                                  className="group flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-all">
+                                  <div className="w-10 h-10 rounded-xl border border-slate-100 bg-white flex items-center justify-center shrink-0 p-1.5">
+                                    {intg.logo
+                                      ? <Image src={intg.logo} alt={intg.en} width={32} height={32} className="object-contain w-full h-full" />
+                                      : <span className="text-[10px] font-extrabold text-slate-500 text-center leading-tight">{intg.en.slice(0,3).toUpperCase()}</span>
+                                    }
+                                  </div>
+                                  <div>
+                                    <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
+                                      {isAr ? intg.ar : intg.en}
+                                    </p>
+                                    <span className="text-[9.5px] font-bold text-slate-400">
+                                      {isAr ? intg.badge_ar : intg.badge_en}
+                                    </span>
+                                  </div>
+                                </Link>
+                              ))}
                           </div>
 
                           <div className="border-t border-slate-100 pt-4 flex items-center justify-between">
                             <p className="text-[11.5px] text-slate-400">
-                              {isAr ? 'هل تحتاج حلاً مختلفاً؟' : 'Need a different solution?'}
+                              {isAr ? 'تكامل مفقود؟' : 'Missing an integration?'}
                             </p>
-                            <Link href="/demo"
+                            <button onClick={openModal}
                               className="flex items-center gap-1.5 text-[11.5px] font-bold text-[#25A4E8] bg-blue-50 px-3.5 py-1.5 rounded-full hover:bg-blue-100 transition-colors">
-                              {isAr ? 'تحدث مع المبيعات' : 'Talk to sales'} <ArrowRight size={10} />
-                            </Link>
+                              {isAr ? 'اطلب تكاملاً' : 'Request one'} <ArrowRight size={10} />
+                            </button>
                           </div>
                         </motion.div>
                       </AnimatePresence>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="w-px bg-slate-100 self-stretch" />
-
-                    {/* RIGHT: Promo */}
-                    <PromoPanel isAr={isAr} />
-                  </div>
-                )}
-
-                {/* ── INTEGRATIONS ── */}
-                {activeMenu === 'integrations' && (
-                  <div className="flex gap-5">
-                    {/* LEFT: Category labels */}
-                    <div className="w-[180px] shrink-0">
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400 px-3 mb-3">
-                        {isAr ? 'نوع التكامل' : 'Integration type'}
-                      </p>
-                      <div className="space-y-0.5">
-                        {[
-                          { label_en: 'OTA Channels',   label_ar: 'قنوات OTA',        color: '#FF5A5F', icon: Globe },
-                          { label_en: 'Payments',       label_ar: 'المدفوعات',         color: '#10B981', icon: CreditCard },
-                          { label_en: 'Local Platforms',label_ar: 'المنصات المحلية',   color: '#00A651', icon: Building2 },
-                          { label_en: 'Accounting',     label_ar: 'المحاسبة',          color: '#7C69E8', icon: FileText },
-                        ].map((cat, i) => (
-                          <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-100 transition-all">
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${cat.color}14` }}>
-                              <cat.icon size={13} style={{ color: cat.color }} />
-                            </div>
-                            <p className="text-[12px] font-semibold text-slate-600">{isAr ? cat.label_ar : cat.label_en}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="w-px bg-slate-100 self-stretch" />
-
-                    {/* CENTER: Integration cards */}
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-4">
-                        <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400">
-                          {isAr ? 'جميع تكاملات المنصة' : 'All platform integrations'}
-                        </p>
-                        <Link href="/integrations"
-                          className="flex items-center gap-1 text-[11px] font-bold text-slate-400 hover:text-[#25A4E8] transition-colors">
-                          {isAr ? 'جميع التكاملات' : 'View all'} <ArrowRight size={10} />
-                        </Link>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 mb-5">
-                        {INTEGRATIONS.map((intg) => (
-                          <Link key={intg.slug} href={`/integrations/${intg.slug}`}
-                            className="group flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-all">
-                            <div className="w-9 h-9 rounded-xl border border-slate-100 bg-white flex items-center justify-center shrink-0 p-1">
-                              <Image src={intg.logo} alt={intg.en} width={28} height={28} className="object-contain w-full h-full" />
-                            </div>
-                            <div>
-                              <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
-                                {isAr ? intg.ar : intg.en}
-                              </p>
-                              <span className="text-[9.5px] font-bold text-slate-400">
-                                {isAr ? intg.badge_ar : intg.badge_en}
-                              </span>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                      <div className="border-t border-slate-100 pt-4 flex items-center justify-between">
-                        <p className="text-[11.5px] text-slate-400">
-                          {isAr ? 'هل تريد تكاملاً مختلفاً؟' : 'Missing an integration?'}
-                        </p>
-                        <Link href="/demo"
-                          className="flex items-center gap-1.5 text-[11.5px] font-bold text-[#25A4E8] bg-blue-50 px-3.5 py-1.5 rounded-full hover:bg-blue-100 transition-colors">
-                          {isAr ? 'اطلب تكاملاً' : 'Request one'} <ArrowRight size={10} />
-                        </Link>
-                      </div>
                     </div>
 
                     {/* Divider */}
@@ -768,8 +923,11 @@ export default function Navbar() {
                           ))}
                           {key === 'integrations' && INTEGRATIONS.map(intg => (
                             <Link key={intg.slug} href={`/integrations/${intg.slug}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 text-sm text-slate-700 font-medium">
-                              <div className="w-6 h-6 rounded-md border border-slate-100 bg-white flex items-center justify-center shrink-0 p-0.5">
-                                <Image src={intg.logo} alt={intg.en} width={20} height={20} className="object-contain w-full h-full" />
+                              <div className="w-8 h-8 rounded-md border border-slate-100 bg-white flex items-center justify-center shrink-0 p-1">
+                                {intg.logo
+                                  ? <Image src={intg.logo} alt={intg.en} width={28} height={28} className="object-contain w-full h-full" />
+                                  : <span className="text-[9px] font-extrabold text-slate-500">{intg.en.slice(0,3).toUpperCase()}</span>
+                                }
                               </div>
                               {isAr ? intg.ar : intg.en}
                             </Link>
@@ -786,17 +944,19 @@ export default function Navbar() {
                 </div>
               ))}
 
-              <Link href="/pricing" className="block py-3 text-sm font-bold text-[#0F172A] border-b border-slate-100 mb-6">
+              <button onClick={() => { openModal(); setMobileOpen(false); }}
+                className="w-full text-start py-3 text-sm font-bold text-[#0F172A] border-b border-slate-100 mb-6">
                 {isAr ? 'الأسعار' : 'Pricing'}
-              </Link>
+              </button>
 
               <div className="flex flex-col gap-3">
                 <Link href="/login" className="block text-center py-3 border-2 border-[#25A4E8] text-[#25A4E8] font-bold rounded-xl text-sm">
                   {isAr ? 'تسجيل الدخول' : 'Sign in'}
                 </Link>
-                <Link href="/demo" className="block text-center py-3 bg-[#25A4E8] text-white font-bold rounded-xl text-sm shadow-lg shadow-blue-500/20">
+                <button onClick={() => { openModal(); setMobileOpen(false); }}
+                  className="block w-full text-center py-3 bg-[#25A4E8] text-white font-bold rounded-xl text-sm shadow-lg shadow-blue-500/20">
                   {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-                </Link>
+                </button>
               </div>
             </div>
           </motion.div>
