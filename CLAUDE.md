@@ -233,7 +233,7 @@ stayhub-next/
 ### 🔴 High Priority
 - [ ] **Wire demo form to backend** — form submissions go nowhere; needs Resend/SendGrid/HubSpot/webhook
 - [ ] **Fix pricing modal duplication** — `PricingPageClient.tsx` has local modal copy; refactor to use global `useDemoModal()`
-- [ ] **Push to Vercel** — commit + push pending changes to deploy live
+- [x] **Deployed to Vercel** — via `npx vercel deploy --prod` (Jun 2, 2026)
 
 ### 🟡 Medium Priority
 - [ ] **Missing pages** — `/blog`, `/help`, `/docs`, `/case-studies`, `/updates`, `/login`, `/signup`, `/demo`, `/contact` all 404
@@ -300,16 +300,17 @@ fadeUp: { initial: { opacity: 0, y: 28 }, whileInView: { opacity: 1, y: 0 }, vie
 ## 10. Git History
 
 ```
+0d03c34  Force redeploy — trigger fresh Vercel build (empty commit)
+8ab9c2d  UI improvements: Tajawal font, wider container, integrations page rebuild, Solutions mega menu redesign
 b33176f  Replace placeholder icons with real logos from stayhub.sa
 f7bf0bc  Set Arabic as default language + redesign pricing to per-property model
 02f8b94  Redesign mega menu → 3-column layout with animated category switcher
 43d295b  Redesign automation section to match Figma (node 2662:115)
+e9ff1c9  Fix package-lock.json: remove stub entry with missing version field
+5526698  Add vercel.json: use npm ci to fix canary Next.js 16 semver issue
 fd50556  Add full StayHub marketing site — bilingual EN/AR Next.js build
 0ef8d2a  Initial commit from Create Next App
 ```
-
-> **Note:** Changes from this session (Jun 2) are uncommitted — container width, Tajawal font,
-> integrations page rebuild, Solutions mega menu redesign, hydration fix, integrations 3-col grid.
 
 ---
 
@@ -332,3 +333,12 @@ client-side JS may not load correctly via network IP in local dev.
 - `.vercel/project.json` contains project + org IDs
 - `vercel.json` sets build command to `npm ci` (fixes canary Next.js semver issue)
 - After making changes: `git add . && git commit -m "message" && git push origin main`
+
+### ⚠️ Vercel GitHub Webhook Issue (known)
+The GitHub → Vercel auto-deploy webhook sometimes does **not trigger** on push.
+If the live site is not updating after a push, deploy manually:
+```bash
+npx vercel deploy --prod
+```
+This forces a fresh production build and aliases it to `stayhub-next.vercel.app` directly.
+Also do a hard refresh (`Cmd + Shift + R`) on the live URL to bypass CDN cache.
