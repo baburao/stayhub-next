@@ -578,19 +578,38 @@ export default function HomepageClient() {
         <div
           className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[48%] pointer-events-none hidden md:block overflow-hidden`}
         >
-          {/* Blurred bg image */}
+          {/* Video — always mounted so it plays continuously, opacity toggled */}
           <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'url(/hero-bg-1.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'blur(3px)',
-              transform: 'scale(1.05)',
-            }}
-          />
-          {/* Overlay to soften */}
-          <div className="absolute inset-0 bg-white/20" />
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{ opacity: heroSlide === 1 ? 1 : 0 }}
+          >
+            <video
+              src="/hero_2_banner.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Blurred image — slides 1 & 3 */}
+          <div
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{ opacity: heroSlide === 1 ? 0 : 1 }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: 'url(/hero-bg-1.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'blur(3px)',
+                transform: 'scale(1.05)',
+              }}
+            />
+            <div className="absolute inset-0 bg-white/20" />
+          </div>
         </div>
 
         <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full py-24 md:py-0">
@@ -599,8 +618,8 @@ export default function HomepageClient() {
             {/* ── LEFT: slider ── */}
             <div className={`${isAr ? 'text-right' : 'text-left'} py-20 md:py-28 order-2 md:order-1 flex flex-col`}>
 
-              {/* Slide content */}
-              <div className="relative overflow-hidden flex-1">
+              {/* Slide content — badge + headline + subtext only */}
+              <div className="relative overflow-hidden" style={{ minHeight: '280px' }}>
                 <AnimatePresence mode="wait" custom={heroDir}>
                   <motion.div
                     key={heroSlide}
@@ -627,31 +646,31 @@ export default function HomepageClient() {
                     </h1>
 
                     {/* Sub-headline */}
-                    <p className="text-slate-500 text-base md:text-lg max-w-[420px] mb-10 leading-relaxed">
+                    <p className="text-slate-500 text-base md:text-lg max-w-[420px] leading-relaxed">
                       {isAr ? HERO_SLIDES[heroSlide].sub.ar : HERO_SLIDES[heroSlide].sub.en}
                     </p>
-
-                    {/* CTAs */}
-                    <div className={`flex items-center gap-4 mb-12 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}>
-                      <button
-                        onClick={openModal}
-                        className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
-                      >
-                        {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-                        <ArrowRight size={15} />
-                      </button>
-                      <button
-                        onClick={openModal}
-                        className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
-                      >
-                        <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
-                          <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
-                        </div>
-                        {isAr ? HERO_SLIDES[heroSlide].cta2.ar : HERO_SLIDES[heroSlide].cta2.en}
-                      </button>
-                    </div>
                   </motion.div>
                 </AnimatePresence>
+              </div>
+
+              {/* ── CTAs — frozen (outside AnimatePresence) ── */}
+              <div className={`flex items-center gap-4 mt-8 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}>
+                <button
+                  onClick={openModal}
+                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
+                >
+                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
+                  <ArrowRight size={15} />
+                </button>
+                <button
+                  onClick={openModal}
+                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
+                    <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
+                  </div>
+                  {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
+                </button>
               </div>
 
               {/* ── Slider controls ── */}
@@ -721,15 +740,17 @@ export default function HomepageClient() {
 
             </div>
 
-            {/* ── RIGHT: Hero image ── */}
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="relative hidden md:flex items-center justify-start order-1 md:order-2 h-[600px]"
-              style={{ marginLeft: '-48px' }}
+            {/* ── RIGHT: integration card (slides 1 & 3 only) ── */}
+            <div
+              className="relative hidden md:flex items-center justify-start order-1 md:order-2 h-[600px] transition-opacity duration-500"
+              style={{ marginLeft: '-48px', opacity: heroSlide === 1 ? 0 : 1, pointerEvents: heroSlide === 1 ? 'none' : 'auto' }}
             >
-              <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+              <motion.div
+                initial={{ opacity: 0, y: 28 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
+              >
                 <Image
                   src="/hero-section-1-img.png"
                   alt="StayHub Integration"
@@ -738,8 +759,8 @@ export default function HomepageClient() {
                   className="w-[380px] h-auto object-contain"
                   priority
                 />
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
           </div>
         </div>

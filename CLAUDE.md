@@ -240,7 +240,7 @@ stayhub-next/
 | Automation flow hover interactions | `HomepageClient.tsx` | Step cards: lift + scale on hover, per-step colour wash gradient, glow border with shadow, connector dot between cards, spring physics via Framer Motion. |
 | Hero right-side background image | `HomepageClient.tsx`, `/public/hero-bg-1.png` | Replaced plain `bg-[#f5f6f8]` grey panel with `hero-bg-1.png` as `cover` background image, rounded left edge preserved. |
 | Hero converted to 3-slide carousel | `HomepageClient.tsx` | Auto-slides every 5s. Left arrow, right arrow, dot indicators, linear progress bar. AnimatePresence slide transitions (x-axis). 3 slides: (1) One Platform, (2) Guest Journey Automation, (3) Built for Saudi Arabia. Right side (floating cards + bg image) stays fixed. `heroSlide`, `heroDir`, `heroTimerRef` state added. |
-| Hero right — single card | `HomepageClient.tsx` | Single `hero-section-1-img.png` (380px, white border+shadow, marginLeft -48px). Blurred bg visible around it. Second pop card removed. |
+| Hero right — bg layers | `HomepageClient.tsx` | Video always mounted (never remounts), opacity toggled per slide. Slide 2: video fills bg, no card. Slides 1&3: blurred `hero-bg-1.png` + integration card. |
 
 ---
 
