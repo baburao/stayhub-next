@@ -67,58 +67,38 @@ const CATS = [
 
 /* ── Integration card ───────────────────────────────────── */
 function IntegrationCard({ intg, isAr }: { intg: typeof INTEGRATIONS[0]; isAr: boolean }) {
-  const name   = isAr ? intg.ar   : intg.en;
-  const badge  = isAr ? intg.badge_ar : intg.badge_en;
+  const name  = isAr ? intg.ar       : intg.en;
+  const badge = isAr ? intg.badge_ar : intg.badge_en;
 
   return (
     <Link
       href={`/integrations/${intg.slug}`}
-      className={`group flex items-center gap-4 bg-white rounded-2xl p-5 border transition-all duration-200 h-full
+      className={`group flex flex-col items-center text-center gap-0 bg-white rounded-3xl border p-7 transition-all duration-200
         ${intg.soon
-          ? 'border-dashed border-slate-200 hover:border-slate-300 cursor-default opacity-75 pointer-events-none'
-          : 'border-slate-100 hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5'
+          ? 'border-slate-100 opacity-80 pointer-events-none'
+          : 'border-slate-100 hover:border-slate-200 hover:shadow-xl hover:-translate-y-1'
         }`}
     >
-      {/* Logo / letter avatar */}
-      <div
-        className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border border-slate-100 bg-white p-1.5 transition-transform group-hover:scale-105"
-      >
+      {/* iOS-style icon box */}
+      <div className="w-24 h-24 rounded-[24px] bg-white border border-slate-100 shadow-sm flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md p-3">
         {intg.logo ? (
-          <Image src={intg.logo} alt={intg.en} width={44} height={44} className="object-contain w-full h-full" />
+          <Image src={intg.logo} alt={intg.en} width={72} height={72} className="object-contain w-full h-full" />
         ) : (
-          <span
-            className="text-lg font-extrabold"
-            style={{ color: intg.color }}
-          >
-            {intg.en.slice(0, 2).toUpperCase()}
+          <span className="text-xl font-extrabold tracking-tight" style={{ color: intg.color }}>
+            {intg.en.slice(0, 3).toUpperCase()}
           </span>
         )}
       </div>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <p className="font-bold text-[#0F172A] text-sm group-hover:text-[#25A4E8] transition-colors leading-tight truncate">
-            {name}
-          </p>
-          {intg.soon && (
-            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 uppercase tracking-wide shrink-0">
-              {isAr ? 'قريباً' : 'Soon'}
-            </span>
-          )}
-        </div>
-        <span
-          className="text-[11px] font-semibold"
-          style={{ color: intg.color }}
-        >
-          {badge}
-        </span>
-      </div>
+      {/* Name */}
+      <p className="font-bold text-[#0F172A] text-base leading-tight mb-1.5 group-hover:text-[#25A4E8] transition-colors">
+        {name}
+      </p>
 
-      <ArrowRight
-        size={14}
-        className="shrink-0 text-slate-200 group-hover:text-[#25A4E8] transition-colors"
-      />
+      {/* Badge */}
+      <span className={`text-sm font-semibold ${intg.soon ? 'text-amber-500' : 'text-[#25A4E8]'}`}>
+        {badge}
+      </span>
     </Link>
   );
 }
@@ -236,7 +216,7 @@ export default function IntegrationsPageClient() {
               )}
 
               {/* Grid */}
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                 {filtered.map((intg, i) => (
                   <motion.div
                     key={intg.slug}
