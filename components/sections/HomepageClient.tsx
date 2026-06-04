@@ -537,45 +537,34 @@ export default function HomepageClient() {
               transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
               className={`${isAr ? 'text-right' : 'text-left'} py-20 md:py-28 order-2 md:order-1`}
             >
-              {/* Badge */}
-              <motion.span
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#f0fdf4] text-[#15803d] text-xs font-bold uppercase tracking-widest rounded-full border border-[#bbf7d0] mb-8"
-              >
-                <Sparkles size={12} />
-                {isAr ? 'منصة الضيافة الذكية في السعودية' : "Saudi Arabia's Smart Hospitality Platform"}
-              </motion.span>
-
               {/* Headline */}
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="text-5xl md:text-6xl lg:text-[70px] font-extrabold text-[#0F172A] leading-[1.05] tracking-tight mb-6"
+                transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                className="text-5xl md:text-6xl lg:text-[64px] font-extrabold text-[#0F172A] leading-[1.08] tracking-tight mb-6"
               >
                 {isAr ? (
                   <>
-                    نظام التشغيل
+                    أدِر أعمالك في الضيافة
                     <br />
-                    <span className="relative inline-block">
-                      <span className="relative z-[1]">لأعمال</span>
-                      <span className="absolute inset-x-0 bottom-1 h-[6px] bg-[#bef264] rounded-full z-[0]" />
+                    بالكامل من{' '}
+                    <span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">
+                      منصة واحدة
+                      <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" />
                     </span>
-                    {' '}الضيافة
                   </>
                 ) : (
                   <>
-                    The Operating
+                    Run Your Entire
                     <br />
-                    <span className="relative inline-block">
-                      <span className="relative z-[1]">System</span>
-                      <span className="absolute inset-x-0 bottom-1 h-[6px] bg-[#bef264] rounded-full z-[0]" />
+                    Hospitality Business
+                    <br />
+                    From{' '}
+                    <span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">
+                      One Platform
+                      <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" />
                     </span>
-                    {' '}for
-                    <br />
-                    Hospitality Businesses
                   </>
                 )}
               </motion.h1>
@@ -584,27 +573,36 @@ export default function HomepageClient() {
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.22 }}
-                className="text-slate-500 text-base md:text-lg max-w-[380px] mb-10 leading-relaxed"
+                transition={{ duration: 0.6, delay: 0.18 }}
+                className="text-slate-500 text-base md:text-lg max-w-[420px] mb-10 leading-relaxed"
               >
                 {isAr
-                  ? 'رؤى مبنية على البيانات لمديري العقارات ومضيفي الإيجارات السياحية في المملكة.'
-                  : 'Data-driven automation for property managers and vacation rental hosts across Saudi Arabia.'}
+                  ? 'إدارة الحجوزات والضيوف والأسعار والأقفال الذكية والتنظيف والتقييمات والمدفوعات عبر Airbnb وBooking.com والقنوات المباشرة.'
+                  : 'Manage bookings, guests, pricing, smart locks, housekeeping, reviews and payments across Airbnb, Booking.com and direct channels.'}
               </motion.p>
 
               {/* CTA row */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.32 }}
-                className={`flex items-center gap-8 mb-12 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}
+                transition={{ duration: 0.6, delay: 0.28 }}
+                className={`flex items-center gap-4 mb-12 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}
               >
                 <button
                   onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#0F172A] text-white font-bold rounded-full hover:bg-slate-800 transition-all text-sm shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
                 >
-                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
+                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
                   <ArrowRight size={15} />
+                </button>
+                <button
+                  onClick={openModal}
+                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
+                    <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
+                  </div>
+                  {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
                 </button>
               </motion.div>
 
