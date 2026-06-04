@@ -214,7 +214,7 @@ stayhub-next/
 
 ---
 
-## 6. Changes Made in Current Session (Jun 2, 2026)
+## 6. Changes Made in Session (Jun 2, 2026)
 
 | Change | File(s) | Details |
 |---|---|---|
@@ -225,6 +225,16 @@ stayhub-next/
 | Hydration error fixed | `app/layout.tsx` | Added `suppressHydrationWarning` to `<body>` — was caused by Grammarly extension |
 | Solutions mega menu redesigned | `Navbar.tsx` | Single column list → **3-column Guesty-style** layout (By Portfolio Size / By Need / By Property Type) |
 | Integrations mega menu grid | `Navbar.tsx` | 2 columns → **3 columns** per row (less scrolling, more compact) |
+
+## 6b. Changes Made in Session (Jun 4, 2026)
+
+| Change | File(s) | Details |
+|---|---|---|
+| Demo modal fully redesigned | `DemoModal.tsx` | 4-step flow: (1) Unit count cards → (2) Name + Phone → (3) Calendly slot picker → (4) Success. Old email-first flow replaced. |
+| Calendly integrated | `DemoModal.tsx` | Real Calendly URL wired: `https://calendly.com/stayhub-info/30min`. Step 3 is a two-column layout: dark summary panel + inline Calendly embed. `calendly.event_scheduled` postMessage auto-advances to success. |
+| Integration mega menu icons enlarged | `Navbar.tsx` | Cards changed from horizontal `w-10 h-10` row layout → vertical centered `w-14 h-14` card layout. "Soon" badges now amber. |
+| Hero section | `HomepageClient.tsx` | Reverted to original floating mockup cards design — new design attempt was discarded. |
+| `hero-banner.png` added | `/public/hero-banner.png` | Integration diagram image stored in public/ for future use. |
 
 ---
 

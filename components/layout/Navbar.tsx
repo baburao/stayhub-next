@@ -769,23 +769,23 @@ export default function Navbar() {
                             </Link>
                           </div>
 
-                          <div className="grid grid-cols-3 gap-2 mb-4">
+                          <div className="grid grid-cols-3 gap-2.5 mb-4">
                             {INTEGRATIONS
                               .filter(intg => INTG_CATS[activeIntgIdx].slugs.includes(intg.slug))
                               .map((intg) => (
                                 <Link key={intg.slug} href={`/integrations/${intg.slug}`}
-                                  className="group flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-all">
-                                  <div className="w-10 h-10 rounded-xl border border-slate-100 bg-white flex items-center justify-center shrink-0 p-1.5">
+                                  className="group flex flex-col items-center gap-2 p-3.5 rounded-2xl border border-slate-100 bg-white hover:border-[#25A4E8]/30 hover:bg-blue-50/40 hover:shadow-md transition-all text-center">
+                                  <div className="w-14 h-14 rounded-2xl border border-slate-100 bg-white flex items-center justify-center shrink-0 p-2 shadow-sm group-hover:shadow-md transition-shadow">
                                     {intg.logo
-                                      ? <Image src={intg.logo} alt={intg.en} width={32} height={32} className="object-contain w-full h-full" />
-                                      : <span className="text-[10px] font-extrabold text-slate-500 text-center leading-tight">{intg.en.slice(0,3).toUpperCase()}</span>
+                                      ? <Image src={intg.logo} alt={intg.en} width={48} height={48} className="object-contain w-full h-full" />
+                                      : <span className="text-[13px] font-extrabold text-slate-500 leading-tight">{intg.en.slice(0,3).toUpperCase()}</span>
                                     }
                                   </div>
                                   <div>
-                                    <p className="text-[12.5px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
+                                    <p className="text-[12px] font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
                                       {isAr ? intg.ar : intg.en}
                                     </p>
-                                    <span className="text-[9.5px] font-bold text-slate-400">
+                                    <span className={`text-[10px] font-semibold mt-0.5 inline-block ${intg.badge_en === 'Soon' ? 'text-amber-500' : 'text-slate-400'}`}>
                                       {isAr ? intg.badge_ar : intg.badge_en}
                                     </span>
                                   </div>
