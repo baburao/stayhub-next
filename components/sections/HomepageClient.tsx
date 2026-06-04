@@ -510,6 +510,58 @@ export default function HomepageClient() {
     return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  /* ── Hero slider ── */
+  const [heroSlide, setHeroSlide] = useState(0);
+  const [heroDir, setHeroDir] = useState(1);
+  const heroTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const HERO_SLIDES = [
+    {
+      badge:   { en: "Saudi Arabia's Smart Hospitality Platform", ar: 'منصة الضيافة الذكية في السعودية' },
+      h1En: (<>Run Your Entire<br />Hospitality Business<br />From{' '}<span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">One Platform<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
+      h1Ar: (<>أدِر أعمالك في الضيافة<br />بالكامل من{' '}<span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">منصة واحدة<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
+      sub:  { en: 'Manage bookings, guests, pricing, smart locks, housekeeping, reviews and payments across Airbnb, Booking.com and direct channels.', ar: 'إدارة الحجوزات والضيوف والأسعار والأقفال الذكية والتنظيف والتقييمات والمدفوعات عبر Airbnb وBooking.com والقنوات المباشرة.' },
+      cta2: { en: 'Watch Platform Tour', ar: 'شاهد جولة المنصة' },
+    },
+    {
+      badge:   { en: 'Full Guest Journey Automation', ar: 'أتمتة رحلة الضيف بالكامل' },
+      h1En: (<>Automate Every Step<br />of the{' '}<span className="bg-gradient-to-r from-[#10B981] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">Guest Journey<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
+      h1Ar: (<>أتمت كل خطوة في<br /><span className="bg-gradient-to-r from-[#10B981] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">رحلة الضيف<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
+      sub:  { en: 'From booking confirmation to checkout — StayHub handles messaging, ID verification, access codes, housekeeping tasks, and review requests on autopilot.', ar: 'من تأكيد الحجز حتى تسجيل المغادرة — يتولى StayHub الرسائل والتحقق من الهوية ورموز الوصول ومهام التنظيف وطلبات التقييم تلقائياً.' },
+      cta2: { en: 'Explore Features', ar: 'استكشف الميزات' },
+    },
+    {
+      badge:   { en: 'Built for Saudi Arabia', ar: 'مبني للسوق السعودي' },
+      h1En: (<>Built for Saudi Arabia's<br /><span className="bg-gradient-to-r from-[#7C69E8] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">Hospitality Market<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
+      h1Ar: (<>مبني لسوق الضيافة<br /><span className="bg-gradient-to-r from-[#7C69E8] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">في المملكة العربية السعودية<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
+      sub:  { en: 'ZATCA-compliant invoicing, Absher ID verification, Ejar contracts, Gathern and AQAR integration — everything your Saudi property business needs to scale.', ar: 'فوترة متوافقة مع زاتكا، تحقق عبر أبشر، عقود إيجار، تكامل غثرن وعقار — كل ما تحتاجه للنمو في السوق السعودي.' },
+      cta2: { en: 'View Integrations', ar: 'عرض التكاملات' },
+    },
+  ];
+
+  const goToSlide = (idx: number) => {
+    setHeroDir(idx > heroSlide ? 1 : -1);
+    setHeroSlide(idx);
+    if (heroTimerRef.current) clearInterval(heroTimerRef.current);
+    heroTimerRef.current = setInterval(() => nextHeroSlide(), 5000);
+  };
+  const nextHeroSlide = () => {
+    setHeroDir(1);
+    setHeroSlide(s => (s + 1) % 3);
+  };
+  const prevHeroSlide = () => {
+    setHeroDir(-1);
+    setHeroSlide(s => (s + 2) % 3);
+  };
+
+  useEffect(() => {
+    heroTimerRef.current = setInterval(() => {
+      setHeroDir(1);
+      setHeroSlide(s => (s + 1) % 3);
+    }, 5000);
+    return () => { if (heroTimerRef.current) clearInterval(heroTimerRef.current); };
+  }, []);
+
   const automationSteps = isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN;
   const outcomes = isAr ? OUTCOMES_AR : OUTCOMES_EN;
   const compliance = isAr ? COMPLIANCE_ITEMS_AR : COMPLIANCE_ITEMS_EN;
@@ -524,122 +576,136 @@ export default function HomepageClient() {
 
         {/* Right-side bg panel */}
         <div
-          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[48%] bg-[#f5f6f8] pointer-events-none hidden md:block`}
-        />
+          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[48%] pointer-events-none hidden md:block overflow-hidden`}
+        >
+          {/* Blurred bg image */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'url(/hero-bg-1.png)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'blur(3px)',
+              transform: 'scale(1.05)',
+            }}
+          />
+          {/* Overlay to soften */}
+          <div className="absolute inset-0 bg-white/20" />
+        </div>
 
         <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full py-24 md:py-0">
           <div className={`grid md:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen`}>
 
-            {/* ── LEFT: copy ── */}
-            <motion.div
-              initial={{ opacity: 0, x: isAr ? 40 : -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-              className={`${isAr ? 'text-right' : 'text-left'} py-20 md:py-28 order-2 md:order-1`}
-            >
-              {/* Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="text-5xl md:text-6xl lg:text-[64px] font-extrabold text-[#0F172A] leading-[1.08] tracking-tight mb-6"
-              >
-                {isAr ? (
-                  <>
-                    أدِر أعمالك في الضيافة
-                    <br />
-                    بالكامل من{' '}
-                    <span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">
-                      منصة واحدة
-                      <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" />
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    Run Your Entire
-                    <br />
-                    Hospitality Business
-                    <br />
-                    From{' '}
-                    <span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">
-                      One Platform
-                      <span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" />
-                    </span>
-                  </>
-                )}
-              </motion.h1>
+            {/* ── LEFT: slider ── */}
+            <div className={`${isAr ? 'text-right' : 'text-left'} py-20 md:py-28 order-2 md:order-1 flex flex-col`}>
 
-              {/* Sub-headline */}
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.18 }}
-                className="text-slate-500 text-base md:text-lg max-w-[420px] mb-10 leading-relaxed"
-              >
-                {isAr
-                  ? 'إدارة الحجوزات والضيوف والأسعار والأقفال الذكية والتنظيف والتقييمات والمدفوعات عبر Airbnb وBooking.com والقنوات المباشرة.'
-                  : 'Manage bookings, guests, pricing, smart locks, housekeeping, reviews and payments across Airbnb, Booking.com and direct channels.'}
-              </motion.p>
+              {/* Slide content */}
+              <div className="relative overflow-hidden flex-1">
+                <AnimatePresence mode="wait" custom={heroDir}>
+                  <motion.div
+                    key={heroSlide}
+                    custom={heroDir}
+                    variants={{
+                      enter:  (d: number) => ({ opacity: 0, x: d * 48 }),
+                      center: { opacity: 1, x: 0 },
+                      exit:   (d: number) => ({ opacity: 0, x: d * -48 }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {/* Badge */}
+                    <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#f0fdf4] text-[#15803d] text-[11px] font-bold rounded-full border border-[#bbf7d0] mb-7">
+                      <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
+                      {isAr ? HERO_SLIDES[heroSlide].badge.ar : HERO_SLIDES[heroSlide].badge.en}
+                    </span>
 
-              {/* CTA row */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.28 }}
-                className={`flex items-center gap-4 mb-12 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}
-              >
+                    {/* Headline */}
+                    <h1 className="text-5xl md:text-6xl lg:text-[64px] font-extrabold text-[#0F172A] leading-[1.08] tracking-tight mb-6">
+                      {isAr ? HERO_SLIDES[heroSlide].h1Ar : HERO_SLIDES[heroSlide].h1En}
+                    </h1>
+
+                    {/* Sub-headline */}
+                    <p className="text-slate-500 text-base md:text-lg max-w-[420px] mb-10 leading-relaxed">
+                      {isAr ? HERO_SLIDES[heroSlide].sub.ar : HERO_SLIDES[heroSlide].sub.en}
+                    </p>
+
+                    {/* CTAs */}
+                    <div className={`flex items-center gap-4 mb-12 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}>
+                      <button
+                        onClick={openModal}
+                        className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
+                      >
+                        {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
+                        <ArrowRight size={15} />
+                      </button>
+                      <button
+                        onClick={openModal}
+                        className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
+                          <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
+                        </div>
+                        {isAr ? HERO_SLIDES[heroSlide].cta2.ar : HERO_SLIDES[heroSlide].cta2.en}
+                      </button>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* ── Slider controls ── */}
+              <div className={`flex items-center gap-5 mt-2 ${isAr ? 'flex-row-reverse' : ''}`}>
+                {/* Arrows */}
                 <button
-                  onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
+                  onClick={() => { prevHeroSlide(); }}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group"
+                  aria-label="Previous slide"
                 >
-                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-                  <ArrowRight size={15} />
+                  <ChevronLeft size={16} className="text-slate-500 group-hover:text-[#25A4E8] transition-colors" />
                 </button>
                 <button
-                  onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
+                  onClick={() => { nextHeroSlide(); }}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group"
+                  aria-label="Next slide"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
-                    <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
-                  </div>
-                  {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
+                  <ChevronRight size={16} className="text-slate-500 group-hover:text-[#25A4E8] transition-colors" />
                 </button>
-              </motion.div>
 
-              {/* Divider */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.44 }}
-                className="w-full h-px bg-slate-100 mb-6"
-              />
+                {/* Dot indicators */}
+                <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : ''}`}>
+                  {[0, 1, 2].map(i => (
+                    <button
+                      key={i}
+                      onClick={() => goToSlide(i)}
+                      className={`rounded-full transition-all duration-300 ${heroSlide === i ? 'w-6 h-2.5 bg-[#25A4E8]' : 'w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300'}`}
+                      aria-label={`Go to slide ${i + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Progress bar */}
+                <div className="flex-1 h-[2px] bg-slate-100 rounded-full overflow-hidden">
+                  <motion.div
+                    key={heroSlide}
+                    className="h-full bg-[#25A4E8] rounded-full"
+                    initial={{ width: '0%' }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 5, ease: 'linear' }}
+                  />
+                </div>
+              </div>
 
               {/* Trusted logos strip */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.52 }}
-              >
-                <div className={`flex items-center justify-between mb-5 ${isAr ? 'flex-row-reverse' : ''}`}>
-                  <p className="text-xs text-slate-400 leading-relaxed max-w-[220px]">
-                    {isAr
-                      ? 'نُقدّم خدماتنا لمئات المشغّلين الرائدين في المملكة العربية السعودية.'
-                      : 'We provide our services to many worldwide leading companies.'}
-                  </p>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
-                      <ArrowRight size={12} className={`text-slate-500 ${isAr ? '' : 'rotate-180'}`} />
-                    </button>
-                    <button className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
-                      <ArrowRight size={12} className={`text-slate-500 ${isAr ? 'rotate-180' : ''}`} />
-                    </button>
-                  </div>
-                </div>
+              <div className="mt-8 pt-6 border-t border-slate-100">
+                <p className="text-xs text-slate-400 mb-4">
+                  {isAr ? 'نُقدّم خدماتنا لمئات المشغّلين الرائدين في المملكة.' : 'Trusted by leading hospitality operators across Saudi Arabia.'}
+                </p>
                 <div className={`flex items-center gap-8 ${isAr ? 'flex-row-reverse' : ''}`}>
                   {[
-                    { src: '/logos/airbnb.webp',     name: 'Airbnb' },
-                    { src: '/logos/booking-com.webp', name: 'Booking' },
-                    { src: '/logos/gathern.webp',     name: 'Gathern' },
+                    { src: '/logos/airbnb.webp',      name: 'Airbnb' },
+                    { src: '/logos/booking-com.webp',  name: 'Booking' },
+                    { src: '/logos/gathern.webp',      name: 'Gathern' },
                   ].map((logo) => (
                     <Image
                       key={logo.name}
@@ -647,146 +713,34 @@ export default function HomepageClient() {
                       alt={logo.name}
                       width={90}
                       height={30}
-                      className="h-6 w-auto object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-80 transition-all"
+                      className="h-6 w-auto object-contain opacity-40 grayscale hover:grayscale-0 hover:opacity-80 transition-all"
                     />
                   ))}
                 </div>
-              </motion.div>
-            </motion.div>
-
-            {/* ── RIGHT: Floating mockup cards ── */}
-            <div className="relative h-[600px] hidden md:block order-1 md:order-2">
-
-              {/* Top-right circular icon badge */}
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className={`absolute top-10 ${isAr ? 'left-2' : 'right-2'} w-14 h-14 rounded-full bg-[#0F172A] flex items-center justify-center shadow-xl z-10`}
-              >
-                <BarChart2 size={22} className="text-[#bef264]" />
-              </motion.div>
-
-              {/* Card 1 — top area, dashboard metrics */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.18, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className={`absolute top-0 ${isAr ? 'left-16 right-0' : 'right-16 left-0'} bg-white rounded-3xl border border-slate-100 shadow-2xl shadow-slate-200/70 overflow-hidden`}
-                style={{ height: '295px' }}
-              >
-                <div className="h-full p-5 flex flex-col">
-                  {/* Browser chrome */}
-                  <div className="flex items-center gap-1.5 mb-4">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                    <div className="flex-1 mx-2 h-5 bg-slate-100 rounded-lg flex items-center px-2.5">
-                      <span className="text-[9px] text-slate-400">app.stayhub.sa/dashboard</span>
-                    </div>
-                  </div>
-                  {/* Metric grid */}
-                  <div className="grid grid-cols-2 gap-2 mb-3 flex-1">
-                    {[
-                      { label: 'RevPAR',     value: 'SAR 312', delta: '+22%', color: '#25A4E8' },
-                      { label: isAr ? 'الإشغال' : 'Occupancy', value: '89%',     delta: '+7%',  color: '#7C69E8' },
-                      { label: 'ADR',        value: 'SAR 481', delta: '+14%', color: '#25A4E8' },
-                      { label: isAr ? 'حجوزات' : 'Bookings',   value: '124',     delta: '+31%', color: '#10B981' },
-                    ].map((m, i) => (
-                      <div key={i} className="bg-slate-50 rounded-xl p-3">
-                        <p className="text-[9px] text-slate-400 mb-0.5">{m.label}</p>
-                        <p className="font-extrabold text-[#0F172A] text-sm leading-tight">{m.value}</p>
-                        <p className="text-[9px] font-bold mt-0.5" style={{ color: m.color }}>{m.delta} ↑</p>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Sync bar */}
-                  <div className="flex items-center gap-2 bg-green-50 rounded-xl px-3 py-2">
-                    <RefreshCw size={11} className="text-green-500 animate-spin" style={{ animationDuration: '3s' }} />
-                    <span className="text-[10px] font-semibold text-green-700">{isAr ? 'متزامن مع جميع القنوات' : 'Synced with all channels'}</span>
-                    <span className="ms-auto text-[10px] font-bold text-green-500">● {isAr ? 'مباشر' : 'Live'}</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 2 — bottom area, bookings list, overlaps card 1 */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className={`absolute bottom-0 ${isAr ? 'right-16 left-0' : 'left-16 right-0'} bg-[#0F172A] rounded-3xl shadow-2xl shadow-slate-900/25 overflow-hidden z-10`}
-                style={{ height: '255px' }}
-              >
-                <div className="h-full p-5 flex flex-col">
-                  <div className={`flex items-center justify-between mb-4 ${isAr ? 'flex-row-reverse' : ''}`}>
-                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">
-                      {isAr ? 'حجوزات اليوم' : "Today's Bookings"}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-[10px] font-bold text-green-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                      {isAr ? 'مباشر' : 'Live'}
-                    </span>
-                  </div>
-                  <div className="space-y-2.5 flex-1">
-                    {[
-                      { from: isAr ? 'محمد أ.'  : 'Mohammed A.', ch: 'Airbnb',  color: '#FF5A5F', time: '2:00 PM' },
-                      { from: isAr ? 'سارة ك.'  : 'Sara K.',     ch: 'Booking', color: '#003580', time: '4:30 PM' },
-                      { from: isAr ? 'نورة ز.'  : 'Nora Z.',     ch: 'Gathern', color: '#00A651', time: '6:00 PM' },
-                    ].map((b, i) => (
-                      <div key={i} className={`flex items-center gap-3 p-2.5 rounded-xl bg-white/5 border border-white/5 ${isAr ? 'flex-row-reverse' : ''}`}>
-                        <div
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
-                          style={{ backgroundColor: b.color }}
-                        >
-                          {b.from.charAt(0)}
-                        </div>
-                        <div className={`flex-1 min-w-0 ${isAr ? 'text-right' : ''}`}>
-                          <p className="text-white text-[11px] font-semibold truncate">{b.from}</p>
-                          <p className="text-slate-500 text-[10px]">{b.ch}</p>
-                        </div>
-                        <span className="text-[10px] text-slate-400 font-medium shrink-0">{b.time}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating stat chip — revenue uplift */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.55, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className={`absolute top-[42%] -translate-y-1/2 ${isAr ? '-right-4' : '-left-4'} bg-white rounded-2xl shadow-2xl shadow-slate-200/80 p-4 z-20 w-52 border border-slate-100`}
-              >
-                <p className="text-[#65a30d] text-xs font-extrabold mb-0.5">+24.0%</p>
-                <p className="font-bold text-[#0F172A] text-[13px] leading-snug mb-2">
-                  {isAr ? 'زيادة في إيرادات العقار' : "Increase of the property's revenue"}
-                </p>
-                <div className="w-full bg-slate-100 rounded-full h-1.5 mb-1.5">
-                  <div className="bg-[#bef264] h-1.5 rounded-full" style={{ width: '74%' }} />
-                </div>
-                <p className="text-slate-400 text-[10px]">(+2.8% / {isAr ? 'شهر' : 'Month'})</p>
-              </motion.div>
-
-              {/* Floating rating chip */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.68, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className={`absolute bottom-[20%] ${isAr ? 'left-2' : 'right-2'} bg-[#0F172A] rounded-2xl shadow-2xl p-4 z-20 w-52`}
-              >
-                <div className={`flex items-center gap-3 ${isAr ? 'flex-row-reverse' : ''}`}>
-                  <div className="w-11 h-11 rounded-xl bg-[#25A4E8] flex items-center justify-center text-white font-extrabold text-base shrink-0 shadow-lg shadow-blue-500/30">
-                    9.8
-                  </div>
-                  <div className={isAr ? 'text-right' : ''}>
-                    <p className="text-white font-bold text-[12px] leading-tight">{isAr ? 'تقييم العملاء الإجمالي' : 'Overall clients rate'}</p>
-                    <p className="text-slate-400 text-[10px] mt-0.5">{isAr ? 'أكثر من 500+ مشغّل' : 'More than 500+ operators'}</p>
-                  </div>
-                </div>
-              </motion.div>
+              </div>
 
             </div>
+
+            {/* ── RIGHT: Hero image ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="relative hidden md:flex items-center justify-start order-1 md:order-2 h-[600px]"
+              style={{ marginLeft: '-48px' }}
+            >
+              <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                <Image
+                  src="/hero-section-1-img.png"
+                  alt="StayHub Integration"
+                  width={380}
+                  height={300}
+                  className="w-[380px] h-auto object-contain"
+                  priority
+                />
+              </div>
+            </motion.div>
+
           </div>
         </div>
       </section>
@@ -1010,19 +964,48 @@ export default function HomepageClient() {
               <motion.div
                 key={i}
                 {...fadeUp(i * 0.07)}
-                className="bg-white rounded-xl p-4 flex flex-col gap-3 border border-[#d6def0]"
+                whileHover={{ y: -6, scale: 1.03 }}
+                transition={{ type: 'spring', stiffness: 340, damping: 22 }}
+                className="relative bg-white rounded-xl p-4 flex flex-col gap-3 border border-[#d6def0] cursor-default group overflow-hidden"
+                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
               >
-                {/* Numbered icon */}
+                {/* Hover colour wash */}
                 <div
-                  className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"
+                  style={{ background: `linear-gradient(135deg, ${step.bg} 0%, transparent 70%)` }}
+                />
+
+                {/* Glow border on hover */}
+                <div
+                  className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  style={{ boxShadow: `0 0 0 1.5px ${step.color}55, 0 8px 32px ${step.color}30` }}
+                />
+
+                {/* Numbered icon */}
+                <motion.div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 relative z-10 transition-transform duration-300"
                   style={{ backgroundColor: step.bg }}
+                  whileHover={{ rotate: [0, -8, 8, 0] }}
                 >
                   <span className="text-lg font-extrabold leading-none" style={{ color: step.color }}>
                     {step.num}
                   </span>
-                </div>
-                <p className="font-bold text-[#081133] text-[15px] leading-snug">{step.title}</p>
-                <p className="text-[#5c6687] text-[12px] leading-relaxed">{step.desc}</p>
+                </motion.div>
+
+                <p className="font-bold text-[#081133] text-[15px] leading-snug relative z-10 group-hover:transition-colors duration-200" style={{ color: undefined }}>
+                  {step.title}
+                </p>
+                <p className="text-[#5c6687] text-[12px] leading-relaxed relative z-10">{step.desc}</p>
+
+                {/* Arrow connector (hidden on last card) */}
+                {i < automationSteps.length - 1 && (
+                  <div
+                    className="hidden lg:flex absolute -right-[7px] top-1/2 -translate-y-1/2 z-20 w-3.5 h-3.5 rounded-full border-2 items-center justify-center transition-all duration-300"
+                    style={{ backgroundColor: 'white', borderColor: step.color + '80' }}
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ backgroundColor: step.color }} />
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

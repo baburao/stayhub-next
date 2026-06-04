@@ -235,6 +235,12 @@ stayhub-next/
 | Integration mega menu icons enlarged | `Navbar.tsx` | Cards changed from horizontal `w-10 h-10` row layout → vertical centered `w-14 h-14` card layout. "Soon" badges now amber. |
 | Hero section | `HomepageClient.tsx` | Reverted to original floating mockup cards design — new design attempt was discarded. |
 | `hero-banner.png` added | `/public/hero-banner.png` | Integration diagram image stored in public/ for future use. |
+| Hero left copy updated | `HomepageClient.tsx` | New headline "Run Your Entire Hospitality Business From One Platform" (gradient), new subtext, two CTAs (Book a Demo + Watch Platform Tour). |
+| Integrations page cards redesigned | `IntegrationsPageClient.tsx` | Vertical iOS-style cards: 96px centered icon box, bold name, coloured badge. Grid changed from 4-col → 3-col. |
+| Automation flow hover interactions | `HomepageClient.tsx` | Step cards: lift + scale on hover, per-step colour wash gradient, glow border with shadow, connector dot between cards, spring physics via Framer Motion. |
+| Hero right-side background image | `HomepageClient.tsx`, `/public/hero-bg-1.png` | Replaced plain `bg-[#f5f6f8]` grey panel with `hero-bg-1.png` as `cover` background image, rounded left edge preserved. |
+| Hero converted to 3-slide carousel | `HomepageClient.tsx` | Auto-slides every 5s. Left arrow, right arrow, dot indicators, linear progress bar. AnimatePresence slide transitions (x-axis). 3 slides: (1) One Platform, (2) Guest Journey Automation, (3) Built for Saudi Arabia. Right side (floating cards + bg image) stays fixed. `heroSlide`, `heroDir`, `heroTimerRef` state added. |
+| Hero right — single card | `HomepageClient.tsx` | Single `hero-section-1-img.png` (380px, white border+shadow, marginLeft -48px). Blurred bg visible around it. Second pop card removed. |
 
 ---
 
@@ -346,10 +352,13 @@ client-side JS may not load correctly via network IP in local dev.
 
 ### ⚠️ Vercel GitHub Webhook Issue (known)
 The GitHub → Vercel auto-deploy webhook **reliably does NOT trigger** on push (confirmed broken Jun 2 + Jun 4, 2026).
-**Always deploy manually after every push:**
+**Deploy workflow:**
+1. Make all changes across the session
+2. When ready to go live, do one combined push:
 ```bash
-cd stayhub-next
+git add . && git commit -m "message" && git push origin main
 npx vercel deploy --prod
 ```
-This forces a fresh production build and aliases it to `stayhub-next.vercel.app` directly.
 Also do a hard refresh (`Cmd + Shift + R`) on the live URL to bypass CDN cache.
+
+> ⚠️ **Do NOT push/deploy after every individual change — batch all changes and push once.**
