@@ -345,9 +345,10 @@ client-side JS may not load correctly via network IP in local dev.
 - After making changes: `git add . && git commit -m "message" && git push origin main`
 
 ### ⚠️ Vercel GitHub Webhook Issue (known)
-The GitHub → Vercel auto-deploy webhook sometimes does **not trigger** on push.
-If the live site is not updating after a push, deploy manually:
+The GitHub → Vercel auto-deploy webhook **reliably does NOT trigger** on push (confirmed broken Jun 2 + Jun 4, 2026).
+**Always deploy manually after every push:**
 ```bash
+cd stayhub-next
 npx vercel deploy --prod
 ```
 This forces a fresh production build and aliases it to `stayhub-next.vercel.app` directly.
