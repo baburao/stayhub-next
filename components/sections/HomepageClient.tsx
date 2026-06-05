@@ -474,6 +474,61 @@ function DashboardShowcase({ isAr }: { isAr: boolean }) {
   );
 }
 
+/* ─── Hero 3D floating card ─────────────────────────────── */
+type StepData = { num: string; title: string; desc: string; color: string; bg: string };
+
+function HeroCard3D({
+  step, floatDuration = 3.5, floatDelay = 0, entryDelay = 0, className = '',
+}: {
+  step: StepData; floatDuration?: number; floatDelay?: number; entryDelay?: number; className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [hovered, setHovered] = useState(false);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    const nx = (e.clientX - left) / width - 0.5;
+    const ny = (e.clientY - top) / height - 0.5;
+    setTilt({ x: -ny * 20, y: nx * 20 });
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24, scale: 0.92 }}
+      animate={{ opacity: 1, y: hovered ? -4 : [0, -9, 0], scale: hovered ? 1.04 : 1 }}
+      exit={{ opacity: 0, y: 20, scale: 0.92 }}
+      transition={{
+        opacity:  { duration: 0.45, delay: entryDelay },
+        scale:    { duration: 0.25 },
+        y: hovered
+          ? { duration: 0.25 }
+          : { duration: floatDuration, repeat: Infinity, ease: 'easeInOut', delay: floatDelay },
+      }}
+      onMouseMove={onMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(false); }}
+      style={{
+        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transition: hovered ? 'transform 0.08s linear' : 'transform 0.55s cubic-bezier(0.23,1,0.32,1)',
+        boxShadow: hovered
+          ? `0 20px 60px ${step.color}30, 0 8px 20px rgba(0,0,0,0.12)`
+          : '0 8px 32px rgba(0,0,0,0.10)',
+        willChange: 'transform',
+      }}
+      className={`bg-white rounded-2xl p-4 border border-white/80 cursor-default select-none ${className}`}
+    >
+      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 shrink-0" style={{ backgroundColor: step.bg }}>
+        <span className="text-base font-extrabold leading-none" style={{ color: step.color }}>{step.num}</span>
+      </div>
+      <p className="font-bold text-[#0F172A] text-[13.5px] leading-snug mb-1.5">{step.title}</p>
+      <p className="text-slate-400 text-[11.5px] leading-relaxed">{step.desc}</p>
+    </motion.div>
+  );
+}
+
 /* ─── main component ────────────────────────────────────── */
 
 export default function HomepageClient() {
@@ -510,6 +565,19 @@ export default function HomepageClient() {
     return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  /* ── Hero background video — plays full duration then switches (3-video loop) ── */
+  const [bgVideo, setBgVideo] = useState(0); // 0 = hero_video_1, 1 = hero_2_banner, 2 = hero_video_3
+  const bgVid1Ref = useRef<HTMLVideoElement>(null);
+  const bgVid2Ref = useRef<HTMLVideoElement>(null);
+  const bgVid3Ref = useRef<HTMLVideoElement>(null);
+
+  // When active video changes, reset that video to start and play it
+  useEffect(() => {
+    const refs = [bgVid1Ref, bgVid2Ref, bgVid3Ref];
+    const active = refs[bgVideo]?.current;
+    if (active) { active.currentTime = 0; active.play(); }
+  }, [bgVideo]);
+
   /* ── Hero slider ── */
   const [heroSlide, setHeroSlide] = useState(0);
   const [heroDir, setHeroDir] = useState(1);
@@ -574,42 +642,39 @@ export default function HomepageClient() {
       {/* ── 1. HERO ─────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center bg-white overflow-hidden">
 
-        {/* Right-side bg panel */}
+        {/* Right-side bg panel — two videos always mounted, opacity toggled per slide */}
         <div
           className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[48%] pointer-events-none hidden md:block overflow-hidden`}
         >
-          {/* Video — always mounted so it plays continuously, opacity toggled */}
-          <div
-            className="absolute inset-0 transition-opacity duration-700"
-            style={{ opacity: heroSlide === 1 ? 1 : 0 }}
-          >
-            <video
-              src="/hero_2_banner.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Blurred image — slides 1 & 3 */}
-          <div
-            className="absolute inset-0 transition-opacity duration-700"
-            style={{ opacity: heroSlide === 1 ? 0 : 1 }}
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: 'url(/hero-bg-1.png)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'blur(3px)',
-                transform: 'scale(1.05)',
-              }}
-            />
-            <div className="absolute inset-0 bg-white/20" />
-          </div>
+          {/* Video 1 → hands off to Video 2 */}
+          <video
+            ref={bgVid1Ref}
+            src="/hero_video_1.mp4"
+            autoPlay muted playsInline
+            onEnded={() => setBgVideo(1)}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+            style={{ opacity: bgVideo === 0 ? 1 : 0 }}
+          />
+          {/* Video 2 → hands off to Video 3 */}
+          <video
+            ref={bgVid2Ref}
+            src="/hero_2_banner.mp4"
+            autoPlay muted playsInline
+            onEnded={() => setBgVideo(2)}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+            style={{ opacity: bgVideo === 1 ? 1 : 0 }}
+          />
+          {/* Video 3 → hands off back to Video 1 */}
+          <video
+            ref={bgVid3Ref}
+            src="/hero_video_3.mp4"
+            autoPlay muted playsInline
+            onEnded={() => setBgVideo(0)}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+            style={{ opacity: bgVideo === 2 ? 1 : 0 }}
+          />
+          {/* Subtle dark overlay for chip legibility */}
+          <div className="absolute inset-0 bg-black/15" />
         </div>
 
         <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full py-24 md:py-0">
@@ -740,26 +805,56 @@ export default function HomepageClient() {
 
             </div>
 
-            {/* ── RIGHT: integration card (slides 1 & 3 only) ── */}
-            <div
-              className="relative hidden md:flex items-center justify-start order-1 md:order-2 h-[600px] transition-opacity duration-500"
-              style={{ marginLeft: '-48px', opacity: heroSlide === 1 ? 0 : 1, pointerEvents: heroSlide === 1 ? 'none' : 'auto' }}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
-              >
-                <Image
-                  src="/hero-section-1-img.png"
-                  alt="StayHub Integration"
-                  width={380}
-                  height={300}
-                  className="w-[380px] h-auto object-contain"
-                  priority
-                />
-              </motion.div>
+            {/* ── RIGHT: floating step cards ── */}
+            <div className="relative hidden md:block order-1 md:order-2 h-[600px] overflow-visible">
+
+              {/* ── Slide 1 — 3 cards: 2 stacked peek-left + 1 inside upper ── */}
+              {heroSlide === 0 && (<>
+                {/* Card 01 — peek far left, upper */}
+                <div className="absolute top-[15%] left-[-52px] z-20">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[0] : AUTOMATION_STEPS_EN[0]}
+                    floatDuration={3.8} floatDelay={0} entryDelay={0} className="w-[178px]" />
+                </div>
+                {/* Card 02 — peek far left, lower (stacked under 01) */}
+                <div className="absolute top-[44%] left-[-52px] z-20">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[1] : AUTOMATION_STEPS_EN[1]}
+                    floatDuration={4.4} floatDelay={0.6} entryDelay={0.1} className="w-[178px]" />
+                </div>
+                {/* Card 03 — inside panel, upper-center */}
+                <div className="absolute top-[18%] left-[22%] z-10">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[2] : AUTOMATION_STEPS_EN[2]}
+                    floatDuration={5.0} floatDelay={1.1} entryDelay={0.18} className="w-[178px]" />
+                </div>
+              </>)}
+
+              {/* ── Slide 2 — 2 cards: 1 peek-left + 1 inside offset lower ── */}
+              {heroSlide === 1 && (<>
+                {/* Card 04 — peek left edge, upper */}
+                <div className="absolute top-[20%] left-[-44px] z-20">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[3] : AUTOMATION_STEPS_EN[3]}
+                    floatDuration={4.0} floatDelay={0} entryDelay={0} className="w-[178px]" />
+                </div>
+                {/* Card 05 — inside panel, lower-right diagonal */}
+                <div className="absolute top-[50%] left-[28%] z-10">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[4] : AUTOMATION_STEPS_EN[4]}
+                    floatDuration={4.8} floatDelay={0.8} entryDelay={0.12} className="w-[178px]" />
+                </div>
+              </>)}
+
+              {/* ── Slide 3 — 2 cards: 1 peek-left + 1 inside offset lower ── */}
+              {heroSlide === 2 && (<>
+                {/* Card 06 — peek left edge, upper */}
+                <div className="absolute top-[18%] left-[-44px] z-20">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[5] : AUTOMATION_STEPS_EN[5]}
+                    floatDuration={3.9} floatDelay={0} entryDelay={0} className="w-[178px]" />
+                </div>
+                {/* Card 07 — inside panel, lower diagonal */}
+                <div className="absolute top-[52%] left-[30%] z-10">
+                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[6] : AUTOMATION_STEPS_EN[6]}
+                    floatDuration={4.6} floatDelay={0.7} entryDelay={0.12} className="w-[178px]" />
+                </div>
+              </>)}
+
             </div>
 
           </div>
