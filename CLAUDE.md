@@ -240,7 +240,7 @@ stayhub-next/
 | Automation flow hover interactions | `HomepageClient.tsx` | Step cards: lift + scale on hover, per-step colour wash gradient, glow border with shadow, connector dot between cards, spring physics via Framer Motion. |
 | Hero right-side background image | `HomepageClient.tsx`, `/public/hero-bg-1.png` | Replaced plain `bg-[#f5f6f8]` grey panel with `hero-bg-1.png` as `cover` background image, rounded left edge preserved. |
 | Hero converted to 3-slide carousel | `HomepageClient.tsx` | Auto-slides every 5s. Left arrow, right arrow, dot indicators, linear progress bar. AnimatePresence slide transitions (x-axis). 3 slides: (1) One Platform, (2) Guest Journey Automation, (3) Built for Saudi Arabia. Right side (floating cards + bg image) stays fixed. `heroSlide`, `heroDir`, `heroTimerRef` state added. |
-| Hero bg + step cards | `HomepageClient.tsx` | Triple video loop: video_1→video_2_banner→video_3→video_1. Step cards fixed: removed AnimatePresence wrapper, direct conditional render per slide. Layout matches reference: cards peek from left edge. Slide1:3cards Slide2:2cards Slide3:2cards.. Step cards per slide: Slide1→01,02,03 Slide2→04,05 Slide3→06,07. `HeroCard3D` component: 3D tilt on hover, per-card float animation, AnimatePresence between slides. Cards offset outside panel boundary. |
+| Hero bg + step cards | `HomepageClient.tsx` | Triple video loop: video_1→video_2_banner→video_3→video_1. Hero 100svh: paddingTop 64px for navbar. Marquee bottom-10 margin. Removed minHeight constraint. Logos strip compact inline. Left py reduced to py-4/py-6.
 
 ---
 

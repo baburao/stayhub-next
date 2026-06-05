@@ -640,11 +640,11 @@ export default function HomepageClient() {
     <div className="bg-white overflow-x-hidden">
 
       {/* ── 1. HERO ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center bg-white overflow-hidden">
+      <section className="relative flex items-center bg-white overflow-hidden mt-16" style={{ height: 'calc(100vh - 64px)' }}>
 
         {/* Right-side bg panel — two videos always mounted, opacity toggled per slide */}
         <div
-          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[48%] pointer-events-none hidden md:block overflow-hidden`}
+          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[55%] pointer-events-none hidden md:block overflow-hidden`}
         >
           {/* Video 1 → hands off to Video 2 */}
           <video
@@ -673,18 +673,47 @@ export default function HomepageClient() {
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
             style={{ opacity: bgVideo === 2 ? 1 : 0 }}
           />
-          {/* Subtle dark overlay for chip legibility */}
+          {/* Subtle dark overlay */}
           <div className="absolute inset-0 bg-black/15" />
+
+          {/* ── Marquee strip — bottom of video ── */}
+          <div className="absolute bottom-10 inset-x-0 overflow-hidden pointer-events-auto">
+            {/* Fade masks */}
+            <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none"
+              style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.6), transparent)' }} />
+            <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none"
+              style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.6), transparent)' }} />
+
+            {/* Scrolling track — cards duplicated for perfectly seamless loop */}
+            <div className="flex gap-3 animate-marquee" style={{ width: 'max-content' }}>
+              {[...( isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN), ...( isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN)].map((step, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-3 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-3 shrink-0 border border-white/60 shadow-lg hover:bg-white hover:shadow-xl hover:scale-[1.03] transition-all duration-200 cursor-default"
+                  style={{ width: '190px' }}
+                >
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: step.bg }}>
+                    <span className="text-[11px] font-extrabold" style={{ color: step.color }}>{step.num}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-[#0F172A] text-[12px] leading-tight mb-1">{step.title}</p>
+                    <p className="text-slate-500 text-[10.5px] leading-snug line-clamp-2">{step.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
 
         <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full py-24 md:py-0">
-          <div className={`grid md:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen`}>
+          <div className={`grid lg:grid-cols-[45%_55%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full`}>
 
             {/* ── LEFT: slider ── */}
-            <div className={`${isAr ? 'text-right' : 'text-left'} py-20 md:py-28 order-2 md:order-1 flex flex-col`}>
+            <div className={`${isAr ? 'text-right' : 'text-left'} py-4 md:py-6 order-2 md:order-1 flex flex-col`}>
 
               {/* Slide content — badge + headline + subtext only */}
-              <div className="relative overflow-hidden" style={{ minHeight: '280px' }}>
+              <div className="relative overflow-hidden">
                 <AnimatePresence mode="wait" custom={heroDir}>
                   <motion.div
                     key={heroSlide}
@@ -706,12 +735,12 @@ export default function HomepageClient() {
                     </span>
 
                     {/* Headline */}
-                    <h1 className="text-5xl md:text-6xl lg:text-[64px] font-extrabold text-[#0F172A] leading-[1.08] tracking-tight mb-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-[52px] font-extrabold text-[#0F172A] leading-[1.1] tracking-tight mb-5">
                       {isAr ? HERO_SLIDES[heroSlide].h1Ar : HERO_SLIDES[heroSlide].h1En}
                     </h1>
 
                     {/* Sub-headline */}
-                    <p className="text-slate-500 text-base md:text-lg max-w-[420px] leading-relaxed">
+                    <p className="text-slate-500 text-sm md:text-base max-w-[360px] leading-relaxed">
                       {isAr ? HERO_SLIDES[heroSlide].sub.ar : HERO_SLIDES[heroSlide].sub.en}
                     </p>
                   </motion.div>
@@ -780,82 +809,25 @@ export default function HomepageClient() {
                 </div>
               </div>
 
-              {/* Trusted logos strip */}
-              <div className="mt-8 pt-6 border-t border-slate-100">
-                <p className="text-xs text-slate-400 mb-4">
-                  {isAr ? 'نُقدّم خدماتنا لمئات المشغّلين الرائدين في المملكة.' : 'Trusted by leading hospitality operators across Saudi Arabia.'}
+              {/* Trusted logos — compact inline */}
+              <div className={`flex items-center gap-5 mt-5 ${isAr ? 'flex-row-reverse' : ''}`}>
+                <p className="text-[11px] text-slate-400 shrink-0">
+                  {isAr ? 'موثوق من قِبل:' : 'Trusted by:'}
                 </p>
-                <div className={`flex items-center gap-8 ${isAr ? 'flex-row-reverse' : ''}`}>
-                  {[
-                    { src: '/logos/airbnb.webp',      name: 'Airbnb' },
-                    { src: '/logos/booking-com.webp',  name: 'Booking' },
-                    { src: '/logos/gathern.webp',      name: 'Gathern' },
-                  ].map((logo) => (
-                    <Image
-                      key={logo.name}
-                      src={logo.src}
-                      alt={logo.name}
-                      width={90}
-                      height={30}
-                      className="h-6 w-auto object-contain opacity-40 grayscale hover:grayscale-0 hover:opacity-80 transition-all"
-                    />
-                  ))}
-                </div>
+                {[
+                  { src: '/logos/airbnb.webp',      name: 'Airbnb' },
+                  { src: '/logos/booking-com.webp',  name: 'Booking' },
+                  { src: '/logos/gathern.webp',      name: 'Gathern' },
+                ].map((logo) => (
+                  <Image key={logo.name} src={logo.src} alt={logo.name} width={70} height={22}
+                    className="h-5 w-auto object-contain opacity-40 grayscale hover:grayscale-0 hover:opacity-80 transition-all" />
+                ))}
               </div>
 
             </div>
 
-            {/* ── RIGHT: floating step cards ── */}
-            <div className="relative hidden md:block order-1 md:order-2 h-[600px] overflow-visible">
-
-              {/* ── Slide 1 — 3 cards: 2 stacked peek-left + 1 inside upper ── */}
-              {heroSlide === 0 && (<>
-                {/* Card 01 — peek far left, upper */}
-                <div className="absolute top-[15%] left-[-52px] z-20">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[0] : AUTOMATION_STEPS_EN[0]}
-                    floatDuration={3.8} floatDelay={0} entryDelay={0} className="w-[178px]" />
-                </div>
-                {/* Card 02 — peek far left, lower (stacked under 01) */}
-                <div className="absolute top-[44%] left-[-52px] z-20">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[1] : AUTOMATION_STEPS_EN[1]}
-                    floatDuration={4.4} floatDelay={0.6} entryDelay={0.1} className="w-[178px]" />
-                </div>
-                {/* Card 03 — inside panel, upper-center */}
-                <div className="absolute top-[18%] left-[22%] z-10">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[2] : AUTOMATION_STEPS_EN[2]}
-                    floatDuration={5.0} floatDelay={1.1} entryDelay={0.18} className="w-[178px]" />
-                </div>
-              </>)}
-
-              {/* ── Slide 2 — 2 cards: 1 peek-left + 1 inside offset lower ── */}
-              {heroSlide === 1 && (<>
-                {/* Card 04 — peek left edge, upper */}
-                <div className="absolute top-[20%] left-[-44px] z-20">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[3] : AUTOMATION_STEPS_EN[3]}
-                    floatDuration={4.0} floatDelay={0} entryDelay={0} className="w-[178px]" />
-                </div>
-                {/* Card 05 — inside panel, lower-right diagonal */}
-                <div className="absolute top-[50%] left-[28%] z-10">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[4] : AUTOMATION_STEPS_EN[4]}
-                    floatDuration={4.8} floatDelay={0.8} entryDelay={0.12} className="w-[178px]" />
-                </div>
-              </>)}
-
-              {/* ── Slide 3 — 2 cards: 1 peek-left + 1 inside offset lower ── */}
-              {heroSlide === 2 && (<>
-                {/* Card 06 — peek left edge, upper */}
-                <div className="absolute top-[18%] left-[-44px] z-20">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[5] : AUTOMATION_STEPS_EN[5]}
-                    floatDuration={3.9} floatDelay={0} entryDelay={0} className="w-[178px]" />
-                </div>
-                {/* Card 07 — inside panel, lower diagonal */}
-                <div className="absolute top-[52%] left-[30%] z-10">
-                  <HeroCard3D step={isAr ? AUTOMATION_STEPS_AR[6] : AUTOMATION_STEPS_EN[6]}
-                    floatDuration={4.6} floatDelay={0.7} entryDelay={0.12} className="w-[178px]" />
-                </div>
-              </>)}
-
-            </div>
+            {/* ── RIGHT: empty — marquee is inside the bg panel ── */}
+            <div className="hidden md:block order-1 md:order-2 h-[600px]" />
 
           </div>
         </div>
