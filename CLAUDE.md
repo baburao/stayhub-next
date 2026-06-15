@@ -240,7 +240,16 @@ stayhub-next/
 | Automation flow hover interactions | `HomepageClient.tsx` | Step cards: lift + scale on hover, per-step colour wash gradient, glow border with shadow, connector dot between cards, spring physics via Framer Motion. |
 | Hero right-side background image | `HomepageClient.tsx`, `/public/hero-bg-1.png` | Replaced plain `bg-[#f5f6f8]` grey panel with `hero-bg-1.png` as `cover` background image, rounded left edge preserved. |
 | Hero converted to 3-slide carousel | `HomepageClient.tsx` | Auto-slides every 5s. Left arrow, right arrow, dot indicators, linear progress bar. AnimatePresence slide transitions (x-axis). 3 slides: (1) One Platform, (2) Guest Journey Automation, (3) Built for Saudi Arabia. Right side (floating cards + bg image) stays fixed. `heroSlide`, `heroDir`, `heroTimerRef` state added. |
-| Hero bg + step cards | `HomepageClient.tsx` | Triple video loop: video_1→video_2_banner→video_3→video_1. Hero 100svh: paddingTop 64px for navbar. Marquee bottom-10 margin. Removed minHeight constraint. Logos strip compact inline. Left py reduced to py-4/py-6.
+| Hero bg + step cards | `HomepageClient.tsx` | Triple video loop: video_1→video_2_banner→video_3→video_1. Hero height: calc(100vh - 64px) + mt-16. Removed py-24 from container div (was causing overflow). Left column padding removed entirely.
+
+## 6c. Changes Made in Session (Jun 15, 2026)
+
+| Change | File(s) | Details |
+|---|---|---|
+| Hero polish | `HomepageClient.tsx` | Removed `mt-16` (layout.tsx `<main>` already has `pt-16`); removed slider progress bar + "Trusted by" logo strip; video panel widened to 58% and grid to `42%_58%`; slide content area given `minHeight:300px` so CTAs/arrows don't jump between slides. |
+| Integrations mega menu icons | `Navbar.tsx` | Icon boxes enlarged `w-14`→`w-16`, grid `grid-cols-3`→`grid-cols-4`, tighter padding so menu is shorter. |
+| **19 integration detail pages added** | `data/integrations.js`, `data/integrations.ar.js` | Full bilingual content (stats, painPoints, benefits, workflowSteps, faq) for: aqar, ejar-ota, qotoon, attiude, almosafer, darent, absher, shmoos, mot, ejar-gov, pricelabs, tuya, ttlock, odoo, quyood, daftra, anb, whatsapp, vfirst-sms. **All 25 integration pages now live** (was 6). |
+| **13 static pages built** | `app/{about,blog,careers,case-studies,help,updates,docs,privacy,terms,cookies,compliance}/page.tsx` + `ContentPageTemplate.tsx`; `app/login` + `LoginPageClient.tsx`; `app/demo` + `DemoPageClient.tsx` | New reusable bilingual `ContentPageTemplate` (hero + prose sections + card grid + CTA band). `/login` is a sign-in form UI (no backend). `/demo` auto-opens the demo modal. **Zero 404s remain — all 61 routes return 200.** |
 
 ---
 

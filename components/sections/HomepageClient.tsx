@@ -640,11 +640,11 @@ export default function HomepageClient() {
     <div className="bg-white overflow-x-hidden">
 
       {/* ── 1. HERO ─────────────────────────────────────────── */}
-      <section className="relative flex items-center bg-white overflow-hidden mt-16" style={{ height: 'calc(100vh - 64px)' }}>
+      <section className="relative flex items-center bg-white overflow-hidden" style={{ height: 'calc(100vh - 64px)' }}>
 
         {/* Right-side bg panel — two videos always mounted, opacity toggled per slide */}
         <div
-          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[55%] pointer-events-none hidden md:block overflow-hidden`}
+          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[58%] pointer-events-none hidden md:block overflow-hidden`}
         >
           {/* Video 1 → hands off to Video 2 */}
           <video
@@ -706,14 +706,14 @@ export default function HomepageClient() {
 
         </div>
 
-        <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full py-24 md:py-0">
-          <div className={`grid lg:grid-cols-[45%_55%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full`}>
+        <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full">
+          <div className={`grid lg:grid-cols-[42%_58%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full`}>
 
             {/* ── LEFT: slider ── */}
-            <div className={`${isAr ? 'text-right' : 'text-left'} py-4 md:py-6 order-2 md:order-1 flex flex-col`}>
+            <div className={`${isAr ? 'text-right' : 'text-left'} order-2 md:order-1 flex flex-col`}>
 
               {/* Slide content — badge + headline + subtext only */}
-              <div className="relative overflow-hidden">
+              <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
                 <AnimatePresence mode="wait" custom={heroDir}>
                   <motion.div
                     key={heroSlide}
@@ -796,33 +796,8 @@ export default function HomepageClient() {
                     />
                   ))}
                 </div>
-
-                {/* Progress bar */}
-                <div className="flex-1 h-[2px] bg-slate-100 rounded-full overflow-hidden">
-                  <motion.div
-                    key={heroSlide}
-                    className="h-full bg-[#25A4E8] rounded-full"
-                    initial={{ width: '0%' }}
-                    animate={{ width: '100%' }}
-                    transition={{ duration: 5, ease: 'linear' }}
-                  />
-                </div>
               </div>
 
-              {/* Trusted logos — compact inline */}
-              <div className={`flex items-center gap-5 mt-5 ${isAr ? 'flex-row-reverse' : ''}`}>
-                <p className="text-[11px] text-slate-400 shrink-0">
-                  {isAr ? 'موثوق من قِبل:' : 'Trusted by:'}
-                </p>
-                {[
-                  { src: '/logos/airbnb.webp',      name: 'Airbnb' },
-                  { src: '/logos/booking-com.webp',  name: 'Booking' },
-                  { src: '/logos/gathern.webp',      name: 'Gathern' },
-                ].map((logo) => (
-                  <Image key={logo.name} src={logo.src} alt={logo.name} width={70} height={22}
-                    className="h-5 w-auto object-contain opacity-40 grayscale hover:grayscale-0 hover:opacity-80 transition-all" />
-                ))}
-              </div>
 
             </div>
 
