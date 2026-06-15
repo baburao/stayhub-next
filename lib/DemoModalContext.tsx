@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react';
 
 interface DemoModalContextType {
   openModal:  () => void;
@@ -15,12 +15,11 @@ const DemoModalContext = createContext<DemoModalContextType>({
 
 export function DemoModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const openModal  = useCallback(() => setIsOpen(true), []);
+  const closeModal = useCallback(() => setIsOpen(false), []);
+  const value = useMemo(() => ({ openModal, closeModal, isOpen }), [openModal, closeModal, isOpen]);
   return (
-    <DemoModalContext.Provider value={{
-      openModal:  () => setIsOpen(true),
-      closeModal: () => setIsOpen(false),
-      isOpen,
-    }}>
+    <DemoModalContext.Provider value={value}>
       {children}
     </DemoModalContext.Provider>
   );

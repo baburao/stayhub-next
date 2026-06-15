@@ -19,7 +19,9 @@ export default function DemoPageClient() {
   const { isAr } = useLanguage();
   const { openModal } = useDemoModal();
 
-  // Open the booking modal automatically when the page loads
+  // Open the booking modal automatically when the page loads.
+  // `openModal` is memoized in DemoModalContext, so closing the modal
+  // does NOT re-run this effect (which previously caused it to reopen).
   useEffect(() => {
     const t = setTimeout(() => openModal(), 400);
     return () => clearTimeout(t);
