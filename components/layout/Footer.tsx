@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ShieldCheck } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 /* ── Social icon SVGs ──────────────────────────────────── */
@@ -99,6 +100,18 @@ const LEGAL_AR = [
   { label: 'امتثال زاتكا',    href: '/compliance' },
 ];
 
+/* ── Ministry of Tourism license ───────────────────────── */
+const LICENSE = {
+  authority: { ar: 'مرخصة من وزارة السياحة', en: 'Licensed by the Ministry of Tourism' },
+  verified:  { ar: 'منشأة سياحية معتمدة', en: 'Verified tourism establishment' },
+  items: [
+    { labelAr: 'رقم الترخيص',    labelEn: 'License No.',             valueAr: '73104678',                              valueEn: '73104678' },
+    { labelAr: 'السجل التجاري',  labelEn: 'Commercial Registration', valueAr: '1010937195',                            valueEn: '1010937195' },
+    { labelAr: 'نوع الترخيص',    labelEn: 'License Type',            valueAr: 'حجز وحدات ضيافة',                        valueEn: 'Hospitality Unit Booking' },
+    { labelAr: 'الاسم التجاري',  labelEn: 'Trade Name',              valueAr: 'شركة هب الإقامة للسفر والسياحة',         valueEn: 'Hub Accommodation for Travel & Tourism Co.' },
+  ],
+};
+
 /* ── component ─────────────────────────────────────────── */
 export default function Footer() {
   const { isAr } = useLanguage();
@@ -192,6 +205,33 @@ export default function Footer() {
           ))}
         </div>
 
+        {/* Ministry of Tourism license */}
+        <div className="mt-10">
+          <div className="rounded-2xl bg-white/[0.03] border border-white/8 p-6 md:p-7">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shrink-0">
+                <ShieldCheck size={20} />
+              </span>
+              <div>
+                <p className="text-sm font-bold text-white leading-tight">{isAr ? LICENSE.authority.ar : LICENSE.authority.en}</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">{isAr ? LICENSE.verified.ar : LICENSE.verified.en}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/8 rounded-xl overflow-hidden">
+              {LICENSE.items.map(item => (
+                <div key={item.labelEn} className="bg-[#0A1628] px-4 py-3.5">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                    {isAr ? item.labelAr : item.labelEn}
+                  </p>
+                  <p className="text-sm font-semibold text-slate-200 leading-snug">
+                    {isAr ? item.valueAr : item.valueEn}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-5">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -205,6 +245,9 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-400">
               {isAr ? '🇸🇦 مبني للسوق السعودي' : '🇸🇦 Built for Saudi Arabia'}
+            </span>
+            <span className="text-[11px] font-bold px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400">
+              {isAr ? 'وزارة السياحة ✓' : 'Ministry of Tourism ✓'}
             </span>
             <span className="text-[11px] font-bold px-2.5 py-1 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400">
               ZATCA ✓
