@@ -205,31 +205,18 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Ministry of Tourism license */}
-        <div className="mt-10">
-          <div className="rounded-2xl bg-white/[0.03] border border-white/8 p-6 md:p-7">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shrink-0">
-                <ShieldCheck size={20} />
-              </span>
-              <div>
-                <p className="text-sm font-bold text-white leading-tight">{isAr ? LICENSE.authority.ar : LICENSE.authority.en}</p>
-                <p className="text-[11px] text-slate-500 mt-0.5">{isAr ? LICENSE.verified.ar : LICENSE.verified.en}</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/8 rounded-xl overflow-hidden">
-              {LICENSE.items.map(item => (
-                <div key={item.labelEn} className="bg-[#0A1628] px-4 py-3.5">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                    {isAr ? item.labelAr : item.labelEn}
-                  </p>
-                  <p className="text-sm font-semibold text-slate-200 leading-snug">
-                    {isAr ? item.valueAr : item.valueEn}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Ministry of Tourism license — compact strip */}
+        <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl bg-white/[0.03] border border-white/8 px-4 py-2.5">
+          <span className="inline-flex items-center gap-1.5 text-green-400 font-semibold text-xs shrink-0">
+            <ShieldCheck size={14} />
+            {isAr ? LICENSE.authority.ar : LICENSE.authority.en}
+          </span>
+          {LICENSE.items.map(item => (
+            <span key={item.labelEn} className="text-[11px] text-slate-400 before:content-['•'] before:text-slate-600 before:me-3">
+              <span className="text-slate-500">{isAr ? item.labelAr : item.labelEn}:</span>{' '}
+              <span className="text-slate-300 font-medium">{isAr ? item.valueAr : item.valueEn}</span>
+            </span>
+          ))}
         </div>
 
         {/* Bottom bar */}
