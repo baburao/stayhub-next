@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Rocket, Phone, Mail, Globe, Flag, Check } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 /* ── Social icon SVGs ──────────────────────────────────── */
@@ -132,8 +132,9 @@ export default function Footer() {
       {/* Mini CTA strip */}
       <div className="border-b border-white/5 bg-gradient-to-r from-[#25A4E8]/10 to-[#7C69E8]/10">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm font-semibold text-white/80">
-            {isAr ? '🚀 هل أنت مستعد لأتمتة أعمالك؟ ابدأ اليوم.' : '🚀 Ready to automate your hospitality business? Start today.'}
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-white/80">
+            <Rocket size={16} className="text-[#25A4E8] shrink-0" />
+            {isAr ? 'هل أنت مستعد لأتمتة أعمالك؟ ابدأ اليوم.' : 'Ready to automate your hospitality business? Start today.'}
           </p>
           <div className="flex gap-3 shrink-0">
             <Link href="/demo" className="px-5 py-2.5 bg-[#25A4E8] text-white text-xs font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/20">
@@ -148,7 +149,7 @@ export default function Footer() {
 
       {/* Main footer grid */}
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-14 pb-10">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-white/8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-6">
 
           {/* Brand column — spans 2 */}
           <div className="md:col-span-2">
@@ -174,15 +175,15 @@ export default function Footer() {
             {/* Contact */}
             <div className="space-y-2">
               <a href="tel:0583999902" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
-                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-xs">📞</span>
+                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Phone size={14} /></span>
                 0583999902
               </a>
               <a href="mailto:info@stayhub.sa" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
-                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-xs">✉️</span>
+                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Mail size={14} /></span>
                 info@stayhub.sa
               </a>
               <a href="https://www.stayhub.sa" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
-                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-xs">🌐</span>
+                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Globe size={14} /></span>
                 www.stayhub.sa
               </a>
             </div>
@@ -230,17 +231,21 @@ export default function Footer() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-400">
-              {isAr ? '🇸🇦 مبني للسوق السعودي' : '🇸🇦 Built for Saudi Arabia'}
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-400">
+              <Flag size={11} className="shrink-0" />
+              {isAr ? 'مبني للسوق السعودي' : 'Built for Saudi Arabia'}
             </span>
-            <span className="text-[11px] font-bold px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400">
-              {isAr ? 'وزارة السياحة ✓' : 'Ministry of Tourism ✓'}
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400">
+              {isAr ? 'وزارة السياحة' : 'Ministry of Tourism'}
+              <Check size={12} className="shrink-0" />
             </span>
-            <span className="text-[11px] font-bold px-2.5 py-1 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400">
-              ZATCA ✓
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400">
+              ZATCA
+              <Check size={12} className="shrink-0" />
             </span>
-            <span className="text-[11px] font-bold px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400">
-              Absher ✓
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400">
+              Absher
+              <Check size={12} className="shrink-0" />
             </span>
           </div>
         </div>

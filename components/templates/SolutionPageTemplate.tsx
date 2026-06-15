@@ -167,9 +167,10 @@ export default function SolutionPageTemplate({ solution, relatedFeatureData }: P
               </Link>
               <Link
                 href="/pricing"
-                className="px-8 py-4 rounded-xl font-semibold text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
               >
-                {t.buttons.viewPricing} →
+                {t.buttons.viewPricing}
+                <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
               </Link>
             </motion.div>
           </div>

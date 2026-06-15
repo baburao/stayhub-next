@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Check, ChevronDown, Building2, ArrowRight, X, CheckCircle2 } from 'lucide-react';
+import { Check, ChevronDown, Building2, ArrowRight, X, CheckCircle2, Flag, CreditCard, Unlock, BadgeCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -289,9 +289,10 @@ export default function PricingPageClient() {
                       <button
                         onClick={nextStep}
                         disabled={!form.email.includes('@')}
-                        className="w-full py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.01]"
+                        className="w-full inline-flex items-center justify-center gap-2 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.01]"
                       >
-                        {isAr ? 'التالي ←' : 'Next →'}
+                        {isAr ? 'التالي' : 'Next'}
+                        <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
                       </button>
                     </motion.div>
                   )}
@@ -322,7 +323,7 @@ export default function PricingPageClient() {
                         </label>
                         <div className="flex items-center border border-slate-200 rounded-2xl overflow-hidden focus-within:border-[#25A4E8] focus-within:ring-2 focus-within:ring-[#25A4E8]/20 transition">
                           <span className="flex items-center gap-1.5 px-4 py-4 text-sm font-semibold text-slate-600 bg-slate-50 border-r border-slate-200 shrink-0 select-none">
-                            🇸🇦 +966
+                            <Flag size={14} className="text-slate-500" /> +966
                           </span>
                           <input
                             type="tel"
@@ -354,9 +355,10 @@ export default function PricingPageClient() {
                       <button
                         onClick={nextStep}
                         disabled={!form.name || !form.phone}
-                        className="w-full py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.01] !mt-6"
+                        className="w-full inline-flex items-center justify-center gap-2 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.01] !mt-6"
                       >
-                        {isAr ? 'التالي ←' : 'Next →'}
+                        {isAr ? 'التالي' : 'Next'}
+                        <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
                       </button>
 
                       <p className="text-[11px] text-slate-400 leading-relaxed !mt-4">
@@ -375,7 +377,7 @@ export default function PricingPageClient() {
                         <CheckCircle2 size={44} className="text-green-500" strokeWidth={1.5} />
                       </div>
                       <h2 className="text-2xl font-extrabold text-[#0F172A] mb-3">
-                        {isAr ? 'تم بنجاح! 🎉' : "You're all set! 🎉"}
+                        {isAr ? 'تم بنجاح!' : "You're all set!"}
                       </h2>
                       <p className="text-slate-500 text-sm leading-relaxed mb-8">
                         {isAr
@@ -587,13 +589,13 @@ export default function PricingPageClient() {
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {[
-              { label: isAr ? 'تجربة مجانية 14 يوماً' : '14-day free trial',      icon: '✅' },
-              { label: isAr ? 'بدون بطاقة ائتمان'    : 'No credit card required', icon: '💳' },
-              { label: isAr ? 'إلغاء في أي وقت'      : 'Cancel anytime',          icon: '🔓' },
-              { label: isAr ? 'متوافق مع ZATCA'       : 'ZATCA compliant',         icon: '🇸🇦' },
+              { label: isAr ? 'تجربة مجانية 14 يوماً' : '14-day free trial',      icon: BadgeCheck },
+              { label: isAr ? 'بدون بطاقة ائتمان'    : 'No credit card required', icon: CreditCard },
+              { label: isAr ? 'إلغاء في أي وقت'      : 'Cancel anytime',          icon: Unlock },
+              { label: isAr ? 'متوافق مع ZATCA'       : 'ZATCA compliant',         icon: Flag },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-2 text-sm text-slate-600">
-                <span>{item.icon}</span>
+                <item.icon size={16} className="text-[#25A4E8] shrink-0" />
                 <span className="font-medium">{item.label}</span>
               </div>
             ))}

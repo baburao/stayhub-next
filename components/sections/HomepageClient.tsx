@@ -8,7 +8,7 @@ import {
   Brush, Link2, Calendar, CheckCircle2, Star, Zap, TrendingUp,
   Lock, Users, DollarSign, Smartphone, Building2, ChevronDown,
   CalendarCheck, BadgeCheck, Banknote, Sparkles, RefreshCw,
-  ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight, X, Flag,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
@@ -381,7 +381,7 @@ function DashboardShowcase({ isAr }: { isAr: boolean }) {
                         <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/5">
                           <p className="text-[10px] text-slate-400 mb-1">{m.label}</p>
                           <p className="text-white font-extrabold">{m.value}</p>
-                          <p className="text-[#25A4E8] text-[10px] font-bold">{m.delta} ↑</p>
+                          <p className="inline-flex items-center gap-0.5 text-[#25A4E8] text-[10px] font-bold">{m.delta}<TrendingUp size={10} /></p>
                         </div>
                       ))}
                     </div>
@@ -854,7 +854,7 @@ export default function HomepageClient() {
                   </span>
                 ))}
               </div>
-              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
               <p className="font-bold text-[#0F172A] text-lg leading-snug max-w-[220px]">
                 {isAr ? '5 تطبيقات مفتوحة في نفس الوقت' : '5+ apps open at all times'}
               </p>
@@ -869,7 +869,7 @@ export default function HomepageClient() {
               className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
             >
               <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-orange-50 pointer-events-none" />
-              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
               <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
                 {isAr ? 'حجوزات مزدوجة من منصات غير متزامنة' : 'Double bookings from out-of-sync channels'}
               </p>
@@ -881,7 +881,7 @@ export default function HomepageClient() {
               className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
             >
               <div className="absolute top-4 left-4 w-14 h-14 rounded-full bg-green-50 pointer-events-none" />
-              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
               <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
                 {isAr ? 'رسائل واتساب لا تنتهي مع فريق التنظيف' : 'Endless WhatsApp threads with cleaning teams'}
               </p>
@@ -895,7 +895,7 @@ export default function HomepageClient() {
               className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
             >
               <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-violet-50 pointer-events-none" />
-              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
               <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
                 {isAr ? 'ملاك يتصلون لطلب تقارير الأداء' : 'Owners calling to ask for performance reports'}
               </p>
@@ -907,7 +907,7 @@ export default function HomepageClient() {
               className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
             >
               <div className="absolute top-3 right-3 w-20 h-20 rounded-full bg-yellow-50 pointer-events-none" />
-              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
               <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
                 {isAr ? 'فواتير يدوية غير متوافقة مع زاتكا' : 'Manual invoices not compliant with ZATCA'}
               </p>
@@ -931,7 +931,7 @@ export default function HomepageClient() {
               </div>
               {/* Question marks */}
               <div className="absolute top-4 right-5 text-slate-300 text-2xl font-black select-none leading-none opacity-40">?</div>
-              <span className="text-red-400 font-extrabold text-lg mb-2 leading-none">✕</span>
+              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
               <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
                 {isAr ? 'لا رؤية في الوقت الفعلي لأداء العقارات' : 'No real-time visibility into property performance'}
               </p>
@@ -1200,7 +1200,8 @@ export default function HomepageClient() {
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <motion.div {...fadeUp()} className="text-center mb-14">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-widest rounded-full border border-green-200 mb-5">
-              🇸🇦 {isAr ? 'مبني للسوق السعودي' : 'Built for Saudi Arabia'}
+              <Flag size={13} className="shrink-0" />
+              {isAr ? 'مبني للسوق السعودي' : 'Built for Saudi Arabia'}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0F172A] mb-4">
               {isAr ? 'الامتثال والأمان بالكامل' : 'Compliance & security, fully covered'}
@@ -1235,7 +1236,7 @@ export default function HomepageClient() {
                 { value: '+24%', label: isAr ? 'متوسط زيادة الإيرادات' : 'Avg. revenue uplift', color: '#25A4E8' },
                 { value: '-60%', label: isAr ? 'تخفيض وقت الإدارة' : 'Admin time reduction', color: '#7C69E8' },
                 { value: '0',    label: isAr ? 'حجوزات مزدوجة' : 'Double bookings', color: '#25A4E8' },
-                { value: '4.8★', label: isAr ? 'متوسط تقييم الضيوف' : 'Avg. guest rating', color: '#7C69E8' },
+                { value: (<span className="inline-flex items-center justify-center gap-1">4.8<Star size={22} className="fill-current" /></span>), label: isAr ? 'متوسط تقييم الضيوف' : 'Avg. guest rating', color: '#7C69E8' },
               ].map((s, i) => (
                 <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm text-center">
                   <p className="text-3xl font-extrabold mb-1" style={{ color: s.color }}>{s.value}</p>
@@ -1307,7 +1308,7 @@ export default function HomepageClient() {
                   { label: isAr ? 'صافي الإيرادات' : 'Net Revenue', value: 'SAR 41,200' },
                   { label: isAr ? 'معدل الإشغال' : 'Occupancy', value: '87%' },
                   { label: isAr ? 'حجوزات هذا الشهر' : 'Bookings', value: '38' },
-                  { label: isAr ? 'التقييم' : 'Rating', value: '4.9 ★' },
+                  { label: isAr ? 'التقييم' : 'Rating', value: (<span className="inline-flex items-center gap-1">4.9<Star size={12} className="fill-current" /></span>) },
                 ].map((m, i) => (
                   <div key={i} className="bg-white rounded-xl p-3 border border-slate-100">
                     <p className="text-[10px] text-slate-400">{m.label}</p>

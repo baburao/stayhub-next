@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Building2, Home, Hotel, Users, ArrowRight, type LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { allSolutions } from '@/data/solutions';
 
@@ -13,11 +14,11 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.55, delay, ease },
 });
 
-const solutionEmoji: Record<string, string> = {
-  'property-managers': '🏢',
-  'vacation-rental-hosts': '🏡',
-  'hotels-serviced-apartments': '🏨',
-  'multi-owner-operators': '👥',
+const solutionIcon: Record<string, LucideIcon> = {
+  'property-managers': Building2,
+  'vacation-rental-hosts': Home,
+  'hotels-serviced-apartments': Hotel,
+  'multi-owner-operators': Users,
 };
 
 export default function SolutionsPageClient() {
@@ -70,12 +71,17 @@ export default function SolutionsPageClient() {
                     className="group flex flex-col bg-white rounded-3xl p-8 border border-slate-100 hover:border-blue-200 hover:shadow-2xl transition-all hover:-translate-y-1 h-full"
                   >
                     <div className="flex items-start gap-4 mb-5">
-                      <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 transition-transform group-hover:scale-110"
-                        style={{ backgroundColor: `${solution.color}18` }}
-                      >
-                        {solutionEmoji[solution.slug] || '🏢'}
-                      </div>
+                      {(() => {
+                        const Icon = solutionIcon[solution.slug] ?? Building2;
+                        return (
+                          <div
+                            className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+                            style={{ backgroundColor: `${solution.color}18` }}
+                          >
+                            <Icon size={26} style={{ color: solution.color }} />
+                          </div>
+                        );
+                      })()}
                       <div>
                         <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: solution.color }}>
                           {displayBadge}
@@ -98,7 +104,8 @@ export default function SolutionsPageClient() {
                     </div>
 
                     <div className="flex items-center gap-1 text-sm font-semibold transition-all group-hover:gap-2" style={{ color: solution.color }}>
-                      {t.buttons.exploreSolution} →
+                      {t.buttons.exploreSolution}
+                      <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
                     </div>
                   </Link>
                 </motion.div>

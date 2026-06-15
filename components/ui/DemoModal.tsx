@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { X, CheckCircle2, Home, Building2, Building, Landmark, Calendar } from 'lucide-react';
+import { X, CheckCircle2, Home, Building2, Building, Landmark, Calendar, User, Flag, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -231,7 +231,7 @@ export default function DemoModal() {
                       {/* Booking summary */}
                       <div className="space-y-3 border-t border-white/10 pt-5">
                         <div className="flex items-start gap-2.5">
-                          <span className="text-sky-400 mt-0.5">👤</span>
+                          <span className="text-sky-400 mt-0.5"><User size={16} /></span>
                           <div>
                             <p className="text-white text-sm font-semibold">{form.name || '—'}</p>
                             <p className="text-slate-400 text-xs">+966 {form.phone}</p>
@@ -239,7 +239,7 @@ export default function DemoModal() {
                         </div>
                         {units && (
                           <div className="flex items-center gap-2.5">
-                            <span className="text-sky-400">🏠</span>
+                            <span className="text-sky-400"><Home size={16} /></span>
                             <p className="text-slate-300 text-sm">
                               {UNIT_OPTIONS.find(o => o.id === units)?.[isAr ? 'labelAr' : 'labelEn']}
                             </p>
@@ -261,9 +261,10 @@ export default function DemoModal() {
 
                       <button
                         onClick={() => setStep(2)}
-                        className="mt-auto text-xs text-slate-500 hover:text-slate-300 transition-colors text-left underline underline-offset-2"
+                        className="mt-auto inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 transition-colors text-left underline underline-offset-2"
                       >
-                        {isAr ? '← تعديل التفاصيل' : '← Edit details'}
+                        <ArrowRight size={12} className={isAr ? '' : 'rotate-180'} />
+                        {isAr ? 'تعديل التفاصيل' : 'Edit details'}
                       </button>
                     </div>
 
@@ -398,7 +399,7 @@ export default function DemoModal() {
                               </label>
                               <div className="flex items-center border border-slate-200 rounded-2xl overflow-hidden focus-within:border-[#25A4E8] focus-within:ring-2 focus-within:ring-[#25A4E8]/20 transition">
                                 <span className="flex items-center gap-1.5 px-4 py-3.5 text-sm font-semibold text-slate-600 bg-slate-50 border-r border-slate-200 shrink-0 select-none">
-                                  🇸🇦 +966
+                                  <Flag size={14} className="text-slate-500" /> +966
                                 </span>
                                 <input
                                   type="tel"
@@ -429,9 +430,10 @@ export default function DemoModal() {
                             <button
                               onClick={() => setStep(3)}
                               disabled={!form.name.trim() || form.phone.length < 7}
-                              className="w-full py-4 bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-400/30 mt-2"
+                              className="w-full inline-flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-400/30 mt-2"
                             >
-                              {isAr ? 'اختر موعدك ←' : 'Choose a time slot →'}
+                              {isAr ? 'اختر موعدك' : 'Choose a time slot'}
+                              <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
                             </button>
 
                             <p className="text-[11px] text-slate-400 leading-relaxed text-center">
@@ -455,7 +457,7 @@ export default function DemoModal() {
                             </div>
                           </div>
                           <h2 className="text-2xl font-extrabold text-[#0F172A] mb-2">
-                            {isAr ? '!تم الحجز بنجاح 🎉' : "You're booked! 🎉"}
+                            {isAr ? 'تم الحجز بنجاح!' : "You're booked!"}
                           </h2>
                           <p className="text-slate-500 text-sm leading-relaxed mb-3 max-w-xs mx-auto">
                             {isAr

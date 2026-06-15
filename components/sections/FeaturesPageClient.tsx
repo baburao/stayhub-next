@@ -1,6 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import {
+  Globe, Calendar, FileText, Shield, Lock, MessageSquare, CreditCard, Brush,
+  Wrench, BarChart2, DollarSign, Link2, Smartphone, Share2, CheckSquare,
+  BarChart3, Wallet, ClipboardList, Zap, ArrowRight, type LucideIcon,
+} from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { allFeatures } from '@/data/features';
 
@@ -13,11 +18,10 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.55, delay, ease },
 });
 
-const iconMap: Record<string, string> = {
-  Globe: '🌐', Calendar: '📅', FileText: '📋', Shield: '🛡️', Lock: '🔒',
-  MessageSquare: '💬', CreditCard: '💳', Brush: '🧹', Wrench: '🔧',
-  BarChart2: '📊', DollarSign: '💰', Link2: '🔗', Smartphone: '📱', Share2: '🔗',
-  CheckSquare: '✅', BarChart3: '📈', Wallet: '💼', ClipboardList: '📋',
+const iconMap: Record<string, LucideIcon> = {
+  Globe, Calendar, FileText, Shield, Lock, MessageSquare, CreditCard, Brush,
+  Wrench, BarChart2, DollarSign, Link2, Smartphone, Share2, CheckSquare,
+  BarChart3, Wallet, ClipboardList,
 };
 
 export default function FeaturesPageClient() {
@@ -67,12 +71,17 @@ export default function FeaturesPageClient() {
                     href={`/features/${feature.slug}`}
                     className="group bg-white rounded-2xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col h-full"
                   >
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4 transition-transform group-hover:scale-110"
-                      style={{ backgroundColor: `${feature.color}18` }}
-                    >
-                      {iconMap[feature.iconName] || '⚡'}
-                    </div>
+                    {(() => {
+                      const Icon = iconMap[feature.iconName] ?? Zap;
+                      return (
+                        <div
+                          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                          style={{ backgroundColor: `${feature.color}18` }}
+                        >
+                          <Icon size={22} style={{ color: feature.color }} />
+                        </div>
+                      );
+                    })()}
                     <span
                       className="text-xs font-semibold uppercase tracking-wider mb-2"
                       style={{ color: feature.color }}
@@ -86,7 +95,8 @@ export default function FeaturesPageClient() {
                       {displaySub.slice(0, 80)}...
                     </p>
                     <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#25A4E8] opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-1">
-                      {t.buttons.learnMore} →
+                      {t.buttons.learnMore}
+                      <ArrowRight size={13} className={isAr ? 'rotate-180' : ''} />
                     </div>
                   </Link>
                 </motion.div>

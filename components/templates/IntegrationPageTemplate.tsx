@@ -180,9 +180,10 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
               </Link>
               <Link
                 href="/integrations"
-                className="px-8 py-4 rounded-xl font-semibold text-sm border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-all"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-sm border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-all"
               >
                 {t.buttons.allIntegrations}
+                <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
               </Link>
             </motion.div>
           </div>
