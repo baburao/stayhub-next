@@ -23,14 +23,14 @@ const FEATURE_CATEGORIES_EN = [
     color: '#25A4E8',
     icon: Globe,
     items: [
-      { slug: 'channel-manager/aqar',    label: 'AQAR',         desc: 'Saudi local OTA platform',         icon: Building2,  isNew: false },
-      { slug: 'channel-manager/ejar',    label: 'Ejar',         desc: 'Government rental platform',       icon: FileText,   isNew: false },
-      { slug: 'channel-manager/airbnb',  label: 'Airbnb',       desc: 'Global short-term rental OTA',     icon: Globe,      isNew: false },
-      { slug: 'channel-manager/booking', label: 'Booking.com',  desc: 'World\'s largest OTA platform',   icon: Globe,      isNew: false },
-      { slug: 'channel-manager/agoda',   label: 'AGODA',        desc: 'Asia-Pacific OTA leader',          icon: Globe,      isNew: false },
-      { slug: 'channel-manager/google',  label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
-      { slug: 'channel-manager/qotoon',  label: 'Qotoon',       desc: 'Saudi rental platform',            icon: Globe,      isNew: true  },
-      { slug: 'channel-manager/attiude', label: 'Attiude',      desc: 'Coming soon',                      icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/aqar',    href: '/integrations/aqar',                    label: 'AQAR',         desc: 'Saudi local OTA platform',         icon: Building2,  isNew: false },
+      { slug: 'channel-manager/ejar',    href: '/integrations/ejar-ota',                label: 'Ejar',         desc: 'Government rental platform',       icon: FileText,   isNew: false },
+      { slug: 'channel-manager/airbnb',  href: '/integrations/airbnb',                  label: 'Airbnb',       desc: 'Global short-term rental OTA',     icon: Globe,      isNew: false },
+      { slug: 'channel-manager/booking', href: '/integrations/booking-com',             label: 'Booking.com',  desc: 'World\'s largest OTA platform',   icon: Globe,      isNew: false },
+      { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   label: 'AGODA',        desc: 'Asia-Pacific OTA leader',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  label: 'Qotoon',       desc: 'Saudi rental platform',            icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 label: 'Attiude',      desc: 'Coming soon',                      icon: Globe,      isNew: true  },
     ],
   },
   {
@@ -119,14 +119,14 @@ const FEATURE_CATEGORIES_AR = [
     color: '#25A4E8',
     icon: Globe,
     items: [
-      { slug: 'channel-manager/aqar',    label: 'عقار',         desc: 'منصة إيجار سعودية محلية',          icon: Building2,  isNew: false },
-      { slug: 'channel-manager/ejar',    label: 'إيجار',        desc: 'منصة الإيجار الحكومية',            icon: FileText,   isNew: false },
-      { slug: 'channel-manager/airbnb',  label: 'Airbnb',       desc: 'أكبر منصة إيجار قصير المدى',      icon: Globe,      isNew: false },
-      { slug: 'channel-manager/booking', label: 'Booking.com',  desc: 'أكبر منصة حجز في العالم',         icon: Globe,      isNew: false },
-      { slug: 'channel-manager/agoda',   label: 'AGODA',        desc: 'رائدة منطقة آسيا والمحيط الهادئ', icon: Globe,      isNew: false },
-      { slug: 'channel-manager/google',  label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
-      { slug: 'channel-manager/qotoon',  label: 'قطون',         desc: 'منصة إيجار سعودية',               icon: Globe,      isNew: true  },
-      { slug: 'channel-manager/attiude', label: 'Attiude',      desc: 'قريباً',                           icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/aqar',    href: '/integrations/aqar',                    label: 'عقار',         desc: 'منصة إيجار سعودية محلية',          icon: Building2,  isNew: false },
+      { slug: 'channel-manager/ejar',    href: '/integrations/ejar-ota',                label: 'إيجار',        desc: 'منصة الإيجار الحكومية',            icon: FileText,   isNew: false },
+      { slug: 'channel-manager/airbnb',  href: '/integrations/airbnb',                  label: 'Airbnb',       desc: 'أكبر منصة إيجار قصير المدى',      icon: Globe,      isNew: false },
+      { slug: 'channel-manager/booking', href: '/integrations/booking-com',             label: 'Booking.com',  desc: 'أكبر منصة حجز في العالم',         icon: Globe,      isNew: false },
+      { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   label: 'AGODA',        desc: 'رائدة منطقة آسيا والمحيط الهادئ', icon: Globe,      isNew: false },
+      { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  label: 'قطون',         desc: 'منصة إيجار سعودية',               icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 label: 'Attiude',      desc: 'قريباً',                           icon: Globe,      isNew: true  },
     ],
   },
   {
@@ -534,7 +534,7 @@ export default function Navbar() {
                             {featureCats[activeCatIdx].items.map((item) => (
                               <Link
                                 key={item.slug}
-                                href={`/features/${item.slug}`}
+                                href={(item as { href?: string }).href ?? `/features/${item.slug}`}
                                 className="group flex items-start gap-3 p-3.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
                               >
                                 <div
@@ -911,7 +911,7 @@ export default function Navbar() {
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }} className="overflow-hidden">
                         <div className="pb-2 space-y-0.5">
                           {key === 'features' && featureCats.flatMap(cat => cat.items).map(item => (
-                            <Link key={item.slug} href={`/features/${item.slug}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 text-sm text-slate-700 font-medium">
+                            <Link key={item.slug} href={(item as { href?: string }).href ?? `/features/${item.slug}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 text-sm text-slate-700 font-medium">
                               <item.icon size={15} className="text-[#25A4E8] shrink-0" />{item.label}
                               {item.isNew && <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-600 uppercase ms-auto">NEW</span>}
                             </Link>
