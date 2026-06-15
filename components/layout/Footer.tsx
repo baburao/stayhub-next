@@ -206,15 +206,15 @@ export default function Footer() {
         </div>
 
         {/* Ministry of Tourism license — compact strip */}
-        <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl bg-white/[0.03] border border-white/8 px-4 py-2.5">
-          <span className="inline-flex items-center gap-1.5 text-green-400 font-semibold text-xs shrink-0">
-            <ShieldCheck size={14} />
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-b border-white/8 py-3.5">
+          <span className="inline-flex items-center gap-1.5 text-green-400 font-semibold text-[13px] shrink-0">
+            <ShieldCheck size={15} />
             {isAr ? LICENSE.authority.ar : LICENSE.authority.en}
           </span>
           {LICENSE.items.map(item => (
-            <span key={item.labelEn} className="text-[11px] text-slate-400 before:content-['•'] before:text-slate-600 before:me-3">
+            <span key={item.labelEn} className="text-[12px] text-slate-400 before:content-['•'] before:text-slate-600 before:me-5">
               <span className="text-slate-500">{isAr ? item.labelAr : item.labelEn}:</span>{' '}
-              <span className="text-slate-300 font-medium">{isAr ? item.valueAr : item.valueEn}</span>
+              <span className="text-slate-200 font-medium">{isAr ? item.valueAr : item.valueEn}</span>
             </span>
           ))}
         </div>
