@@ -54,7 +54,7 @@ export default function FeaturesPageClient() {
       {/* Features Grid */}
       <section className="py-16 bg-white">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
             {allFeatures.map((feature, index) => {
               const displayBadge = isAr ? (feature.arBadge ?? feature.badge) : feature.badge;
               const displayH1    = isAr ? feature.arabicH1 : feature.h1;
@@ -69,32 +69,32 @@ export default function FeaturesPageClient() {
                 >
                   <Link
                     href={`/features/${feature.slug}`}
-                    className="group bg-white rounded-2xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col h-full"
+                    className="group bg-white rounded-2xl p-4 sm:p-6 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col h-full"
                   >
                     {(() => {
                       const Icon = iconMap[feature.iconName] ?? Zap;
                       return (
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4 transition-transform group-hover:scale-110"
                           style={{ backgroundColor: `${feature.color}18` }}
                         >
-                          <Icon size={22} style={{ color: feature.color }} />
+                          <Icon size={20} style={{ color: feature.color }} />
                         </div>
                       );
                     })()}
                     <span
-                      className="text-xs font-semibold uppercase tracking-wider mb-2"
+                      className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-1.5 sm:mb-2"
                       style={{ color: feature.color }}
                     >
                       {displayBadge}
                     </span>
-                    <h2 className="text-base font-bold text-[#0F172A] mb-2 group-hover:text-[#25A4E8] transition-colors leading-snug">
+                    <h2 className="text-sm sm:text-base font-bold text-[#0F172A] mb-1.5 sm:mb-2 group-hover:text-[#25A4E8] transition-colors leading-snug">
                       {displayH1}
                     </h2>
-                    <p className="text-slate-500 text-sm leading-relaxed flex-1">
+                    <p className="text-slate-500 text-[13px] sm:text-sm leading-relaxed flex-1">
                       {displaySub.slice(0, 80)}...
                     </p>
-                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#25A4E8] opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-1">
+                    <div className="mt-3 sm:mt-4 flex items-center gap-1 text-xs font-semibold text-[#25A4E8] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-1">
                       {t.buttons.learnMore}
                       <ArrowRight size={13} className={isAr ? 'rotate-180' : ''} />
                     </div>

@@ -1126,7 +1126,7 @@ export default function HomepageClient() {
             {outcomes.map((outcome, i) => (
               <div key={i} className="flex items-center gap-3.5">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-[rgba(20,199,196,0.12)]">
-                  <span className="text-sm font-extrabold text-[#14c7c4]">OK</span>
+                  <CheckCircle2 size={22} className="text-[#14c7c4]" />
                 </div>
                 <div>
                   <p className="font-bold text-white text-base leading-snug">{outcome.title}</p>
