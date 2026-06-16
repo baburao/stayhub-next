@@ -128,7 +128,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#0A1628] text-white">
+    <footer className="bg-[#0A1628] text-white pb-16 lg:pb-0">
       {/* Mini CTA strip */}
       <div className="border-b border-white/5 bg-gradient-to-r from-[#25A4E8]/10 to-[#7C69E8]/10">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">

@@ -10,6 +10,7 @@ import {
   CreditCard, Brush, Wrench, BarChart2, DollarSign, Link2, Smartphone, Share2,
   BookOpen, LifeBuoy, Code2, Award, Zap, Building2, Users, ArrowRight, Play,
   CheckCircle2, Star, Layers, Cpu, Sparkles, RefreshCw, TrendingUp,
+  Home, LayoutGrid, Plug, Tag,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -370,6 +371,13 @@ export default function Navbar() {
 
   const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
+  const bottomNav = [
+    { href: '/',             icon: Home,       en: 'Home',         ar: 'الرئيسية',  active: pathname === '/' },
+    { href: '/features',     icon: LayoutGrid, en: 'Features',     ar: 'المميزات',   active: pathname.startsWith('/features') },
+    { href: '/integrations', icon: Plug,       en: 'Integrations', ar: 'التكاملات',  active: pathname.startsWith('/integrations') },
+    { href: '/pricing',      icon: Tag,        en: 'Pricing',      ar: 'الأسعار',    active: pathname.startsWith('/pricing') },
+  ];
+
   return (
     <>
       <header
@@ -432,14 +440,11 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Mobile toggle */}
-            <button
-              className="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            {/* Mobile: language switcher (burger lives in the bottom nav) */}
+            <div className="lg:hidden flex items-center bg-slate-100 rounded-lg p-0.5">
+              <button onClick={() => setLang('en')} className={clsx('px-3 py-1.5 rounded-md text-xs font-bold transition-all', lang === 'en' ? 'bg-white text-[#25A4E8] shadow-sm' : 'text-slate-500')}>EN</button>
+              <button onClick={() => setLang('ar')} className={clsx('px-3 py-1.5 rounded-md text-xs font-bold transition-all', lang === 'ar' ? 'bg-white text-[#25A4E8] shadow-sm' : 'text-slate-500')}>AR</button>
+            </div>
           </div>
         </div>
 
@@ -876,6 +881,36 @@ export default function Navbar() {
         </AnimatePresence>
       </header>
 
+      {/* ── Mobile Bottom Nav ──────────────────────────────── */}
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/97 backdrop-blur-xl border-t border-slate-100 pb-[env(safe-area-inset-bottom)]">
+        <div className="flex items-stretch justify-around px-1 py-1.5">
+          {bottomNav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={clsx(
+                'flex-1 flex flex-col items-center justify-center gap-1 py-1.5 rounded-lg transition-colors',
+                item.active ? 'text-[#25A4E8]' : 'text-slate-500'
+              )}
+            >
+              <item.icon size={21} strokeWidth={item.active ? 2.4 : 2} />
+              <span className={clsx('text-[10px] leading-none', item.active && 'font-bold')}>{isAr ? item.ar : item.en}</span>
+            </Link>
+          ))}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={isAr ? 'القائمة' : 'Menu'}
+            className={clsx(
+              'flex-1 flex flex-col items-center justify-center gap-1 py-1.5 rounded-lg transition-colors',
+              mobileOpen ? 'text-[#25A4E8]' : 'text-slate-500'
+            )}
+          >
+            {mobileOpen ? <X size={21} strokeWidth={2.4} /> : <Menu size={21} strokeWidth={2} />}
+            <span className={clsx('text-[10px] leading-none', mobileOpen && 'font-bold')}>{isAr ? 'القائمة' : 'Menu'}</span>
+          </button>
+        </div>
+      </nav>
+
       {/* ── Mobile Drawer ──────────────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
@@ -886,13 +921,7 @@ export default function Navbar() {
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             className="fixed inset-0 z-40 bg-white lg:hidden overflow-y-auto"
           >
-            <div className="p-5 pt-20">
-              {/* Lang */}
-              <div className="flex items-center bg-slate-100 rounded-xl p-1 mb-6 w-fit">
-                <button onClick={() => setLang('en')} className={clsx('px-4 py-2 rounded-lg text-sm font-bold transition-all', lang === 'en' ? 'bg-white text-[#25A4E8] shadow-sm' : 'text-slate-500')}>EN</button>
-                <button onClick={() => setLang('ar')} className={clsx('px-4 py-2 rounded-lg text-sm font-bold transition-all', lang === 'ar' ? 'bg-white text-[#25A4E8] shadow-sm' : 'text-slate-500')}>AR</button>
-              </div>
-
+            <div className="p-5 pt-20 pb-28">
               {/* Accordion nav */}
               {(['features', 'solutions', 'integrations', 'resources'] as MenuKey[]).map((key) => (
                 <div key={key} className="border-b border-slate-100 pb-2 mb-2">
