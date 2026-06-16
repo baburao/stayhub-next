@@ -29,7 +29,7 @@ export default function FloatingCTA() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className={`fixed bottom-20 lg:bottom-6 z-40 flex flex-col gap-2.5 ${isAr ? 'left-5' : 'right-5'}`}
+          className={`fixed bottom-20 lg:bottom-6 z-40 flex flex-row-reverse lg:flex-col items-center gap-2.5 ${isAr ? 'left-5' : 'right-5'}`}
         >
           {/* WhatsApp */}
           <a
