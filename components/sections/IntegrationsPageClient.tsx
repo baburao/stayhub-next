@@ -161,7 +161,7 @@ export default function IntegrationsPageClient() {
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
 
           {/* Tabs */}
-          <motion.div {...fadeUp(0)} className="flex flex-wrap gap-2 mb-10 justify-center">
+          <motion.div {...fadeUp(0)} className="grid grid-cols-2 gap-2 mb-10 sm:flex sm:flex-wrap sm:justify-center">
             {CATS.map((cat) => {
               const isActive = activeTab === cat.key;
               const label = isAr ? cat.ar : cat.en;
@@ -170,16 +170,18 @@ export default function IntegrationsPageClient() {
                 <button
                   key={cat.key}
                   onClick={() => setActiveTab(cat.key)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-[13px] sm:text-sm font-semibold transition-all border justify-between sm:justify-start ${
                     isActive
                       ? 'text-white shadow-lg shadow-blue-500/20 border-transparent'
                       : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-[#25A4E8]'
                   }`}
                   style={isActive ? { backgroundColor: cat.color, borderColor: cat.color } : {}}
                 >
-                  <cat.icon size={13} />
-                  {label}
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                  <span className="flex items-center gap-2 min-w-0">
+                    <cat.icon size={13} className="shrink-0" />
+                    <span className="text-start leading-tight">{label}</span>
+                  </span>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
                     isActive ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-500'
                   }`}>
                     {count}
