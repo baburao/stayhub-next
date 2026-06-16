@@ -706,7 +706,52 @@ export default function HomepageClient() {
 
         </div>
 
-        <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 w-full">
+        {/* ── MOBILE: full-screen background video + overlaid hero ── */}
+        <div className="md:hidden absolute inset-0 w-full h-full overflow-hidden">
+          <video
+            src="/hero_video_1.mp4"
+            autoPlay muted loop playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Legibility gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
+        </div>
+
+        <div className={`md:hidden relative z-10 w-full px-6 ${isAr ? 'text-right' : 'text-left'}`}>
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 backdrop-blur-sm text-white text-[11px] font-bold rounded-full border border-white/25 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
+            {isAr ? HERO_SLIDES[0].badge.ar : HERO_SLIDES[0].badge.en}
+          </span>
+
+          <h1 className="text-[34px] leading-[1.14] font-extrabold text-white tracking-tight mb-4">
+            {isAr ? HERO_SLIDES[0].h1Ar : HERO_SLIDES[0].h1En}
+          </h1>
+
+          <p className="text-white/80 text-[15px] leading-relaxed mb-8 max-w-[340px]">
+            {isAr ? HERO_SLIDES[0].sub.ar : HERO_SLIDES[0].sub.en}
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={openModal}
+              className={`inline-flex items-center justify-center gap-2.5 w-full px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-500/30`}
+            >
+              {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
+              <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
+            </button>
+            <button
+              onClick={openModal}
+              className="inline-flex items-center justify-center gap-2.5 w-full px-7 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-bold rounded-xl text-sm transition-all hover:bg-white/20"
+            >
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <div className="w-0 h-0 border-l-[7px] border-l-white border-y-[4.5px] border-y-transparent ms-0.5" />
+              </div>
+              {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
+            </button>
+          </div>
+        </div>
+
+        <div className="hidden md:block relative max-w-[1400px] mx-auto px-4 md:px-8 w-full">
           <div className={`grid lg:grid-cols-[42%_58%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full`}>
 
             {/* ── LEFT: slider ── */}
