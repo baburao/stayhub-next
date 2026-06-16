@@ -73,30 +73,30 @@ function IntegrationCard({ intg, isAr }: { intg: typeof INTEGRATIONS[0]; isAr: b
   return (
     <Link
       href={`/integrations/${intg.slug}`}
-      className={`group flex flex-col items-center text-center gap-0 bg-white rounded-3xl border p-7 transition-all duration-200
+      className={`group flex flex-col items-center text-center gap-0 bg-white rounded-2xl sm:rounded-3xl border p-4 sm:p-7 transition-all duration-200
         ${intg.soon
           ? 'border-slate-100 opacity-80 pointer-events-none'
           : 'border-slate-100 hover:border-slate-200 hover:shadow-xl hover:-translate-y-1'
         }`}
     >
       {/* iOS-style icon box */}
-      <div className="w-24 h-24 rounded-[24px] bg-white border border-slate-100 shadow-sm flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md p-3">
+      <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-[18px] sm:rounded-[24px] bg-white border border-slate-100 shadow-sm flex items-center justify-center mb-3 sm:mb-5 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md p-2.5 sm:p-3">
         {intg.logo ? (
           <Image src={intg.logo} alt={intg.en} width={72} height={72} className="object-contain w-full h-full" />
         ) : (
-          <span className="text-xl font-extrabold tracking-tight" style={{ color: intg.color }}>
+          <span className="text-lg sm:text-xl font-extrabold tracking-tight" style={{ color: intg.color }}>
             {intg.en.slice(0, 3).toUpperCase()}
           </span>
         )}
       </div>
 
       {/* Name */}
-      <p className="font-bold text-[#0F172A] text-base leading-tight mb-1.5 group-hover:text-[#25A4E8] transition-colors">
+      <p className="font-bold text-[#0F172A] text-sm sm:text-base leading-tight mb-1 sm:mb-1.5 group-hover:text-[#25A4E8] transition-colors">
         {name}
       </p>
 
       {/* Badge */}
-      <span className={`text-sm font-semibold ${intg.soon ? 'text-amber-500' : 'text-[#25A4E8]'}`}>
+      <span className={`text-xs sm:text-sm font-semibold ${intg.soon ? 'text-amber-500' : 'text-[#25A4E8]'}`}>
         {badge}
       </span>
     </Link>
@@ -216,7 +216,7 @@ export default function IntegrationsPageClient() {
               )}
 
               {/* Grid */}
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
                 {filtered.map((intg, i) => (
                   <motion.div
                     key={intg.slug}
