@@ -260,6 +260,18 @@ stayhub-next/
 | **Ministry of Tourism license in footer** | `components/layout/Footer.tsx` | Added bilingual license info: authority (مرخصة من وزارة السياحة), License No. 73104678, CR 1010937195, type (حجز وحدات ضيافة), trade name (شركة هب الإقامة للسفر والسياحة). Rendered as a compact borderless inline strip with `border-t`/`border-b` dividers + green ShieldCheck icon + bullet separators. Also added a "Ministry of Tourism ✓" credential chip in the bottom bar. Main link-grid bottom border removed + `pb-12`→`pb-6` to tighten spacing. |
 | **Removed ALL emoji icons app-wide → Lucide** | `Footer.tsx`, `FeaturesPageClient.tsx`, `SolutionsPageClient.tsx`, `HomepageClient.tsx`, `DemoModal.tsx`, `PricingPageClient.tsx`, `lib/i18n.ts`, `templates/{Feature,Solution,Integration}PageTemplate.tsx` | Consistency rule: **no emoji icons anywhere — use Lucide stroke/fill icons.** Footer contact/badges (Rocket/Phone/Mail/Globe/Flag/Check); Features emoji icon-map → real Lucide components per `iconName`; Solutions → Building2/Home/Hotel/Users; Homepage ✕ problem cards → red `X` tiles, 🇸🇦→Flag, `4.8★`→Star, `↑`→TrendingUp; DemoModal 👤/🏠/🇸🇦/🎉→User/Home/Flag/(removed); Pricing trust row + 🇸🇦/🎉→Lucide. Stripped text arrows (`→`/`←`) from i18n button strings and added RTL-aware `ArrowRight` icons at render sites. Workflow body-text arrows (e.g. "Reported → Assigned") intentionally kept as prose. |
 
+## 6e. Mobile / native-app pass (Jun 16, 2026)
+
+Goal: make the mobile view feel like a native app. All changes are mobile-scoped (`md:`/`lg:` prefixes); desktop is unchanged.
+
+| Change | File(s) | Details |
+|---|---|---|
+| **Native bottom nav + minimal top bar** | `components/layout/Navbar.tsx` | Mobile top bar now shows only logo + EN/AR language switcher (RTL-mirrored); burger removed from top. New `lg:hidden` fixed bottom sticky nav: **Home · Features · Integrations · Pricing · Menu**, icon+label per tab, active highlight via `usePathname`. **Menu** toggles the existing drawer (flips to X) while the bar stays on top (bar z-50, drawer z-40). **Pricing** tab calls `openModal()` (Book a Demo) — there is no pricing page in nav. Drawer: removed redundant lang toggle, added bottom padding to clear the bar. |
+| **Footer + FloatingCTA bottom clearance** | `components/layout/Footer.tsx`, `components/ui/FloatingCTA.tsx` | Footer root `pb-16 lg:pb-0` so content clears the fixed bottom nav. FloatingCTA `bottom-20 lg:bottom-6` and on mobile a **row** layout (`flex-row-reverse lg:flex-col`): WhatsApp right, Book Demo left. |
+| **Mobile hero = full-screen background video** | `components/sections/HomepageClient.tsx` | `md:hidden` full-bleed looping `/hero_video_1.mp4` (object-cover) + dark legibility gradient, with badge/headline/subtext/2 full-width CTAs overlaid (RTL-aware). Desktop text column is `hidden md:block`; marquee/horizontal cards stay desktop-only. No horizontal page scroll on mobile. |
+| **Integrations: mobile grids** | `components/sections/IntegrationsPageClient.tsx` | Cards `grid-cols-2` on mobile (was full-width single col) with smaller padding/icon. Category filter pills also `grid-cols-2` on mobile (count badge right-aligned, full labels, no truncation); desktop keeps centered flex-wrap. |
+| **Mobile review fixes** | `components/sections/HomepageClient.tsx`, `components/sections/FeaturesPageClient.tsx` | Home automation outcomes: literal "OK" text → `CheckCircle2` icon. Features list → `grid-cols-2` on mobile with "Learn more" shown (no empty cards). Feature Ecosystem carousel reviewed — clean at rest (1 card + peek + arrows), left as designed. |
+
 ---
 
 ## 7. Current Tasks / What's Pending
