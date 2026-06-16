@@ -375,8 +375,8 @@ export default function Navbar() {
     { href: '/',             icon: Home,       en: 'Home',         ar: 'الرئيسية',  active: pathname === '/' },
     { href: '/features',     icon: LayoutGrid, en: 'Features',     ar: 'المميزات',   active: pathname.startsWith('/features') },
     { href: '/integrations', icon: Plug,       en: 'Integrations', ar: 'التكاملات',  active: pathname.startsWith('/integrations') },
-    { href: '/pricing',      icon: Tag,        en: 'Pricing',      ar: 'الأسعار',    active: pathname.startsWith('/pricing') },
-  ];
+    { onClick: openModal,    icon: Tag,        en: 'Pricing',      ar: 'الأسعار',    active: false },
+  ] as Array<{ href?: string; onClick?: () => void; icon: typeof Home; en: string; ar: string; active: boolean }>;
 
   return (
     <>
@@ -884,19 +884,23 @@ export default function Navbar() {
       {/* ── Mobile Bottom Nav ──────────────────────────────── */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/97 backdrop-blur-xl border-t border-slate-100 pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-stretch justify-around px-1 py-1.5">
-          {bottomNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={clsx(
-                'flex-1 flex flex-col items-center justify-center gap-1 py-1.5 rounded-lg transition-colors',
-                item.active ? 'text-[#25A4E8]' : 'text-slate-500'
-              )}
-            >
-              <item.icon size={21} strokeWidth={item.active ? 2.4 : 2} />
-              <span className={clsx('text-[10px] leading-none', item.active && 'font-bold')}>{isAr ? item.ar : item.en}</span>
-            </Link>
-          ))}
+          {bottomNav.map((item) => {
+            const cls = clsx(
+              'flex-1 flex flex-col items-center justify-center gap-1 py-1.5 rounded-lg transition-colors',
+              item.active ? 'text-[#25A4E8]' : 'text-slate-500'
+            );
+            const inner = (
+              <>
+                <item.icon size={21} strokeWidth={item.active ? 2.4 : 2} />
+                <span className={clsx('text-[10px] leading-none', item.active && 'font-bold')}>{isAr ? item.ar : item.en}</span>
+              </>
+            );
+            return item.onClick ? (
+              <button key={item.en} onClick={item.onClick} className={cls}>{inner}</button>
+            ) : (
+              <Link key={item.en} href={item.href!} className={cls}>{inner}</Link>
+            );
+          })}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={isAr ? 'القائمة' : 'Menu'}
