@@ -9,6 +9,7 @@ import {
   Lock, Users, DollarSign, Smartphone, Building2, ChevronDown,
   CalendarCheck, BadgeCheck, Banknote, Sparkles, RefreshCw,
   ChevronLeft, ChevronRight, X, Flag,
+  Layers, AlertTriangle, Phone, FileText, MessageCircle, BarChart3,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
@@ -854,152 +855,228 @@ export default function HomepageClient() {
       </section>
 
       {/* ── 3. PROBLEM SECTION ──────────────────────────────── */}
-      <section className="py-20 md:py-28 bg-[#ECEEF5]">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-[#F4F3FB] to-white">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
 
           {/* Title */}
-          <motion.div {...fadeUp()} className={`mb-10 ${isAr ? 'text-right' : ''}`}>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0F172A] leading-[1.1] max-w-2xl">
+          <motion.div {...fadeUp()} className="mb-12 text-start">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0F172A] leading-[1.08] max-w-2xl">
               {isAr
                 ? 'إدارة عقاراتك يجب ألا تكون هكذا'
                 : "Managing your rentals shouldn't feel like this"}
             </h2>
+            <div className="mt-5 h-1.5 w-24 rounded-full bg-[#7C69E8]" />
           </motion.div>
 
-          {/* ── Bento grid: 4 cols × 2 rows ── */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* ── Bento grid ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
 
-            {/* ── ROW 1 ── */}
-
-            {/* Card 1 — large (2-col), scattered apps visual */}
+            {/* Card 1 — 5+ apps (wide) */}
             <motion.div
               {...fadeUp(0.05)}
-              className="col-span-2 bg-white rounded-3xl p-7 relative overflow-hidden flex flex-col justify-end min-h-[220px]"
+              className="sm:col-span-2 lg:col-span-6 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              {/* Soft blob bg */}
-              <div
-                className="absolute -top-10 -right-10 w-64 h-64 pointer-events-none"
-                style={{ background: 'radial-gradient(circle at 60% 40%, #DBEAFE 0%, transparent 65%)', borderRadius: '60% 40% 50% 60% / 55% 45% 55% 45%' }}
-              />
-              {/* Floating app tags (decorative) */}
-              <div className={`absolute top-6 ${isAr ? 'left-6' : 'right-6'} flex flex-col gap-2 items-end`}>
-                {[
-                  { name: 'Airbnb',       bg: '#FFF1F1', border: '#FECACA', text: '#DC2626' },
-                  { name: 'Booking.com',  bg: '#EFF6FF', border: '#BFDBFE', text: '#1D4ED8' },
-                  { name: 'WhatsApp',     bg: '#F0FDF4', border: '#BBF7D0', text: '#15803D' },
-                  { name: 'Excel',        bg: '#F0FDF4', border: '#A7F3D0', text: '#059669' },
-                  { name: '+5 more tabs', bg: '#F8FAFC', border: '#E2E8F0', text: '#64748B' },
-                ].map((app, i) => (
-                  <span
-                    key={i}
-                    className="text-[10px] font-bold px-2.5 py-1 rounded-lg border leading-none"
-                    style={{ backgroundColor: app.bg, borderColor: app.border, color: app.text, opacity: 0.75 + i * 0.05 }}
-                  >
-                    {app.name}
-                  </span>
-                ))}
+              {/* icon */}
+              <div className="absolute top-6 start-6 lg:top-7 lg:start-7 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+                <Layers size={22} className="text-[#7C69E8]" strokeWidth={1.75} />
               </div>
-              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
-              <p className="font-bold text-[#0F172A] text-lg leading-snug max-w-[220px]">
-                {isAr ? '5 تطبيقات مفتوحة في نفس الوقت' : '5+ apps open at all times'}
-              </p>
-              <p className="text-slate-400 text-sm mt-1.5 max-w-[220px] leading-relaxed">
-                {isAr ? 'تبديل مستمر بين منصات متعددة يومياً' : 'Constant switching between platforms every day'}
-              </p>
+              {/* app pills */}
+              <div className={`absolute top-7 ${isAr ? 'left-6' : 'right-6'} flex flex-col gap-2 items-stretch z-10 w-[180px]`}>
+                {[
+                  { name: 'Airbnb',      initial: 'A', color: '#FF5A5F' },
+                  { name: 'Booking.com', initial: 'B', color: '#1D4ED8' },
+                  { name: 'WhatsApp',    initial: 'W', color: '#25D366' },
+                  { name: 'Excel',       initial: 'X', color: '#107C41' },
+                ].map((a) => (
+                  <div key={a.name} className="flex items-center gap-2.5 bg-white border border-slate-100 rounded-xl px-3 py-2 shadow-sm">
+                    <span className="w-5 h-5 rounded-md flex items-center justify-center text-white text-[10px] font-black shrink-0" style={{ backgroundColor: a.color }}>{a.initial}</span>
+                    <span className="text-[12px] font-bold" style={{ color: a.color }}>{a.name}</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-center bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5">
+                  <span className="text-[11px] font-semibold text-slate-400">{isAr ? '+5 علامات أخرى' : '+5 more tabs'}</span>
+                </div>
+              </div>
+              {/* text */}
+              <div className="mt-auto relative z-10 max-w-[230px]">
+                <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-3"><X size={15} strokeWidth={2.5} /></span>
+                <p className="font-bold text-[#0F172A] text-[17px] leading-snug">
+                  {isAr ? '5 تطبيقات مفتوحة في نفس الوقت' : '5+ apps open at all times'}
+                </p>
+                <p className="text-slate-400 text-sm mt-1.5 leading-relaxed">
+                  {isAr ? 'تبديل مستمر بين منصات متعددة يومياً' : 'Constant switching between platforms every day'}
+                </p>
+              </div>
             </motion.div>
 
-            {/* Card 2 */}
+            {/* Card 2 — double bookings */}
             <motion.div
               {...fadeUp(0.1)}
-              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-orange-50 pointer-events-none" />
-              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
-              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+                <Calendar size={20} className="text-[#F59E0B]" strokeWidth={1.75} />
+              </div>
+              {/* mini calendar + warning */}
+              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} z-10`}>
+                <div className="w-[112px] rounded-xl bg-white border border-slate-100 shadow-md p-2.5">
+                  <div className="h-1.5 w-2/3 rounded-full bg-slate-100 mb-2" />
+                  <div className="grid grid-cols-5 gap-1">
+                    {Array.from({ length: 15 }).map((_, i) => (
+                      <div key={i} className={`h-3.5 rounded-[3px] ${i === 6 || i === 7 || i === 12 ? 'bg-red-400' : 'bg-slate-100'}`} />
+                    ))}
+                  </div>
+                </div>
+                <div className={`absolute -bottom-2.5 ${isAr ? '-left-2.5' : '-right-2.5'} w-8 h-8 rounded-full bg-red-500 flex items-center justify-center shadow-lg shadow-red-500/30`}>
+                  <AlertTriangle size={15} className="text-white" strokeWidth={2.5} />
+                </div>
+              </div>
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
                 {isAr ? 'حجوزات مزدوجة من منصات غير متزامنة' : 'Double bookings from out-of-sync channels'}
               </p>
             </motion.div>
 
-            {/* Card 3 */}
+            {/* Card 3 — WhatsApp chaos */}
             <motion.div
               {...fadeUp(0.15)}
-              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-4 left-4 w-14 h-14 rounded-full bg-green-50 pointer-events-none" />
-              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
-              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#EBF9F0] flex items-center justify-center z-10">
+                <MessageCircle size={20} className="text-[#25D366]" strokeWidth={1.75} />
+              </div>
+              {/* chat bubbles */}
+              <div className={`absolute top-7 ${isAr ? 'left-5' : 'right-5'} flex flex-col gap-2 z-10 w-[150px]`}>
+                <div className="flex items-end gap-1.5 self-start">
+                  <span className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center shrink-0"><Users size={11} className="text-slate-400" /></span>
+                  <div className="bg-slate-100 rounded-2xl rounded-bl-sm px-3 py-2 space-y-1">
+                    <div className="h-1.5 w-16 rounded-full bg-slate-300" />
+                    <div className="h-1.5 w-10 rounded-full bg-slate-300" />
+                  </div>
+                </div>
+                <div className="bg-[#DCF8C6] rounded-2xl rounded-br-sm px-3 py-2 space-y-1 self-end">
+                  <div className="h-1.5 w-14 rounded-full bg-[#a3d98e]" />
+                  <div className="h-1.5 w-8 rounded-full bg-[#a3d98e]" />
+                </div>
+                <div className="flex items-end gap-1.5 self-start">
+                  <span className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center shrink-0"><Users size={11} className="text-slate-400" /></span>
+                  <div className="bg-slate-100 rounded-2xl rounded-bl-sm px-3 py-2.5 flex gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                  </div>
+                </div>
+              </div>
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
                 {isAr ? 'رسائل واتساب لا تنتهي مع فريق التنظيف' : 'Endless WhatsApp threads with cleaning teams'}
               </p>
             </motion.div>
 
-            {/* ── ROW 2 ── */}
-
-            {/* Card 4 */}
+            {/* Card 4 — owners calling */}
             <motion.div
               {...fadeUp(0.2)}
-              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-violet-50 pointer-events-none" />
-              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
-              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+                <Phone size={20} className="text-[#7C69E8]" strokeWidth={1.75} />
+              </div>
+              {/* phone + call waves */}
+              <div className={`absolute top-7 ${isAr ? 'left-7' : 'right-7'} z-10`}>
+                <div className="relative w-[84px] h-[84px] flex items-center justify-center">
+                  <span className="absolute w-[84px] h-[84px] rounded-full border border-[#7C69E8]/15" />
+                  <span className="absolute w-[58px] h-[58px] rounded-full border border-[#7C69E8]/25" />
+                  <div className="relative w-12 h-[88px] rounded-[14px] bg-[#0F172A] p-1.5 shadow-xl">
+                    <div className="w-full h-full rounded-[10px] bg-slate-800 flex flex-col items-center justify-center gap-1">
+                      <span className="w-5 h-5 rounded-full bg-slate-600 flex items-center justify-center"><Users size={11} className="text-slate-300" /></span>
+                      <div className="h-1 w-6 rounded-full bg-slate-600" />
+                    </div>
+                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-[#7C69E8] flex items-center justify-center shadow-lg shadow-[#7C69E8]/40">
+                      <Phone size={12} className="text-white fill-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
                 {isAr ? 'ملاك يتصلون لطلب تقارير الأداء' : 'Owners calling to ask for performance reports'}
               </p>
             </motion.div>
 
-            {/* Card 5 */}
+            {/* Card 5 — ZATCA invoices */}
             <motion.div
               {...fadeUp(0.25)}
-              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-3 right-3 w-20 h-20 rounded-full bg-yellow-50 pointer-events-none" />
-              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
-              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+                <FileText size={20} className="text-[#7C69E8]" strokeWidth={1.75} />
+              </div>
+              {/* invoice card */}
+              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} w-[112px] rounded-xl bg-white border border-slate-100 shadow-md p-3 z-10`}>
+                <p className="text-[8px] font-black tracking-[0.15em] text-slate-400 mb-2">INVOICE</p>
+                <div className="space-y-1.5 mb-2.5">
+                  <div className="h-1.5 w-full rounded-full bg-slate-100" />
+                  <div className="h-1.5 w-3/4 rounded-full bg-slate-100" />
+                  <div className="h-1.5 w-1/2 rounded-full bg-slate-100" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[12px] font-black text-[#0F172A]">$ —</span>
+                  <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-[8px] font-bold px-1.5 py-0.5 rounded-md"><CheckCircle2 size={9} />ZATCA</span>
+                </div>
+              </div>
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
                 {isAr ? 'فواتير يدوية غير متوافقة مع زاتكا' : 'Manual invoices not compliant with ZATCA'}
               </p>
             </motion.div>
 
-            {/* Card 6 — ghost chart visual */}
+            {/* Card 6 — no visibility */}
             <motion.div
               {...fadeUp(0.3)}
-              className="bg-white rounded-3xl p-6 flex flex-col justify-end min-h-[220px] relative overflow-hidden"
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              {/* Organic blob */}
-              <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 bg-slate-100 pointer-events-none"
-                style={{ borderRadius: '58% 42% 48% 52% / 52% 46% 54% 48%' }}
-              />
-              {/* Ghost bar chart */}
-              <div className="absolute top-5 left-1/2 -translate-x-1/2 flex items-end gap-1 opacity-[0.18]">
-                {[45, 68, 38, 74, 52, 82, 48].map((h, i) => (
-                  <div key={i} className="w-3.5 rounded-t bg-slate-500" style={{ height: `${h * 0.9}px` }} />
-                ))}
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+                <BarChart3 size={20} className="text-[#25A4E8]" strokeWidth={1.75} />
               </div>
-              {/* Question marks */}
-              <div className="absolute top-4 right-5 text-slate-300 text-2xl font-black select-none leading-none opacity-40">?</div>
-              <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-2"><X size={16} strokeWidth={2.5} /></span>
-              <p className="font-semibold text-[#0F172A] text-[15px] leading-snug">
+              {/* perf card */}
+              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} w-[124px] rounded-xl bg-white border border-slate-100 shadow-md p-3 z-10`}>
+                <svg viewBox="0 0 100 38" className="w-full h-9">
+                  <polyline fill="none" stroke="#7C69E8" strokeWidth="2.5" points="2,30 22,24 42,27 62,15 82,11 98,4" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="98" cy="4" r="3" fill="#7C69E8" />
+                </svg>
+                <div className="flex items-center justify-between mt-2">
+                  <div>
+                    <p className="text-[8px] text-slate-400 font-semibold leading-none mb-0.5">{isAr ? 'الإشغال' : 'Occupancy'}</p>
+                    <p className="text-[13px] font-black text-[#0F172A] leading-none">62%</p>
+                  </div>
+                  <div className="w-7 h-7 rounded-full" style={{ background: 'conic-gradient(#7C69E8 62%, #E9E7F8 0)' }} />
+                </div>
+              </div>
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
                 {isAr ? 'لا رؤية في الوقت الفعلي لأداء العقارات' : 'No real-time visibility into property performance'}
               </p>
             </motion.div>
 
-            {/* Card 7 — CTA card (lavender) */}
+            {/* Card 7 — promo */}
             <motion.div
               {...fadeUp(0.35)}
-              className="rounded-3xl p-6 flex flex-col justify-between min-h-[220px]"
-              style={{ backgroundColor: '#C4BEF0' }}
+              className="lg:col-span-3 relative overflow-hidden rounded-3xl p-7 min-h-[240px] flex flex-col justify-between"
+              style={{ background: 'linear-gradient(150deg,#CFC9F5 0%,#B7AAF0 100%)' }}
             >
-              <p className="font-bold text-[#1a1550] text-[15px] leading-snug">
-                {isAr
-                  ? '«StayHub» — هو المنصة التي تحل جميع هذه المشاكل وتحقق النتائج.'
-                  : '"StayHub" — the platform that solves all of this and delivers results.'}
-              </p>
-              <button
-                onClick={openModal}
-                className="inline-flex items-center justify-center gap-2 w-full py-3 bg-[#0F172A] text-white font-bold rounded-full text-sm hover:bg-slate-700 transition-colors mt-4"
-              >
-                {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
-                <ArrowRight size={13} />
-              </button>
+              <div className="absolute -top-8 -end-8 w-32 h-32 rounded-full bg-white/25 blur-xl pointer-events-none" />
+              <div className="w-12 h-12 rounded-2xl bg-white/40 backdrop-blur flex items-center justify-center relative z-10">
+                <Sparkles size={22} className="text-[#5b46c9]" />
+              </div>
+              <div className="relative z-10">
+                <p className="font-extrabold text-[#1a1550] text-[17px] leading-snug mb-4">
+                  {isAr
+                    ? '«StayHub» — هو المنصة التي تحل جميع هذه المشاكل وتحقق النتائج.'
+                    : '"StayHub" — the platform that solves all of this and delivers results.'}
+                </p>
+                <button
+                  onClick={openModal}
+                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#0F172A] text-white font-bold rounded-full text-sm hover:bg-[#1e293b] transition-colors"
+                >
+                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
+                  <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
+                </button>
+              </div>
             </motion.div>
 
           </div>
