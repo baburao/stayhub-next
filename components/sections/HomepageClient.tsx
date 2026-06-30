@@ -1,8 +1,8 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, type CSSProperties, type ReactNode, type MouseEvent as ReactMouseEvent } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import {
   ArrowRight, Globe, Shield, MessageSquare, BarChart2, CreditCard,
   Brush, Link2, Calendar, CheckCircle2, Star, Zap, TrendingUp,
@@ -136,6 +136,50 @@ const fadeUp = (delay = 0) => ({
 });
 
 /* ─── sub-components ────────────────────────────────────── */
+
+/* 3D-tilt card: follows the cursor with perspective + spring, lifts on hover.
+   Children with `data-depth` (or a translateZ style) parallax forward in 3D. */
+function TiltCard({
+  delay = 0,
+  className = '',
+  style,
+  children,
+}: {
+  delay?: number;
+  className?: string;
+  style?: CSSProperties;
+  children: ReactNode;
+}) {
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 220, damping: 18, mass: 0.5 });
+  const sry = useSpring(ry, { stiffness: 220, damping: 18, mass: 0.5 });
+
+  const handleMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    ry.set(px * 12);
+    rx.set(-py * 12);
+  };
+  const reset = () => { rx.set(0); ry.set(0); };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -8, scale: 1.015 }}
+      onMouseMove={handleMove}
+      onMouseLeave={reset}
+      style={{ rotateX: srx, rotateY: sry, transformPerspective: 900, transformStyle: 'preserve-3d', ...style }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -872,16 +916,16 @@ export default function HomepageClient() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
 
             {/* Card 1 — 5+ apps (wide) */}
-            <motion.div
-              {...fadeUp(0.05)}
-              className="sm:col-span-2 lg:col-span-6 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
+            <TiltCard
+              delay={0.05}
+              className="sm:col-span-2 lg:col-span-6 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
               {/* icon */}
-              <div className="absolute top-6 start-6 lg:top-7 lg:start-7 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+              <div className="absolute top-6 start-6 lg:top-7 lg:start-7 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(40px)' }}>
                 <Layers size={22} className="text-[#7C69E8]" strokeWidth={1.75} />
               </div>
               {/* app pills */}
-              <div className={`absolute top-7 ${isAr ? 'left-6' : 'right-6'} flex flex-col gap-2 items-stretch z-10 w-[180px]`}>
+              <div className={`absolute top-7 ${isAr ? 'left-6' : 'right-6'} flex flex-col gap-2 items-stretch z-10 w-[180px]`} style={{ transform: 'translateZ(60px)' }}>
                 {[
                   { name: 'Airbnb',      initial: 'A', color: '#FF5A5F' },
                   { name: 'Booking.com', initial: 'B', color: '#1D4ED8' },
@@ -898,7 +942,7 @@ export default function HomepageClient() {
                 </div>
               </div>
               {/* text */}
-              <div className="mt-auto relative z-10 max-w-[230px]">
+              <div className="mt-auto relative z-10 max-w-[230px]" style={{ transform: 'translateZ(28px)' }}>
                 <span className="inline-flex w-7 h-7 rounded-lg bg-red-50 text-red-500 items-center justify-center mb-3"><X size={15} strokeWidth={2.5} /></span>
                 <p className="font-bold text-[#0F172A] text-[17px] leading-snug">
                   {isAr ? '5 تطبيقات مفتوحة في نفس الوقت' : '5+ apps open at all times'}
@@ -907,18 +951,18 @@ export default function HomepageClient() {
                   {isAr ? 'تبديل مستمر بين منصات متعددة يومياً' : 'Constant switching between platforms every day'}
                 </p>
               </div>
-            </motion.div>
+            </TiltCard>
 
             {/* Card 2 — double bookings */}
-            <motion.div
-              {...fadeUp(0.1)}
-              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
+            <TiltCard
+              delay={0.1}
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(40px)' }}>
                 <Calendar size={20} className="text-[#F59E0B]" strokeWidth={1.75} />
               </div>
               {/* mini calendar + warning */}
-              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} z-10`}>
+              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} z-10`} style={{ transform: 'translateZ(55px)' }}>
                 <div className="w-[112px] rounded-xl bg-white border border-slate-100 shadow-md p-2.5">
                   <div className="h-1.5 w-2/3 rounded-full bg-slate-100 mb-2" />
                   <div className="grid grid-cols-5 gap-1">
@@ -927,25 +971,29 @@ export default function HomepageClient() {
                     ))}
                   </div>
                 </div>
-                <div className={`absolute -bottom-2.5 ${isAr ? '-left-2.5' : '-right-2.5'} w-8 h-8 rounded-full bg-red-500 flex items-center justify-center shadow-lg shadow-red-500/30`}>
+                <motion.div
+                  animate={{ scale: [1, 1.12, 1] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                  className={`absolute -bottom-2.5 ${isAr ? '-left-2.5' : '-right-2.5'} w-8 h-8 rounded-full bg-red-500 flex items-center justify-center shadow-lg shadow-red-500/30`}
+                >
                   <AlertTriangle size={15} className="text-white" strokeWidth={2.5} />
-                </div>
+                </motion.div>
               </div>
-              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug" style={{ transform: 'translateZ(25px)' }}>
                 {isAr ? 'حجوزات مزدوجة من منصات غير متزامنة' : 'Double bookings from out-of-sync channels'}
               </p>
-            </motion.div>
+            </TiltCard>
 
             {/* Card 3 — WhatsApp chaos */}
-            <motion.div
-              {...fadeUp(0.15)}
-              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
+            <TiltCard
+              delay={0.15}
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#EBF9F0] flex items-center justify-center z-10">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#EBF9F0] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(40px)' }}>
                 <MessageCircle size={20} className="text-[#25D366]" strokeWidth={1.75} />
               </div>
               {/* chat bubbles */}
-              <div className={`absolute top-7 ${isAr ? 'left-5' : 'right-5'} flex flex-col gap-2 z-10 w-[150px]`}>
+              <div className={`absolute top-7 ${isAr ? 'left-5' : 'right-5'} flex flex-col gap-2 z-10 w-[150px]`} style={{ transform: 'translateZ(55px)' }}>
                 <div className="flex items-end gap-1.5 self-start">
                   <span className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center shrink-0"><Users size={11} className="text-slate-400" /></span>
                   <div className="bg-slate-100 rounded-2xl rounded-bl-sm px-3 py-2 space-y-1">
@@ -960,30 +1008,43 @@ export default function HomepageClient() {
                 <div className="flex items-end gap-1.5 self-start">
                   <span className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center shrink-0"><Users size={11} className="text-slate-400" /></span>
                   <div className="bg-slate-100 rounded-2xl rounded-bl-sm px-3 py-2.5 flex gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    {[0, 0.2, 0.4].map((d) => (
+                      <motion.span
+                        key={d}
+                        className="w-1.5 h-1.5 rounded-full bg-slate-400"
+                        animate={{ y: [0, -3, 0], opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 0.9, repeat: Infinity, ease: 'easeInOut', delay: d }}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
-              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug" style={{ transform: 'translateZ(25px)' }}>
                 {isAr ? 'رسائل واتساب لا تنتهي مع فريق التنظيف' : 'Endless WhatsApp threads with cleaning teams'}
               </p>
-            </motion.div>
+            </TiltCard>
 
             {/* Card 4 — owners calling */}
-            <motion.div
-              {...fadeUp(0.2)}
-              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
+            <TiltCard
+              delay={0.2}
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(40px)' }}>
                 <Phone size={20} className="text-[#7C69E8]" strokeWidth={1.75} />
               </div>
               {/* phone + call waves */}
-              <div className={`absolute top-7 ${isAr ? 'left-7' : 'right-7'} z-10`}>
+              <div className={`absolute top-7 ${isAr ? 'left-7' : 'right-7'} z-10`} style={{ transform: 'translateZ(55px)' }}>
                 <div className="relative w-[84px] h-[84px] flex items-center justify-center">
-                  <span className="absolute w-[84px] h-[84px] rounded-full border border-[#7C69E8]/15" />
-                  <span className="absolute w-[58px] h-[58px] rounded-full border border-[#7C69E8]/25" />
+                  <motion.span
+                    className="absolute w-[84px] h-[84px] rounded-full border border-[#7C69E8]/30"
+                    animate={{ scale: [0.7, 1.05], opacity: [0.6, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
+                  />
+                  <motion.span
+                    className="absolute w-[58px] h-[58px] rounded-full border border-[#7C69E8]/40"
+                    animate={{ scale: [0.7, 1.05], opacity: [0.7, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut', delay: 0.5 }}
+                  />
                   <div className="relative w-12 h-[88px] rounded-[14px] bg-[#0F172A] p-1.5 shadow-xl">
                     <div className="w-full h-full rounded-[10px] bg-slate-800 flex flex-col items-center justify-center gap-1">
                       <span className="w-5 h-5 rounded-full bg-slate-600 flex items-center justify-center"><Users size={11} className="text-slate-300" /></span>
@@ -995,21 +1056,21 @@ export default function HomepageClient() {
                   </div>
                 </div>
               </div>
-              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug" style={{ transform: 'translateZ(25px)' }}>
                 {isAr ? 'ملاك يتصلون لطلب تقارير الأداء' : 'Owners calling to ask for performance reports'}
               </p>
-            </motion.div>
+            </TiltCard>
 
             {/* Card 5 — ZATCA invoices */}
-            <motion.div
-              {...fadeUp(0.25)}
-              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
+            <TiltCard
+              delay={0.25}
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(40px)' }}>
                 <FileText size={20} className="text-[#7C69E8]" strokeWidth={1.75} />
               </div>
               {/* invoice card */}
-              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} w-[112px] rounded-xl bg-white border border-slate-100 shadow-md p-3 z-10`}>
+              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} w-[112px] rounded-xl bg-white border border-slate-100 shadow-md p-3 z-10`} style={{ transform: 'translateZ(55px)' }}>
                 <p className="text-[8px] font-black tracking-[0.15em] text-slate-400 mb-2">INVOICE</p>
                 <div className="space-y-1.5 mb-2.5">
                   <div className="h-1.5 w-full rounded-full bg-slate-100" />
@@ -1021,23 +1082,29 @@ export default function HomepageClient() {
                   <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-[8px] font-bold px-1.5 py-0.5 rounded-md"><CheckCircle2 size={9} />ZATCA</span>
                 </div>
               </div>
-              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug" style={{ transform: 'translateZ(25px)' }}>
                 {isAr ? 'فواتير يدوية غير متوافقة مع زاتكا' : 'Manual invoices not compliant with ZATCA'}
               </p>
-            </motion.div>
+            </TiltCard>
 
             {/* Card 6 — no visibility */}
-            <motion.div
-              {...fadeUp(0.3)}
-              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] p-6 lg:p-7 min-h-[240px] flex flex-col"
+            <TiltCard
+              delay={0.3}
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_4px_24px_rgba(17,12,46,0.05)] transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5] p-6 lg:p-7 min-h-[240px] flex flex-col"
             >
-              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10">
+              <div className="absolute top-6 start-6 w-12 h-12 rounded-full bg-[#F1F0FA] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110" style={{ transform: 'translateZ(40px)' }}>
                 <BarChart3 size={20} className="text-[#25A4E8]" strokeWidth={1.75} />
               </div>
               {/* perf card */}
-              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} w-[124px] rounded-xl bg-white border border-slate-100 shadow-md p-3 z-10`}>
+              <div className={`absolute top-6 ${isAr ? 'left-5' : 'right-5'} w-[124px] rounded-xl bg-white border border-slate-100 shadow-md p-3 z-10`} style={{ transform: 'translateZ(55px)' }}>
                 <svg viewBox="0 0 100 38" className="w-full h-9">
-                  <polyline fill="none" stroke="#7C69E8" strokeWidth="2.5" points="2,30 22,24 42,27 62,15 82,11 98,4" strokeLinecap="round" strokeLinejoin="round" />
+                  <motion.polyline
+                    fill="none" stroke="#7C69E8" strokeWidth="2.5" points="2,30 22,24 42,27 62,15 82,11 98,4" strokeLinecap="round" strokeLinejoin="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.1, ease: 'easeInOut', delay: 0.4 }}
+                  />
                   <circle cx="98" cy="4" r="3" fill="#7C69E8" />
                 </svg>
                 <div className="flex items-center justify-between mt-2">
@@ -1048,22 +1115,27 @@ export default function HomepageClient() {
                   <div className="w-7 h-7 rounded-full" style={{ background: 'conic-gradient(#7C69E8 62%, #E9E7F8 0)' }} />
                 </div>
               </div>
-              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug">
+              <p className="mt-auto relative z-10 font-bold text-[#0F172A] text-[16px] leading-snug" style={{ transform: 'translateZ(25px)' }}>
                 {isAr ? 'لا رؤية في الوقت الفعلي لأداء العقارات' : 'No real-time visibility into property performance'}
               </p>
-            </motion.div>
+            </TiltCard>
 
             {/* Card 7 — promo */}
-            <motion.div
-              {...fadeUp(0.35)}
-              className="lg:col-span-3 relative overflow-hidden rounded-3xl p-7 min-h-[240px] flex flex-col justify-between"
+            <TiltCard
+              delay={0.35}
+              className="lg:col-span-3 group relative overflow-hidden rounded-3xl p-7 min-h-[240px] flex flex-col justify-between shadow-[0_8px_30px_rgba(124,105,232,0.18)] transition-shadow duration-300 hover:shadow-[0_28px_70px_rgba(124,105,232,0.4)]"
               style={{ background: 'linear-gradient(150deg,#CFC9F5 0%,#B7AAF0 100%)' }}
             >
               <div className="absolute -top-8 -end-8 w-32 h-32 rounded-full bg-white/25 blur-xl pointer-events-none" />
-              <div className="w-12 h-12 rounded-2xl bg-white/40 backdrop-blur flex items-center justify-center relative z-10">
+              <motion.div
+                className="w-12 h-12 rounded-2xl bg-white/40 backdrop-blur flex items-center justify-center relative z-10"
+                style={{ transform: 'translateZ(50px)' }}
+                animate={{ rotate: [0, 8, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              >
                 <Sparkles size={22} className="text-[#5b46c9]" />
-              </div>
-              <div className="relative z-10">
+              </motion.div>
+              <div className="relative z-10" style={{ transform: 'translateZ(30px)' }}>
                 <p className="font-extrabold text-[#1a1550] text-[17px] leading-snug mb-4">
                   {isAr
                     ? '«StayHub» — هو المنصة التي تحل جميع هذه المشاكل وتحقق النتائج.'
@@ -1077,7 +1149,7 @@ export default function HomepageClient() {
                   <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
                 </button>
               </div>
-            </motion.div>
+            </TiltCard>
 
           </div>
         </div>
