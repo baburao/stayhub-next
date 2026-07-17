@@ -9,7 +9,7 @@ import {
   Lock, Users, DollarSign, Smartphone, Building2, ChevronDown,
   CalendarCheck, BadgeCheck, Banknote, Sparkles, RefreshCw,
   ChevronLeft, ChevronRight, X, Flag,
-  Layers, AlertTriangle, Phone, FileText, MessageCircle, BarChart3,
+  Layers, AlertTriangle, Phone, FileText, MessageCircle, BarChart3, Mail,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
@@ -303,216 +303,79 @@ function FeatureCard3D({ f, isAr }: { f: Feature; isAr: boolean }) {
   );
 }
 
-/* ─── dashboard showcase (tabbed) ──────────────────────── */
-
-const DASH_TABS_EN = ['Analytics', 'Calendar', 'Inbox'] as const;
-const DASH_TABS_AR = ['التحليلات', 'التقويم', 'البريد الوارد'] as const;
-type DashTab = 0 | 1 | 2;
-
-const CALENDAR_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const CALENDAR_DATA = [
-  [null, null, { ch: 'AB', from: true }, { ch: 'AB' }, { ch: 'AB', to: true }, null, null],
-  [null, { ch: 'BK', from: true }, { ch: 'BK' }, { ch: 'BK' }, { ch: 'BK', to: true }, null, null],
-  [{ ch: 'GT', from: true }, { ch: 'GT' }, { ch: 'GT' }, null, { ch: 'AB', from: true }, { ch: 'AB' }, { ch: 'AB', to: true }],
-];
-const CHANNEL_COLORS: Record<string, string> = { AB: '#FF5A5F', BK: '#003580', GT: '#00A651' };
-const CHANNEL_NAMES: Record<string, string> = { AB: 'Airbnb', BK: 'Booking', GT: 'Gathern' };
-
-const INBOX_MSGS = [
-  { from: 'Mohammed A.', ch: 'AB', preview: 'What time is check-in?', time: '2m', unread: true },
-  { from: 'Sarah K.',    ch: 'BK', preview: 'Can we get an early check-in?', time: '15m', unread: true },
-  { from: 'Nora Z.',     ch: 'GT', preview: 'Confirmed! Looking forward to it', time: '1h', unread: false },
-  { from: 'Khalid M.',   ch: 'AB', preview: 'Is parking available?', time: '3h', unread: false },
-];
-const INBOX_MSGS_AR = [
-  { from: 'محمد أ.', ch: 'AB', preview: 'ما وقت تسجيل الوصول؟', time: 'قبل 2د', unread: true },
-  { from: 'سارة ك.', ch: 'BK', preview: 'هل يمكننا وصول مبكر؟', time: 'قبل 15د', unread: true },
-  { from: 'نورة ز.', ch: 'GT', preview: 'تم التأكيد! نتطلع للزيارة', time: 'قبل 1س', unread: false },
-  { from: 'خالد م.', ch: 'AB', preview: 'هل يوجد موقف سيارات؟', time: 'قبل 3س', unread: false },
-];
+/* ─── dashboard showcase ──────────────────────── */
 
 function DashboardShowcase({ isAr }: { isAr: boolean }) {
   const { openModal } = useDemoModal();
-  const [activeTab, setActiveTab] = useState<DashTab>(0);
-  const tabs = isAr ? DASH_TABS_AR : DASH_TABS_EN;
-  const inboxMsgs = isAr ? INBOX_MSGS_AR : INBOX_MSGS;
+
+  const features = isAr ? [
+    { icon: Calendar,  text: 'تقويم متعدد العقارات مع كشف التعارضات فوراً' },
+    { icon: RefreshCw, text: 'تحديثات الأسعار التلقائية عبر جميع القنوات' },
+    { icon: BarChart2, text: 'تتبّع RevPAR وADR ومعدلات الإشغال' },
+    { icon: Mail,      text: 'صندوق وارد موحد من جميع قنوات OTA' },
+  ] : [
+    { icon: Calendar,  text: 'Multi-property calendar with instant conflict detection' },
+    { icon: RefreshCw, text: 'Automatic rate updates across all channels' },
+    { icon: BarChart2, text: 'RevPAR, ADR, and occupancy rate tracking' },
+    { icon: Mail,      text: 'Unified inbox from all OTAs' },
+  ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-[#0F172A] to-[#1E2D4E]">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+    <section className="relative overflow-hidden py-20 md:py-28 bg-gradient-to-br from-[#F4F3FB] via-white to-[#EEF2FE]">
+      {/* decorative */}
+      <div className="absolute top-12 end-8 w-56 h-56 dot-grid opacity-40 pointer-events-none" />
+      <div className="absolute -bottom-24 -start-24 w-[420px] h-[420px] rounded-full bg-[#7C69E8]/[0.06] blur-3xl pointer-events-none" />
+
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 relative">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left copy */}
-          <motion.div {...fadeUp()}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 text-white/70 text-xs font-bold uppercase tracking-widest rounded-full border border-white/10 mb-6">
+          <motion.div {...fadeUp()} className="text-start">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EEEBFB] text-[#7C69E8] text-xs font-bold uppercase tracking-widest rounded-full mb-6">
               {isAr ? 'لوحة التحكم' : 'Dashboard'}
             </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-5">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0F172A] mb-5 leading-[1.08]">
               {isAr ? 'كل شيء في نظرة واحدة' : 'Everything at a glance'}
             </h2>
-            <p className="text-slate-400 text-lg mb-8 leading-relaxed">
+            <p className="text-slate-500 text-lg mb-9 leading-relaxed max-w-lg">
               {isAr
-                ? 'تقويم موحد، أسعار ديناميكية، مزامنة متعددة القنوات، وتحليلات في الوقت الفعلي — كلها في لوحة تحكم واحدة.'
+                ? 'تقويم موحد، أسعار ديناميكية، مزامنة متعددة القنوات، وتحليلات في الوقت الفعلي — كلها في لوحة تحكم أنيقة واحدة.'
                 : 'Unified calendar, dynamic pricing, multi-channel sync, and real-time analytics — one elegant dashboard.'}
             </p>
-            <div className="space-y-3 mb-8">
-              {(isAr ? [
-                'تقويم متعدد العقارات مع كشف التعارضات فوراً',
-                'تحديثات الأسعار التلقائية عبر جميع القنوات',
-                'RevPAR وADR ومعدلات الإشغال',
-                'صندوق وارد موحد من جميع OTAs',
-              ] : [
-                'Multi-property calendar with instant conflict detection',
-                'Automatic rate updates across all channels',
-                'RevPAR, ADR, and occupancy rate tracking',
-                'Unified inbox from all OTAs',
-              ]).map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <CheckCircle2 size={16} className="text-[#25A4E8] shrink-0" />
-                  <span className="text-slate-300 text-sm">{item}</span>
-                </div>
-              ))}
+            <div className="space-y-4 mb-9">
+              {features.map((f, i) => {
+                const Icon = f.icon;
+                return (
+                  <motion.div key={i} {...fadeUp(0.1 + i * 0.08)} className="flex items-center gap-4">
+                    <span className="w-11 h-11 rounded-xl bg-[#F1F0FA] flex items-center justify-center shrink-0">
+                      <Icon size={20} className="text-[#7C69E8]" strokeWidth={1.9} />
+                    </span>
+                    <span className="text-[#334155] font-semibold text-[15px] leading-snug max-w-xs">{f.text}</span>
+                  </motion.div>
+                );
+              })}
             </div>
-            <button onClick={openModal} className="inline-flex items-center gap-2 px-6 py-3 bg-[#25A4E8] text-white font-bold rounded-xl hover:bg-[#1A8FD1] transition-all shadow-lg shadow-blue-500/30 text-sm">
-              {isAr ? 'شاهد العرض التوضيحي' : 'See it in action'} <ArrowRight size={14} />
+            <button onClick={openModal} className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#7C69E8] text-white font-bold rounded-xl hover:bg-[#6B57DC] transition-all shadow-lg shadow-[#7C69E8]/30 text-sm">
+              {isAr ? 'شاهد العرض التوضيحي' : 'See it in action'}
+              <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
             </button>
           </motion.div>
 
-          {/* Right — tabbed mock dashboard */}
-          <motion.div {...fadeUp(0.15)} className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
-            {/* Tab bar */}
-            <div className="flex items-center gap-0 border-b border-white/10 px-4 pt-4">
-              {tabs.map((tab, i) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(i as DashTab)}
-                  className={`px-4 py-2.5 text-xs font-bold rounded-t-lg transition-all ${
-                    activeTab === i
-                      ? 'bg-white/10 text-white border-b-2 border-[#25A4E8]'
-                      : 'text-slate-500 hover:text-slate-300'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-              <span className="ms-auto text-[10px] text-green-400 font-bold flex items-center gap-1 pb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                {isAr ? 'مباشر' : 'Live'}
-              </span>
-            </div>
-
-            {/* Tab content */}
-            <div className="p-5 min-h-[300px]">
-              <AnimatePresence mode="wait">
-                {/* ANALYTICS TAB */}
-                {activeTab === 0 && (
-                  <motion.div key="analytics" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-white font-bold text-sm">{isAr ? 'الأداء هذا الشهر' : 'This month\'s performance'}</span>
-                      <span className="text-[10px] text-slate-400">{isAr ? 'مايو 2026' : 'May 2026'}</span>
-                    </div>
-                    <div className="flex items-end gap-1.5 h-24 mb-5">
-                      {[55, 70, 48, 85, 68, 92, 62, 88, 52, 95, 74, 82, 65, 90].map((h, i) => (
-                        <div key={i} className="flex-1 rounded-t-sm cursor-pointer hover:opacity-100 transition-opacity"
-                          style={{ height: `${h}%`, background: `linear-gradient(to top, #25A4E8, #7C69E8)`, opacity: 0.65 + (i / 30) }} />
-                      ))}
-                    </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      {[
-                        { label: 'RevPAR', value: 'SAR 312', delta: '+22%' },
-                        { label: isAr ? 'الإشغال' : 'Occupancy', value: '89%', delta: '+7%' },
-                        { label: 'ADR', value: 'SAR 481', delta: '+14%' },
-                        { label: isAr ? 'حجوزات' : 'Bookings', value: '124', delta: '+31%' },
-                      ].map((m, i) => (
-                        <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/5">
-                          <p className="text-[10px] text-slate-400 mb-1">{m.label}</p>
-                          <p className="text-white font-extrabold">{m.value}</p>
-                          <p className="inline-flex items-center gap-0.5 text-[#25A4E8] text-[10px] font-bold">{m.delta}<TrendingUp size={10} /></p>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* CALENDAR TAB */}
-                {activeTab === 1 && (
-                  <motion.div key="calendar" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-white font-bold text-sm">{isAr ? 'تقويم التوفر' : 'Availability Calendar'}</span>
-                      <div className="flex gap-2">
-                        {Object.entries(CHANNEL_NAMES).map(([k, v]) => (
-                          <span key={k} className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${CHANNEL_COLORS[k]}30`, color: CHANNEL_COLORS[k] }}>{v}</span>
-                        ))}
-                      </div>
-                    </div>
-                    {/* Day headers */}
-                    <div className="grid grid-cols-7 gap-1 mb-2">
-                      {CALENDAR_DAYS.map(d => (
-                        <div key={d} className="text-center text-[10px] font-bold text-slate-500">{d}</div>
-                      ))}
-                    </div>
-                    {/* Property rows */}
-                    {['Unit 1', 'Unit 2', 'Unit 3'].map((unit, row) => (
-                      <div key={unit} className="mb-2">
-                        <p className="text-[10px] text-slate-500 mb-1 font-semibold">{unit}</p>
-                        <div className="grid grid-cols-7 gap-1">
-                          {CALENDAR_DATA[row].map((cell, col) => (
-                            <div key={col} className={`h-7 rounded text-[9px] font-bold flex items-center justify-center transition-all ${
-                              cell
-                                ? `text-white ${cell.from ? 'rounded-s-full' : ''} ${cell.to ? 'rounded-e-full' : ''}`
-                                : 'bg-white/5'
-                            }`}
-                            style={cell ? { backgroundColor: CHANNEL_COLORS[cell.ch] } : {}}>
-                              {cell?.from ? CHANNEL_NAMES[cell.ch].slice(0,2) : ''}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    <div className="mt-4 flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-xl px-3 py-2">
-                      <RefreshCw size={11} className="text-green-400" />
-                      <span className="text-[11px] text-green-400 font-semibold">{isAr ? 'مزامن مع جميع القنوات' : 'Synced with all channels'}</span>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* INBOX TAB */}
-                {activeTab === 2 && (
-                  <motion.div key="inbox" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-white font-bold text-sm">{isAr ? 'صندوق الوارد الموحد' : 'Unified Inbox'}</span>
-                      <span className="text-[10px] font-bold bg-[#25A4E8] text-white px-2 py-0.5 rounded-full">2 {isAr ? 'جديد' : 'new'}</span>
-                    </div>
-                    <div className="space-y-2">
-                      {inboxMsgs.map((msg, i) => (
-                        <div key={i} className={`flex items-start gap-3 p-3 rounded-xl border transition-colors ${msg.unread ? 'bg-white/10 border-white/10' : 'bg-white/3 border-white/5'}`}>
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                            style={{ backgroundColor: CHANNEL_COLORS[msg.ch] }}>
-                            {msg.from.charAt(0)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-0.5">
-                              <p className="text-white text-xs font-bold truncate">{msg.from}</p>
-                              <span className="text-[9px] font-bold px-1 rounded shrink-0" style={{ backgroundColor: `${CHANNEL_COLORS[msg.ch]}30`, color: CHANNEL_COLORS[msg.ch] }}>
-                                {CHANNEL_NAMES[msg.ch]}
-                              </span>
-                            </div>
-                            <p className="text-slate-400 text-[11px] truncate">{msg.preview}</p>
-                          </div>
-                          <div className="flex flex-col items-end gap-1 shrink-0">
-                            <span className="text-[10px] text-slate-500">{msg.time}</span>
-                            {msg.unread && <span className="w-2 h-2 rounded-full bg-[#25A4E8]" />}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-3 text-center">
-                      <span className="text-[11px] text-slate-500">{isAr ? 'رسائل من Airbnb + Booking + Gathern في مكان واحد' : 'Messages from Airbnb + Booking + Gathern in one place'}</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </motion.div>
+          {/* Right — dashboard image (Stayhub_calendar.webp) */}
+          <TiltCard delay={0.15} className="relative">
+            <div
+              className="absolute -inset-5 rounded-[32px] bg-gradient-to-br from-[#7C69E8]/20 via-[#25A4E8]/10 to-transparent blur-2xl pointer-events-none"
+              style={{ transform: 'translateZ(-30px)' }}
+            />
+            <Image
+              src="/Stayhub_calendar.webp"
+              alt={isAr ? 'لوحة تحكم StayHub' : 'StayHub dashboard overview'}
+              width={2880}
+              height={1800}
+              sizes="(max-width: 1024px) 100vw, 700px"
+              className="relative w-full h-auto rounded-2xl border border-slate-200/70 shadow-[0_30px_80px_rgba(17,12,46,0.18)]"
+              style={{ transform: 'translateZ(40px)' }}
+            />
+          </TiltCard>
         </div>
       </div>
     </section>

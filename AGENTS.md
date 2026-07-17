@@ -6,6 +6,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Onboarding
 
-**Read [`CODEX_KT.md`](./CODEX_KT.md) before editing anything** — it's the knowledge-transfer doc
-(project overview, conventions, folder map, do-not-break rules, open work, deploy workflow).
-`CLAUDE.md` is the deeper reference if you need more detail.
+**Read [`HANDOFF.md`](./HANDOFF.md) first** — current state of the tree, house rules, and
+environment gotchas.
+
+Then: **[`CODEX_KT.md`](./CODEX_KT.md)** — knowledge transfer (overview, conventions, folder map,
+do-not-break rules, deploy workflow). `CLAUDE.md` is the deeper reference (§13 = state of play,
+§6f = most recent changes).

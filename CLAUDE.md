@@ -272,6 +272,44 @@ Goal: make the mobile view feel like a native app. All changes are mobile-scoped
 | **Integrations: mobile grids** | `components/sections/IntegrationsPageClient.tsx` | Cards `grid-cols-2` on mobile (was full-width single col) with smaller padding/icon. Category filter pills also `grid-cols-2` on mobile (count badge right-aligned, full labels, no truncation); desktop keeps centered flex-wrap. |
 | **Mobile review fixes** | `components/sections/HomepageClient.tsx`, `components/sections/FeaturesPageClient.tsx` | Home automation outcomes: literal "OK" text → `CheckCircle2` icon. Features list → `grid-cols-2` on mobile with "Learn more" shown (no empty cards). Feature Ecosystem carousel reviewed — clean at rest (1 card + peek + arrows), left as designed. |
 
+## 6f. Homepage section redesigns + 3D interactions (Jul 3, 2026)
+
+All work in `components/sections/HomepageClient.tsx`. Two parts shipped live, one part **still uncommitted** — see §13.
+
+### Part 1 — Problem section rebuilt as a polished bento (commit `2c770ed`, LIVE)
+Redesigned from a reference: same copy, far richer presentation.
+
+| Change | Details |
+|---|---|
+| Section shell | Dark `bg-[#ECEEF5]` → light `bg-gradient-to-b from-[#F4F3FB] to-white`; headline gained a purple underline bar (`h-1.5 w-24 bg-[#7C69E8]`) |
+| Grid | Flat `grid-cols-2 lg:grid-cols-4` → 12-col bento: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4`. Row 1 = card1 `lg:col-span-6` + two `lg:col-span-3`; row 2 = four `lg:col-span-3` (3 problems + promo) |
+| Per-card illustrations | Every card got a pure-markup illustration (no images — crisp, fast, theme-safe): **5+ apps** → brand-pill stack (Airbnb/Booking/WhatsApp/Excel + "+5 more tabs"); **Double bookings** → mini calendar w/ red cells + warning badge; **WhatsApp** → chat bubbles + avatars; **Owners calling** → phone w/ call-wave rings; **ZATCA** → invoice card w/ green ZATCA badge; **No visibility** → line chart + "Occupancy 62%" + conic-gradient donut |
+| Promo card | Flat `#C4BEF0` → gradient `linear-gradient(150deg,#CFC9F5,#B7AAF0)`, glassy `Sparkles` tile, still wired to `openModal()` |
+| Icons added | `Layers, AlertTriangle, Phone, FileText, MessageCircle, BarChart3` (lucide) |
+
+### Part 2 — 3D tilt + micro-animations (commit `c23fdb2`, LIVE)
+| Change | Details |
+|---|---|
+| **New `TiltCard` sub-component** | Reusable. Cursor-tracking 3D tilt via `useMotionValue` + `useSpring` (`rotateX/rotateY` ±12°, `transformPerspective: 900`, `transformStyle: 'preserve-3d'`), `whileHover={{ y: -8, scale: 1.015 }}`, resets on mouse-leave. Keeps the standard fadeUp entrance. Props: `delay`, `className`, `style`, `children`. Defined next to `FaqItem` in the sub-components block. |
+| Applied to | All 7 problem cards + the dashboard image (Part 3) |
+| Depth layers | Children get `translateZ`: illustration `55–60px`, icon `40px`, text `25px`. ⚠ **Caveat:** the cards use `overflow-hidden` (to clip illustrations to the rounded corners), which in some browsers flattens child parallax. The whole-card tilt still renders. To make layers pop, move perspective to the grid container instead. |
+| Hover polish | `hover:shadow-[0_24px_60px_rgba(124,105,232,0.22)] hover:border-[#D7D0F5]`, icon circles `group-hover:scale-110` |
+| Live micro-animations | Warning badge pulses; WhatsApp typing dots bounce in sequence; call-wave rings ripple; perf line self-draws on scroll-in (`motion.polyline` + `pathLength`); Sparkles rocks |
+| Imports added | `useMotionValue, useSpring` (framer-motion); `type CSSProperties, ReactNode, MouseEvent as ReactMouseEvent` (react) — note this file also uses the ambient `React.*` namespace elsewhere (`HeroCard3D`), both work |
+
+### Part 3 — "Everything at a glance" / `DashboardShowcase` rewritten (LIVE)
+Matched a supplied reference; swapped the hand-built mock for a real screenshot.
+
+| Change | Details |
+|---|---|
+| Theme flip | Dark `bg-gradient-to-br from-[#0F172A] to-[#1E2D4E]` → light `from-[#F4F3FB] via-white to-[#EEF2FE]` + `dot-grid` accent and a purple blur blob |
+| Left column | Badge → lavender `bg-[#EEEBFB] text-[#7C69E8]`; heading → `text-[#0F172A]` `text-4xl md:text-5xl`; the 4 bullets became **icon tiles** (`w-11 h-11 rounded-xl bg-[#F1F0FA]` + purple icon): `Calendar`, `RefreshCw`, `BarChart2`, `Mail`. CTA → purple `bg-[#7C69E8]`, still `openModal()` |
+| Right column | **Removed ~180 lines** of the tabbed mock (Analytics/Calendar/Inbox) and its constants (`DASH_TABS_*`, `CALENDAR_*`, `CHANNEL_*`, `INBOX_MSGS*`, `DashTab` type) → now a single `next/image` of **`/Stayhub_calendar.webp`** (2880×1800) in a `TiltCard`, rounded + bordered + drop shadow, with a gradient glow behind (`translateZ(-30px)`) and the image at `translateZ(40px)` |
+| Icon added | `Mail` (lucide) |
+| **Image optimised → WebP** | Supplied as `Stayhub_calendar.png` (118 KB). Compared encoders: lossy `-q 90` → 115 KB (only 2% saved, and risks artifacts on the dashboard's small text); lossy `-q 82` → 94 KB; **lossless `cwebp -lossless -z 9` → 64 KB (46% smaller, pixel-perfect)**. Lossless won — flat UI screenshots palette-compress extremely well (palette size 150). The `.png` was deleted; **`Stayhub_calendar.webp` is the only copy.** |
+
+> **Note on `noUnusedLocals`:** tsconfig sets `strict: true` but **not** `noUnusedLocals`, so dead code will not fail the build. Clean it up manually.
+
 ---
 
 ## 7. Current Tasks / What's Pending
@@ -392,3 +430,44 @@ npx vercel deploy --prod
 Also do a hard refresh (`Cmd + Shift + R`) on the live URL to bypass CDN cache.
 
 > ⚠️ **Do NOT push/deploy after every individual change — batch all changes and push once.**
+
+---
+
+## 13. State of Play — as of Jul 3, 2026 (read this first)
+
+**Start here in a new session.** See also `HANDOFF.md` (fuller narrative) and `CODEX_KT.md` (Codex onboarding).
+
+### Git — ✅ CLEAN SLATE
+- Branch `main`, **working tree clean**, in sync with `origin/main`.
+- Everything from the Jul 3 session is **committed, pushed, and deployed to production**.
+- Live: https://stayhub-next.vercel.app
+
+```
+<HEAD>   Everything at a glance: light redesign + WebP dashboard image; docs   ← LIVE
+c23fdb2  Problem cards: 3D cursor-tilt, parallax depth, live micro-animations  ← LIVE
+2c770ed  Redesign problem section: polished bento with per-card illustrations  ← LIVE
+1921c9b  docs: add Codex KT onboarding doc + point AGENTS.md to it
+```
+
+There is **no uncommitted or untracked work**. Nothing is pending review.
+
+### Assets note
+- `public/Stayhub_calendar.webp` — 64 KB lossless WebP, rendered by `DashboardShowcase`.
+  The original `.png` was **deleted**; the WebP is the only copy. See §6f Part 3.
+- `public/Stayhub_db.png` — committed but **used nowhere yet**. The user added it without saying
+  where it goes; ask before wiring it in or deleting it.
+
+### Open questions for the user
+- Where should `public/Stayhub_db.png` be used? (added, unused)
+- Optional: remove the unused `/pricing` route (user said "we dont have pricing page", but the
+  route + `PricingPageClient.tsx` still exist; the mobile nav Pricing tab opens the demo modal).
+
+### Environment gotchas hit this session
+- **Preview MCP is broken here** — `preview_start` fails with `spawn …/Helpers/disclaimer ENOENT`,
+  so no browser screenshots. Verify instead with `npm run build` + `curl -o /dev/null -w "%{http_code}"`
+  against `localhost:3001`.
+- **Bash cwd resets** to the parent `…/works/Claude` between calls. Always prefix with
+  `cd /Users/baburao/Desktop/works/Claude/stayhub-next &&` or npm errors `ENOENT … package.json`.
+- Background dev servers get **killed between turns** — expect to restart `PORT=3001 npm run dev`.
+- Harmless noise: multi-lockfile Turbopack workspace-root warning (a stray `~/package-lock.json`),
+  and `next/image` width/height warnings on the logo + some `/logos/*`.

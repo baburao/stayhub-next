@@ -1,7 +1,8 @@
 # StayHub — Knowledge Transfer (for Codex)
 
 > Self-contained onboarding doc. Read this fully before editing.
-> The deeper reference is `CLAUDE.md` (sections 1–12). This file is the fast KT.
+> The deeper reference is `CLAUDE.md` (sections 1–13). This file is the fast KT.
+> Current state of the tree lives in `HANDOFF.md` + `CLAUDE.md` §13.
 
 ---
 
@@ -165,6 +166,9 @@ Fonts: Latin → Manrope, Arabic → Tajawal (activated via `html[lang="ar"] *` 
 ---
 
 ## 8. Known issues / open work (pick from here)
+
+**Tree state (Jul 3, 2026):** clean — everything committed, pushed, and live. Nothing pending.
+`public/Stayhub_db.png` is committed but used nowhere; ask the user before wiring it in.
 
 **High**
 - Demo form submits nowhere — needs Resend/SendGrid/HubSpot/webhook wiring (`DemoModal.tsx`).
