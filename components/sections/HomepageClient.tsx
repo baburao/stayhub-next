@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
+import ProductHero from '@/components/marketing/home/ProductHero';
 
 /* ─── data ─────────────────────────────────────────────── */
 
@@ -382,65 +383,10 @@ function DashboardShowcase({ isAr }: { isAr: boolean }) {
   );
 }
 
-/* ─── Hero 3D floating card ─────────────────────────────── */
-type StepData = { num: string; title: string; desc: string; color: string; bg: string };
-
-function HeroCard3D({
-  step, floatDuration = 3.5, floatDelay = 0, entryDelay = 0, className = '',
-}: {
-  step: StepData; floatDuration?: number; floatDelay?: number; entryDelay?: number; className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const nx = (e.clientX - left) / width - 0.5;
-    const ny = (e.clientY - top) / height - 0.5;
-    setTilt({ x: -ny * 20, y: nx * 20 });
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24, scale: 0.92 }}
-      animate={{ opacity: 1, y: hovered ? -4 : [0, -9, 0], scale: hovered ? 1.04 : 1 }}
-      exit={{ opacity: 0, y: 20, scale: 0.92 }}
-      transition={{
-        opacity:  { duration: 0.45, delay: entryDelay },
-        scale:    { duration: 0.25 },
-        y: hovered
-          ? { duration: 0.25 }
-          : { duration: floatDuration, repeat: Infinity, ease: 'easeInOut', delay: floatDelay },
-      }}
-      onMouseMove={onMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(false); }}
-      style={{
-        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: hovered ? 'transform 0.08s linear' : 'transform 0.55s cubic-bezier(0.23,1,0.32,1)',
-        boxShadow: hovered
-          ? `0 20px 60px ${step.color}30, 0 8px 20px rgba(0,0,0,0.12)`
-          : '0 8px 32px rgba(0,0,0,0.10)',
-        willChange: 'transform',
-      }}
-      className={`bg-white rounded-2xl p-4 border border-white/80 cursor-default select-none ${className}`}
-    >
-      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 shrink-0" style={{ backgroundColor: step.bg }}>
-        <span className="text-base font-extrabold leading-none" style={{ color: step.color }}>{step.num}</span>
-      </div>
-      <p className="font-bold text-[#0F172A] text-[13.5px] leading-snug mb-1.5">{step.title}</p>
-      <p className="text-slate-400 text-[11.5px] leading-relaxed">{step.desc}</p>
-    </motion.div>
-  );
-}
-
 /* ─── main component ────────────────────────────────────── */
 
 export default function HomepageClient() {
-  const { t, isAr } = useLanguage();
+  const { isAr } = useLanguage();
   const { openModal } = useDemoModal();
   const features = isAr ? FEATURES_AR : FEATURES_EN;
 
@@ -473,71 +419,6 @@ export default function HomepageClient() {
     return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  /* ── Hero background video — plays full duration then switches (3-video loop) ── */
-  const [bgVideo, setBgVideo] = useState(0); // 0 = hero_video_1, 1 = hero_2_banner, 2 = hero_video_3
-  const bgVid1Ref = useRef<HTMLVideoElement>(null);
-  const bgVid2Ref = useRef<HTMLVideoElement>(null);
-  const bgVid3Ref = useRef<HTMLVideoElement>(null);
-
-  // When active video changes, reset that video to start and play it
-  useEffect(() => {
-    const refs = [bgVid1Ref, bgVid2Ref, bgVid3Ref];
-    const active = refs[bgVideo]?.current;
-    if (active) { active.currentTime = 0; active.play(); }
-  }, [bgVideo]);
-
-  /* ── Hero slider ── */
-  const [heroSlide, setHeroSlide] = useState(0);
-  const [heroDir, setHeroDir] = useState(1);
-  const heroTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const HERO_SLIDES = [
-    {
-      badge:   { en: "Saudi Arabia's Smart Hospitality Platform", ar: 'منصة الضيافة الذكية في السعودية' },
-      h1En: (<>Run Your Entire<br />Hospitality Business<br />From{' '}<span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">One Platform<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      h1Ar: (<>أدِر أعمالك في الضيافة<br />بالكامل من{' '}<span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">منصة واحدة<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      sub:  { en: 'Manage bookings, guests, pricing, smart locks, housekeeping, reviews and payments across Airbnb, Booking.com and direct channels.', ar: 'إدارة الحجوزات والضيوف والأسعار والأقفال الذكية والتنظيف والتقييمات والمدفوعات عبر Airbnb وBooking.com والقنوات المباشرة.' },
-      cta2: { en: 'Watch Platform Tour', ar: 'شاهد جولة المنصة' },
-    },
-    {
-      badge:   { en: 'Full Guest Journey Automation', ar: 'أتمتة رحلة الضيف بالكامل' },
-      h1En: (<>Automate Every Step<br />of the{' '}<span className="bg-gradient-to-r from-[#10B981] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">Guest Journey<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      h1Ar: (<>أتمت كل خطوة في<br /><span className="bg-gradient-to-r from-[#10B981] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">رحلة الضيف<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      sub:  { en: 'From booking confirmation to checkout — StayHub handles messaging, ID verification, access codes, housekeeping tasks, and review requests on autopilot.', ar: 'من تأكيد الحجز حتى تسجيل المغادرة — يتولى StayHub الرسائل والتحقق من الهوية ورموز الوصول ومهام التنظيف وطلبات التقييم تلقائياً.' },
-      cta2: { en: 'Explore Features', ar: 'استكشف الميزات' },
-    },
-    {
-      badge:   { en: 'Built for Saudi Arabia', ar: 'مبني للسوق السعودي' },
-      h1En: (<>Built for Saudi Arabia's<br /><span className="bg-gradient-to-r from-[#7C69E8] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">Hospitality Market<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      h1Ar: (<>مبني لسوق الضيافة<br /><span className="bg-gradient-to-r from-[#7C69E8] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">في المملكة العربية السعودية<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      sub:  { en: 'ZATCA-compliant invoicing, Absher ID verification, Ejar contracts, Gathern and AQAR integration — everything your Saudi property business needs to scale.', ar: 'فوترة متوافقة مع زاتكا، تحقق عبر أبشر، عقود إيجار، تكامل غثرن وعقار — كل ما تحتاجه للنمو في السوق السعودي.' },
-      cta2: { en: 'View Integrations', ar: 'عرض التكاملات' },
-    },
-  ];
-
-  const goToSlide = (idx: number) => {
-    setHeroDir(idx > heroSlide ? 1 : -1);
-    setHeroSlide(idx);
-    if (heroTimerRef.current) clearInterval(heroTimerRef.current);
-    heroTimerRef.current = setInterval(() => nextHeroSlide(), 5000);
-  };
-  const nextHeroSlide = () => {
-    setHeroDir(1);
-    setHeroSlide(s => (s + 1) % 3);
-  };
-  const prevHeroSlide = () => {
-    setHeroDir(-1);
-    setHeroSlide(s => (s + 2) % 3);
-  };
-
-  useEffect(() => {
-    heroTimerRef.current = setInterval(() => {
-      setHeroDir(1);
-      setHeroSlide(s => (s + 1) % 3);
-    }, 5000);
-    return () => { if (heroTimerRef.current) clearInterval(heroTimerRef.current); };
-  }, []);
-
   const automationSteps = isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN;
   const outcomes = isAr ? OUTCOMES_AR : OUTCOMES_EN;
   const compliance = isAr ? COMPLIANCE_ITEMS_AR : COMPLIANCE_ITEMS_EN;
@@ -548,218 +429,7 @@ export default function HomepageClient() {
     <div className="bg-white overflow-x-hidden">
 
       {/* ── 1. HERO ─────────────────────────────────────────── */}
-      <section className="relative flex items-center bg-white overflow-hidden" style={{ height: 'calc(100vh - 64px)' }}>
-
-        {/* Right-side bg panel — two videos always mounted, opacity toggled per slide */}
-        <div
-          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0] lg:w-auto lg:[right:calc(50%_-_100px)]' : 'right-0 rounded-[80px_0_0_80px] lg:w-auto lg:[left:calc(50%_-_100px)]'} w-[58%] pointer-events-none hidden md:block overflow-hidden`}
-        >
-          {/* Video 1 → hands off to Video 2 */}
-          <video
-            ref={bgVid1Ref}
-            src="/hero_video_1.mp4"
-            autoPlay muted playsInline
-            onEnded={() => setBgVideo(1)}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-            style={{ opacity: bgVideo === 0 ? 1 : 0 }}
-          />
-          {/* Video 2 → hands off to Video 3 */}
-          <video
-            ref={bgVid2Ref}
-            src="/hero_2_banner.mp4"
-            autoPlay muted playsInline
-            onEnded={() => setBgVideo(2)}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-            style={{ opacity: bgVideo === 1 ? 1 : 0 }}
-          />
-          {/* Video 3 → hands off back to Video 1 */}
-          <video
-            ref={bgVid3Ref}
-            src="/hero_video_3.mp4"
-            autoPlay muted playsInline
-            onEnded={() => setBgVideo(0)}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-            style={{ opacity: bgVideo === 2 ? 1 : 0 }}
-          />
-          {/* Subtle dark overlay */}
-          <div className="absolute inset-0 bg-black/15" />
-
-          {/* ── Marquee strip — bottom of video ── */}
-          <div className="absolute bottom-10 inset-x-0 overflow-hidden pointer-events-auto">
-            {/* Fade masks */}
-            <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none"
-              style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.6), transparent)' }} />
-            <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none"
-              style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.6), transparent)' }} />
-
-            {/* Scrolling track — cards duplicated for perfectly seamless loop */}
-            <div className="flex gap-3 animate-marquee" style={{ width: 'max-content' }}>
-              {[...( isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN), ...( isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN)].map((step, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-3 shrink-0 border border-white/60 shadow-lg hover:bg-white hover:shadow-xl hover:scale-[1.03] transition-all duration-200 cursor-default"
-                  style={{ width: '190px' }}
-                >
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: step.bg }}>
-                    <span className="text-[11px] font-extrabold" style={{ color: step.color }}>{step.num}</span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-[#0F172A] text-[12px] leading-tight mb-1">{step.title}</p>
-                    <p className="text-slate-500 text-[10.5px] leading-snug line-clamp-2">{step.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-
-        {/* ── MOBILE: full-screen background video + overlaid hero ── */}
-        <div className="md:hidden absolute inset-0 w-full h-full overflow-hidden">
-          <video
-            src="/hero_video_1.mp4"
-            autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          {/* Legibility gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
-        </div>
-
-        <div className={`md:hidden relative z-10 w-full px-6 ${isAr ? 'text-right' : 'text-left'}`}>
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 backdrop-blur-sm text-white text-[11px] font-bold rounded-full border border-white/25 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
-            {isAr ? HERO_SLIDES[0].badge.ar : HERO_SLIDES[0].badge.en}
-          </span>
-
-          <h1 className="text-[34px] leading-[1.14] font-extrabold text-white tracking-tight mb-4">
-            {isAr ? HERO_SLIDES[0].h1Ar : HERO_SLIDES[0].h1En}
-          </h1>
-
-          <p className="text-white/80 text-[15px] leading-relaxed mb-8 max-w-[340px]">
-            {isAr ? HERO_SLIDES[0].sub.ar : HERO_SLIDES[0].sub.en}
-          </p>
-
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={openModal}
-              className={`inline-flex items-center justify-center gap-2.5 w-full px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-500/30`}
-            >
-              {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-              <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
-            </button>
-            <button
-              onClick={openModal}
-              className="inline-flex items-center justify-center gap-2.5 w-full px-7 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-bold rounded-xl text-sm transition-all hover:bg-white/20"
-            >
-              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                <div className="w-0 h-0 border-l-[7px] border-l-white border-y-[4.5px] border-y-transparent ms-0.5" />
-              </div>
-              {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
-            </button>
-          </div>
-        </div>
-
-        <div className="hidden md:block relative max-w-[1400px] mx-auto px-4 md:px-8 w-full">
-          <div className={`grid lg:grid-cols-[42%_58%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full`}>
-
-            {/* ── LEFT: slider ── */}
-            <div className={`${isAr ? 'text-right' : 'text-left'} order-2 md:order-1 flex flex-col`}>
-
-              {/* Slide content — badge + headline + subtext only */}
-              <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
-                <AnimatePresence mode="wait" custom={heroDir}>
-                  <motion.div
-                    key={heroSlide}
-                    custom={heroDir}
-                    variants={{
-                      enter:  (d: number) => ({ opacity: 0, x: d * 48 }),
-                      center: { opacity: 1, x: 0 },
-                      exit:   (d: number) => ({ opacity: 0, x: d * -48 }),
-                    }}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {/* Badge */}
-                    <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#f0fdf4] text-[#15803d] text-[11px] font-bold rounded-full border border-[#bbf7d0] mb-7">
-                      <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
-                      {isAr ? HERO_SLIDES[heroSlide].badge.ar : HERO_SLIDES[heroSlide].badge.en}
-                    </span>
-
-                    {/* Headline */}
-                    <h1 className="text-4xl md:text-5xl lg:text-[52px] font-extrabold text-[#0F172A] leading-[1.1] tracking-tight mb-5">
-                      {isAr ? HERO_SLIDES[heroSlide].h1Ar : HERO_SLIDES[heroSlide].h1En}
-                    </h1>
-
-                    {/* Sub-headline */}
-                    <p className="text-slate-500 text-sm md:text-base max-w-[360px] leading-relaxed">
-                      {isAr ? HERO_SLIDES[heroSlide].sub.ar : HERO_SLIDES[heroSlide].sub.en}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* ── CTAs — frozen (outside AnimatePresence) ── */}
-              <div className={`flex items-center gap-4 mt-8 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}>
-                <button
-                  onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
-                >
-                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-                  <ArrowRight size={15} />
-                </button>
-                <button
-                  onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
-                >
-                  <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
-                    <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
-                  </div>
-                  {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
-                </button>
-              </div>
-
-              {/* ── Slider controls ── */}
-              <div className={`flex items-center gap-5 mt-2 ${isAr ? 'flex-row-reverse' : ''}`}>
-                {/* Arrows */}
-                <button
-                  onClick={() => { prevHeroSlide(); }}
-                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group"
-                  aria-label="Previous slide"
-                >
-                  <ChevronLeft size={16} className="text-slate-500 group-hover:text-[#25A4E8] transition-colors" />
-                </button>
-                <button
-                  onClick={() => { nextHeroSlide(); }}
-                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight size={16} className="text-slate-500 group-hover:text-[#25A4E8] transition-colors" />
-                </button>
-
-                {/* Dot indicators */}
-                <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : ''}`}>
-                  {[0, 1, 2].map(i => (
-                    <button
-                      key={i}
-                      onClick={() => goToSlide(i)}
-                      className={`rounded-full transition-all duration-300 ${heroSlide === i ? 'w-6 h-2.5 bg-[#25A4E8]' : 'w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300'}`}
-                      aria-label={`Go to slide ${i + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-
-            </div>
-
-            {/* ── RIGHT: empty — marquee is inside the bg panel ── */}
-            <div className="hidden md:block order-1 md:order-2 h-[600px]" />
-
-          </div>
-        </div>
-      </section>
+      <ProductHero isAr={isAr} />
 
       {/* ── 3. PROBLEM SECTION ──────────────────────────────── */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-[#F4F3FB] to-white">
@@ -1008,7 +678,7 @@ export default function HomepageClient() {
                   onClick={openModal}
                   className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#0F172A] text-white font-bold rounded-full text-sm hover:bg-[#1e293b] transition-colors"
                 >
-                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
+                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
                   <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
                 </button>
               </div>
