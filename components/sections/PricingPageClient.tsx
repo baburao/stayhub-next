@@ -28,8 +28,8 @@ const plans = [
     description_ar: 'مثالي للمضيفين المستقلين الذين يبدأون في تأجير العقارات قصيرة الأمد.',
     color: '#7C69E8',
     popular: false,
-    cta_en: 'Start Free Trial',
-    cta_ar: 'ابدأ التجربة المجانية',
+    cta_en: 'Book a tailored demo',
+    cta_ar: 'احجز عرضاً مخصصاً',
     features_en: [
       'Up to 7 properties',
       'Channel Manager (all OTAs)',
@@ -62,8 +62,8 @@ const plans = [
     description_ar: 'للمشغّلين الناميين الذين يحتاجون إلى أتمتة كاملة وأدوات الامتثال.',
     color: '#25A4E8',
     popular: true,
-    cta_en: 'Start Free Trial',
-    cta_ar: 'ابدأ التجربة المجانية',
+    cta_en: 'Book a tailored demo',
+    cta_ar: 'احجز عرضاً مخصصاً',
     features_en: [
       '8 to 15 properties',
       'All Starter features',
@@ -133,16 +133,16 @@ const plans = [
 
 /* ── FAQ ───────────────────────────────────────────────────── */
 const faqsEn = [
-  { q: 'How do I get a quote?', a: 'Simply click "Book a Free Demo" and our team will prepare a personalised quote based on the size of your portfolio and the features you need.' },
-  { q: 'Is there a free trial?', a: 'Yes. All plans include a 14-day free trial with no credit card required. You can start immediately and invite your whole team.' },
+  { q: 'How do I get a quote?', a: 'Simply click "Book a Demo" and our team will prepare a personalised quote based on the size of your portfolio and the features you need.' },
+  { q: 'Can I see how StayHub works before making a decision?', a: 'Yes. Book a tailored demo and our team will walk you through the platform based on your portfolio, booking channels and operational requirements.' },
   { q: 'Can I change my plan later?', a: 'Absolutely. You can upgrade, downgrade, or switch plans at any time. Our team will help you find the right fit as your portfolio grows.' },
   { q: 'Do you offer contracts in Arabic?', a: 'Yes. All service agreements, invoices, and in-app content are available in both Arabic and English.' },
   { q: 'Is ZATCA e-invoicing included?', a: 'Yes. Growth and Enterprise plans include full ZATCA Phase 2 compliant e-invoicing built directly into the platform. No extra setup required.' },
 ];
 
 const faqsAr = [
-  { q: 'كيف أحصل على عرض سعر؟', a: 'ببساطة اضغط على "احجز عرضاً مجانياً" وسيقوم فريقنا بإعداد عرض سعر مخصص بناءً على حجم محفظتك والمميزات التي تحتاجها.' },
-  { q: 'هل هناك فترة تجريبية مجانية؟', a: 'نعم. تتضمن جميع الخطط تجربة مجانية لمدة 14 يوماً بدون بطاقة ائتمان. يمكنك البدء فوراً ودعوة فريقك بالكامل.' },
+  { q: 'كيف أحصل على عرض سعر؟', a: 'ببساطة اضغط على "احجز عرضاً" وسيقوم فريقنا بإعداد عرض سعر مخصص بناءً على حجم محفظتك والمميزات التي تحتاجها.' },
+  { q: 'هل يمكنني الاطلاع على طريقة عمل StayHub قبل اتخاذ القرار؟', a: 'نعم. احجز عرضاً مخصصاً، وسيشرح لك فريقنا المنصة بناءً على محفظة عقاراتك وقنوات الحجز واحتياجاتك التشغيلية.' },
   { q: 'هل يمكنني تغيير خطتي لاحقاً؟', a: 'بالطبع. يمكنك الترقية أو التخفيض أو تغيير الخطط في أي وقت. سيساعدك فريقنا في إيجاد الخطة المناسبة مع نمو محفظتك.' },
   { q: 'هل تقدمون العقود باللغة العربية؟', a: 'نعم. جميع اتفاقيات الخدمة والفواتير ومحتوى التطبيق متاحة باللغتين العربية والإنجليزية.' },
   { q: 'هل الفوترة الإلكترونية لـ ZATCA مدرجة؟', a: 'نعم. تتضمن خطتا النمو والمؤسسات الفوترة الإلكترونية المتوافقة مع المرحلة الثانية من ZATCA مباشرةً داخل المنصة. لا يلزم أي إعداد إضافي.' },
@@ -589,10 +589,10 @@ export default function PricingPageClient() {
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {[
-              { label: isAr ? 'تجربة مجانية 14 يوماً' : '14-day free trial',      icon: BadgeCheck },
-              { label: isAr ? 'بدون بطاقة ائتمان'    : 'No credit card required', icon: CreditCard },
-              { label: isAr ? 'إلغاء في أي وقت'      : 'Cancel anytime',          icon: Unlock },
-              { label: isAr ? 'متوافق مع ZATCA'       : 'ZATCA compliant',         icon: Flag },
+              { label: isAr ? 'جولة مخصصة في المنصة' : 'Tailored platform walkthrough',      icon: BadgeCheck },
+              { label: isAr ? 'إرشادات الإعداد مشمولة'    : 'Setup guidance included', icon: CreditCard },
+              { label: isAr ? 'مصمم لعمليات الضيافة في السعودية'      : 'Built for Saudi hospitality operations',          icon: Unlock },
+              { label: isAr ? 'يدعم إجراءات الفوترة السعودية'       : 'Supports Saudi invoicing workflows',         icon: Flag },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-2 text-sm text-slate-600">
                 <item.icon size={16} className="text-[#25A4E8] shrink-0" />
