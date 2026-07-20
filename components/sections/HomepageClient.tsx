@@ -1505,23 +1505,23 @@ export default function HomepageClient() {
               {isAr ? 'ابدأ اليوم' : 'Get started today'}
             </span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight">
-              {isAr ? 'جاهز لأتمتة أعمالك؟' : 'Ready to automate your hospitality business?'}
+              {isAr ? 'اكتشف كيف يناسب StayHub عملياتك' : 'See how StayHub fits your operation'}
             </h2>
             <p className="text-white/80 text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
               {isAr
-                ? 'انضم إلى أكثر من 500 مشغّل سعودي يديرون عقاراتهم بذكاء مع StayHub. لا رسوم إعداد. إلغاء في أي وقت.'
-                : 'Join 500+ Saudi operators running their properties smarter with StayHub. No setup fees. Cancel anytime.'}
+                ? 'احجز جولة مخصصة بناءً على محفظة عقاراتك وقنوات الحجز واحتياجاتك التشغيلية.'
+                : 'Book a tailored walkthrough based on your property portfolio, booking channels and operational needs.'}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button onClick={openModal} className="px-10 py-4 bg-white text-[#25A4E8] font-extrabold rounded-xl hover:bg-blue-50 transition-colors shadow-2xl text-sm">
-                {isAr ? 'احجز عرضاً تجريبياً مجانياً' : 'Book a Free Demo'}
+                {isAr ? 'احجز عرضاً مخصصاً' : 'Book a tailored demo'}
               </button>
-              <button onClick={openModal} className="px-10 py-4 border-2 border-white/50 text-white font-bold rounded-xl hover:bg-white/10 hover:border-white transition-colors text-sm">
+              <Link href="/pricing" className="px-10 py-4 border-2 border-white/50 text-white font-bold rounded-xl hover:bg-white/10 hover:border-white transition-colors text-sm">
                 {isAr ? 'عرض الأسعار' : 'View Pricing'}
-              </button>
+              </Link>
             </div>
             <p className="text-white/50 text-xs mt-6">
-              {isAr ? '14 يوم تجربة مجانية · لا بطاقة ائتمان مطلوبة' : '14-day free trial · No credit card required'}
+              {isAr ? '20 دقيقة · مخصص لمحفظتك · بدون التزام' : '20 minutes · Tailored to your portfolio · No commitment'}
             </p>
           </motion.div>
         </div>
