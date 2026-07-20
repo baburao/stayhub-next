@@ -102,8 +102,8 @@ const plans = [
     description_ar: 'أسعار مخصصة للمحافظ الكبيرة. نصمم خطة تناسب احتياجاتك تماماً.',
     color: '#0F172A',
     popular: false,
-    cta_en: 'Contact Sales',
-    cta_ar: 'تواصل مع المبيعات',
+    cta_en: 'Talk to sales',
+    cta_ar: 'تحدث مع فريق المبيعات',
     features_en: [
       'Unlimited properties',
       'All Growth features',
@@ -533,7 +533,7 @@ export default function PricingPageClient() {
                         {/* Button — opens modal for Starter/Growth, navigates for Enterprise */}
                         {plan.name === 'Enterprise' ? (
                           <Link
-                            href="/contact"
+                            href="/demo"
                             className="shrink-0 px-7 py-3 rounded-full font-semibold text-sm transition-all hover:scale-[1.03] border-2 border-slate-200 text-[#0F172A] bg-white hover:border-[#7C69E8] hover:text-[#7C69E8]"
                           >
                             {displayCta}
@@ -628,19 +628,30 @@ export default function PricingPageClient() {
         <div className="absolute inset-0 dot-grid opacity-10" />
         <div className="relative max-w-5xl mx-auto px-4 md:px-8 text-center">
           <motion.div {...fadeUp()}>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              {t.pricing.startTrial}
-            </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
-              {t.pricing.startTrialDesc}
+            {/* Eyebrow */}
+            <p className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/20 text-white/90 border border-white/30 mb-4">
+              {isAr ? 'جولة مخصصة في المنصة' : 'Tailored platform walkthrough'}
             </p>
+            {/* Heading */}
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              {isAr ? 'اكتشف كيف يناسب StayHub عملياتك' : 'See how StayHub fits your operation'}
+            </h2>
+            {/* Supporting copy */}
+            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+              {isAr
+                ? 'احجز جولة مخصصة بناءً على محفظة عقاراتك وقنوات الحجز واحتياجاتك التشغيلية.'
+                : 'Book a tailored walkthrough based on your property portfolio, booking channels and operational needs.'}
+            </p>
+            {/* Primary CTA + Microcopy */}
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/demo" className="px-8 py-4 bg-white text-[#25A4E8] font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
-                {t.buttons.bookDemoShort}
-              </Link>
-              <Link href="/signup" className="px-8 py-4 border-2 border-white/60 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors">
-                {t.buttons.startTrial}
-              </Link>
+              <div className="flex flex-col items-center">
+                <Link href="/demo" className="px-8 py-4 bg-white text-[#25A4E8] font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-lg mb-2">
+                  {isAr ? 'احجز عرضاً مخصصاً' : 'Book a tailored demo'}
+                </Link>
+                <p className="text-xs text-white/70">
+                  {isAr ? '20 دقيقة · مخصص لمحفظتك · بدون التزام' : '20 minutes · Tailored to your portfolio · No commitment'}
+                </p>
+              </div>
             </div>
           </motion.div>
         </div>

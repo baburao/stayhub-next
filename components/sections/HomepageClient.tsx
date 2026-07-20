@@ -552,7 +552,7 @@ export default function HomepageClient() {
 
         {/* Right-side bg panel — two videos always mounted, opacity toggled per slide */}
         <div
-          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0]' : 'right-0 rounded-[80px_0_0_80px]'} w-[58%] pointer-events-none hidden md:block overflow-hidden`}
+          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0] lg:w-auto lg:[right:calc(50%_-_100px)]' : 'right-0 rounded-[80px_0_0_80px] lg:w-auto lg:[left:calc(50%_-_100px)]'} w-[58%] pointer-events-none hidden md:block overflow-hidden`}
         >
           {/* Video 1 → hands off to Video 2 */}
           <video
@@ -1351,29 +1351,17 @@ export default function HomepageClient() {
               </Link>
             </motion.div>
 
-            <motion.div {...fadeUp(0.15)} className="bg-gradient-to-br from-[#F3F0FF] to-white rounded-3xl border border-violet-100 p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-5 p-3 bg-white rounded-xl border border-slate-100">
-                <div className="w-9 h-9 rounded-full bg-violet-200 flex items-center justify-center text-violet-700 font-bold text-sm">M</div>
-                <div>
-                  <p className="text-xs font-bold text-[#0F172A]">{isAr ? 'محمد العتيبي' : 'Mohammed Al-Otaibi'}</p>
-                  <p className="text-[10px] text-slate-400">{isAr ? '12 وحدة — الرياض' : '12 units — Riyadh'}</p>
-                </div>
-                <span className="ms-auto text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">● {isAr ? 'نشط' : 'Active'}</span>
+            <motion.div {...fadeUp(0.15)} className="bg-gradient-to-br from-[#F3F0FF] to-white rounded-3xl border border-violet-100 p-3 sm:p-4 shadow-sm">
+              <div className="overflow-hidden rounded-2xl border border-violet-100 shadow-lg">
+                <Image
+                  src="/owner_DB.png"
+                  alt={isAr ? 'بوابة المالك — لوحة معلومات الأداء الحية' : 'Owner Portal — live performance dashboard'}
+                  width={2880}
+                  height={1600}
+                  className="w-full h-auto"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                {[
-                  { label: isAr ? 'صافي الإيرادات' : 'Net Revenue', value: 'SAR 41,200' },
-                  { label: isAr ? 'معدل الإشغال' : 'Occupancy', value: '87%' },
-                  { label: isAr ? 'حجوزات هذا الشهر' : 'Bookings', value: '38' },
-                  { label: isAr ? 'التقييم' : 'Rating', value: (<span className="inline-flex items-center gap-1">4.9<Star size={12} className="fill-current" /></span>) },
-                ].map((m, i) => (
-                  <div key={i} className="bg-white rounded-xl p-3 border border-slate-100">
-                    <p className="text-[10px] text-slate-400">{m.label}</p>
-                    <p className="font-extrabold text-[#0F172A]">{m.value}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-[10px] text-center text-slate-400">{isAr ? 'آخر تحديث: منذ دقيقتين' : 'Last updated 2 minutes ago'}</p>
             </motion.div>
           </div>
         </div>
@@ -1431,14 +1419,13 @@ export default function HomepageClient() {
               { src: '/logos/airbnb.webp',                  name: 'Airbnb',                   badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'airbnb' },
               { src: '/logos/booking-com.webp',             name: 'Booking.com',               badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'booking-com' },
               { src: '/logos/agoda.webp',                   name: 'Agoda',                     badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'agoda' },
-              { src: '/logos/vrbo.webp',                    name: 'Vrbo',                      badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'vrbo' },
               { src: '/logos/google-vacation-rentals.webp', name: 'Google Vacation Rentals',   badge_en: 'Search',  badge_ar: 'بحث',         slug: 'google-vacation-rentals' },
               { src: '/logos/gathern.webp',                 name: 'Gathern',                   badge_en: 'Local',   badge_ar: 'محلي',        slug: 'gathern' },
               { src: '/logos/aqar.webp',                    name: 'AQAR',                      badge_en: 'Local',   badge_ar: 'محلي',        slug: 'aqar' },
               { src: '/logos/pricelabs.webp',               name: 'PriceLabs',                 badge_en: 'Pricing', badge_ar: 'تسعير',       slug: 'pricelabs' },
               { src: '/logos/tuya.webp',                    name: 'Tuya',                      badge_en: 'IoT',     badge_ar: 'إنترنت الأشياء', slug: 'tuya' },
               { src: '/logos/ttlock.webp',                  name: 'TTLock',                    badge_en: 'Locks',   badge_ar: 'أقفال',       slug: 'ttlock' },
-              { src: '/logos/qoyod.webp',                   name: 'Qoyod',                     badge_en: 'Finance', badge_ar: 'مالية',       slug: 'qoyod' },
+              { src: '/logos/qoyod.webp',                   name: 'Quyood',                    badge_en: 'Finance', badge_ar: 'مالية',       slug: 'quyood' },
               { src: '/logos/daftra.webp',                  name: 'Daftra',                    badge_en: 'Finance', badge_ar: 'مالية',       slug: 'daftra' },
             ].map((intg, i) => (
               <motion.div key={i} {...fadeUp(i * 0.05)}>

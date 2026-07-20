@@ -243,6 +243,59 @@ const INTEGRATIONS = [
   { slug: 'vfirst-sms',              en: 'VFirst SMS',           ar: 'VFirst SMS',   logo: null,                                  badge_en: 'Messaging',   badge_ar: 'مراسلة' },
 ];
 
+/* ── Feature-menu navigation resolution ──────────────────────
+   Single source of truth for where each Features mega-menu / drawer item points.
+   An item is PUBLISHED only if it resolves to an explicit href (carried in the
+   category data itself, e.g. channel-manager/*, or supplied here). Items marked
+   `hidden` are unresolved product concepts pending stakeholder confirmation and
+   are removed from both desktop and mobile navigation. There is deliberately no
+   blind `/features/${slug}` fallback — that is what created the 404 links. */
+const FEATURE_NAV: Record<string, { href?: string; hidden?: boolean }> = {
+  // PMS
+  'unified-calendar':        { href: '/features/availability-calendar' },
+  'unified-inbox':           { hidden: true },
+  'channel-management':      { href: '/features/channel-manager' },
+  'task-management':         { hidden: true },
+  'housekeeping-management': { href: '/features/housekeeping-management' },
+  'direct-booking-website':  { href: '/features/direct-booking-website' },
+  // Automation
+  'guest-journey':           { hidden: true },
+  'automated-messaging':     { href: '/features/automated-messaging' },
+  'sms-notifications':       { href: '/integrations/vfirst-sms' },
+  'tuya-integration':        { href: '/integrations/tuya' },
+  'ttlock-integration':      { href: '/integrations/ttlock' },
+  // Owners & Finance
+  'expenses-model':          { hidden: true },
+  'vat-model':               { hidden: true },
+  'owner-portal':            { href: '/features/owner-portal' },
+  'extras-upsells':          { hidden: true },
+  'payout':                  { hidden: true },
+  'pay-link':                { href: '/features/payment-collection' },
+  // Damage Protection
+  'security-deposit':        { hidden: true },
+  'guest-verification':      { href: '/features/guest-verification' },
+  'e-sign-contracts':        { hidden: true },
+  'tawuniya':                { hidden: true },   // status/category unconfirmed — hide until clarified
+  // Branding
+  'guest-app':               { href: '/features/guest-app' },
+  'website-builder':         { href: '/features/direct-booking-website' },
+  'referral-links':          { href: '/features/referral-links' },
+  'whatsapp-sms':            { href: '/integrations/whatsapp' },
+  // CRM (all unresolved — category is hidden until content exists)
+  'guest-profiles':          { hidden: true },
+  'segmentation':            { hidden: true },
+  'coupons-discounts':       { hidden: true },
+  'campaigns':               { hidden: true },
+};
+
+/* Resolve a feature-menu item to its destination, or null if it must be hidden.
+   `item.href` (e.g. channel-manager/* → /integrations/*) always wins. */
+function resolveFeatureHref(item: { slug: string; href?: string }): string | null {
+  const meta = FEATURE_NAV[item.slug];
+  if (meta?.hidden) return null;
+  return item.href ?? meta?.href ?? null;
+}
+
 /* ── Integration categories (7 tabs, each filters INTEGRATIONS) ── */
 const INTG_CATS = [
   { label_en: 'OTA',             label_ar: 'OTA',               color: '#FF5A5F', icon: Globe,         desc_en: 'Major booking platforms',        desc_ar: 'منصات الحجز الكبرى',
@@ -348,6 +401,7 @@ export default function Navbar() {
   const [mobileOpen,    setMobileOpen]    = useState(false);
   const [activeMenu,    setActiveMenu]    = useState<MenuKey>(null);
   const [mobileExpanded, setMobileExpanded] = useState<MenuKey>(null);
+  const [mobileFeatureCat, setMobileFeatureCat] = useState<string | null>(null);
   const [activeCatIdx,  setActiveCatIdx]  = useState(0);
   const [activeSolIdx,  setActiveSolIdx]  = useState(0);
   const [activeIntgIdx, setActiveIntgIdx] = useState(0);
@@ -367,6 +421,12 @@ export default function Navbar() {
   const closeMenu = () => { leaveTimer.current = setTimeout(() => setActiveMenu(null), 120); };
 
   const featureCats = isAr ? FEATURE_CATEGORIES_AR : FEATURE_CATEGORIES_EN;
+  // Published feature-menu categories only: drop hidden/unresolved items, then drop
+  // any category left with no published items. Desktop + mobile both read from this.
+  const visibleFeatureCats = featureCats
+    .map(cat => ({ ...cat, items: cat.items.filter(it => resolveFeatureHref(it) !== null) }))
+    .filter(cat => cat.items.length > 0);
+  const activeCat = visibleFeatureCats[Math.min(activeCatIdx, visibleFeatureCats.length - 1)];
   const resources   = isAr ? RESOURCES_AR : RESOURCES_EN;
 
   const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -473,7 +533,7 @@ export default function Navbar() {
                         {isAr ? 'الفئات' : 'Categories'}
                       </p>
                       <div className="space-y-0.5">
-                        {featureCats.map((cat, i) => (
+                        {visibleFeatureCats.map((cat, i) => (
                           <button
                             key={cat.label}
                             onMouseEnter={() => setActiveCatIdx(i)}
@@ -522,9 +582,9 @@ export default function Navbar() {
                           <div className="flex items-center justify-between mb-4">
                             <p
                               className="text-[10px] font-extrabold uppercase tracking-[0.12em]"
-                              style={{ color: featureCats[activeCatIdx].color }}
+                              style={{ color: activeCat.color }}
                             >
-                              {featureCats[activeCatIdx].label}
+                              {activeCat.label}
                             </p>
                             <Link
                               href="/features"
@@ -536,17 +596,17 @@ export default function Navbar() {
                           </div>
 
                           <div className="grid grid-cols-2 gap-2 mb-5">
-                            {featureCats[activeCatIdx].items.map((item) => (
+                            {activeCat.items.map((item) => (
                               <Link
                                 key={item.slug}
-                                href={(item as { href?: string }).href ?? `/features/${item.slug}`}
+                                href={resolveFeatureHref(item)!}
                                 className="group flex items-start gap-3 p-3.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
                               >
                                 <div
                                   className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
-                                  style={{ backgroundColor: `${featureCats[activeCatIdx].color}14` }}
+                                  style={{ backgroundColor: `${activeCat.color}14` }}
                                 >
-                                  <item.icon size={16} style={{ color: featureCats[activeCatIdx].color }} />
+                                  <item.icon size={16} style={{ color: activeCat.color }} />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5">
@@ -943,12 +1003,56 @@ export default function Navbar() {
                     {mobileExpanded === key && (
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }} className="overflow-hidden">
                         <div className="pb-2 space-y-0.5">
-                          {key === 'features' && featureCats.flatMap(cat => cat.items).map(item => (
-                            <Link key={item.slug} href={(item as { href?: string }).href ?? `/features/${item.slug}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 text-sm text-slate-700 font-medium">
-                              <item.icon size={15} className="text-[#25A4E8] shrink-0" />{item.label}
-                              {item.isNew && <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-600 uppercase ms-auto">NEW</span>}
-                            </Link>
-                          ))}
+                          {key === 'features' && (
+                            <>
+                              {visibleFeatureCats.map(cat => {
+                                const catOpen = mobileFeatureCat === cat.label;
+                                return (
+                                  <div key={cat.label} className="rounded-lg overflow-hidden">
+                                    <button
+                                      onClick={() => setMobileFeatureCat(catOpen ? null : cat.label)}
+                                      className="flex items-center gap-3 w-full px-3 py-2.5 text-start"
+                                    >
+                                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${cat.color}18` }}>
+                                        <cat.icon size={15} style={{ color: cat.color }} />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-[13px] font-bold text-[#0F172A] leading-tight">{cat.label}</p>
+                                        <p className="text-[10.5px] text-slate-400 leading-tight truncate">{cat.desc}</p>
+                                      </div>
+                                      <ChevronDown size={15} className={clsx('text-slate-400 shrink-0 transition-transform duration-200', catOpen && 'rotate-180')} />
+                                    </button>
+                                    <AnimatePresence>
+                                      {catOpen && (
+                                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+                                          <div className={clsx('pb-1 space-y-0.5', isAr ? 'pr-3' : 'pl-3')}>
+                                            {cat.items.map(item => (
+                                              <Link key={item.slug} href={resolveFeatureHref(item)!} className="flex items-start gap-3 px-3 py-2 rounded-lg hover:bg-blue-50">
+                                                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${cat.color}14` }}>
+                                                  <item.icon size={13} style={{ color: cat.color }} />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                  <div className="flex items-center gap-1.5">
+                                                    <p className="text-[13px] font-semibold text-slate-700 leading-tight">{item.label}</p>
+                                                    {item.isNew && <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-600 uppercase shrink-0">NEW</span>}
+                                                  </div>
+                                                  <p className="text-[10.5px] text-slate-400 leading-tight truncate">{(item as { desc?: string }).desc}</p>
+                                                </div>
+                                              </Link>
+                                            ))}
+                                          </div>
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                );
+                              })}
+                              <Link href="/features" className="flex items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold text-[#25A4E8]">
+                                {isAr ? 'جميع المميزات' : 'All features'}
+                                <ArrowRight size={12} className={isAr ? 'rotate-180' : ''} />
+                              </Link>
+                            </>
+                          )}
                           {key === 'solutions' && SOLUTIONS.map(s => (
                             <Link key={s.slug} href={`/solutions/${s.slug}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 text-sm text-slate-700 font-medium">
                               <s.icon size={15} style={{ color: s.color }} className="shrink-0" />{isAr ? s.ar : s.en}
