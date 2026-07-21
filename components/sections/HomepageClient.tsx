@@ -14,39 +14,40 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
+import ConnectedOperationsWorkflow, { type WorkflowStep } from '@/components/marketing/home/ConnectedOperationsWorkflow';
 
 /* ─── data ─────────────────────────────────────────────── */
 
-const AUTOMATION_STEPS_EN = [
-  { num: '01', title: 'Booking received',    desc: 'Reservations flow into StayHub from every channel.',      color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
-  { num: '02', title: 'Guest messaging',     desc: 'WhatsApp and SMS are sent at key moments.',               color: '#14c7c4', bg: 'rgba(20,199,196,0.12)' },
-  { num: '03', title: 'Identity verified',   desc: 'Guests verify through Absher before check-in.',           color: '#1473f2', bg: 'rgba(20,115,242,0.12)' },
-  { num: '04', title: 'Payment collected',   desc: 'Paylinks and virtual cards secure the stay.',             color: '#4f33eb', bg: 'rgba(79,51,235,0.12)'  },
-  { num: '05', title: 'Access granted',      desc: 'Smart-lock access codes are created automatically.',      color: '#ff851c', bg: 'rgba(255,133,28,0.12)' },
-  { num: '06', title: 'Task created',        desc: 'Housekeeping starts after checkout.',                     color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
-  { num: '07', title: 'Review requested',    desc: 'Guests receive a follow-up to improve ratings.',          color: '#f04580', bg: 'rgba(240,69,128,0.12)' },
+const AUTOMATION_STEPS_EN: WorkflowStep[] = [
+  { num: '01', title: 'Booking received',           desc: 'Reservations enter StayHub from connected booking channels.',                    color: '#25A4E8', bg: 'rgba(37,164,232,0.14)',  stage: 'booking' },
+  { num: '02', title: 'Guest communication',        desc: 'Messages and arrival instructions are coordinated at the right moments.',         color: '#14c7c4', bg: 'rgba(20,199,196,0.14)', stage: 'messaging' },
+  { num: '03', title: 'Identity workflow',          desc: 'Guest identity steps are coordinated before check-in.',                           color: '#6a5cf5', bg: 'rgba(106,92,245,0.14)', stage: 'identity' },
+  { num: '04', title: 'Payment collection',         desc: 'Payment and financial steps are connected to the reservation workflow.',          color: '#8b3ef0', bg: 'rgba(139,62,240,0.14)', stage: 'payment' },
+  { num: '05', title: 'Access prepared',            desc: 'Connected smart-lock access can be prepared for the guest stay.',                 color: '#ff851c', bg: 'rgba(255,133,28,0.14)', stage: 'access' },
+  { num: '06', title: 'Field task created',         desc: 'Housekeeping and operational tasks are assigned around checkout and arrival.',    color: '#0aad7a', bg: 'rgba(10,173,122,0.14)', stage: 'field' },
+  { num: '07', title: 'Owner reporting updated',    desc: 'Operational and reservation information flows into owner reporting.',             color: '#f04580', bg: 'rgba(240,69,128,0.14)', stage: 'reporting' },
 ];
-const AUTOMATION_STEPS_AR = [
-  { num: '01', title: 'استلام الحجز',        desc: 'تصل الحجوزات إلى StayHub من كل قناة.',                   color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
-  { num: '02', title: 'مراسلة الضيف',        desc: 'تُرسَل رسائل واتساب وSMS في اللحظات الحرجة.',            color: '#14c7c4', bg: 'rgba(20,199,196,0.12)' },
-  { num: '03', title: 'التحقق من الهوية',    desc: 'يتحقق الضيوف عبر أبشر قبل تسجيل الوصول.',               color: '#1473f2', bg: 'rgba(20,115,242,0.12)'  },
-  { num: '04', title: 'تحصيل الدفع',         desc: 'تربط روابط الدفع والبطاقات الافتراضية الإقامة.',          color: '#4f33eb', bg: 'rgba(79,51,235,0.12)'  },
-  { num: '05', title: 'منح الوصول',          desc: 'تُنشأ رموز الأقفال الذكية تلقائياً.',                    color: '#ff851c', bg: 'rgba(255,133,28,0.12)' },
-  { num: '06', title: 'إنشاء المهمة',        desc: 'يبدأ التنظيف بعد تسجيل المغادرة.',                      color: '#0aad7a', bg: 'rgba(10,173,122,0.12)' },
-  { num: '07', title: 'طلب التقييم',         desc: 'يتلقى الضيوف متابعة لتحسين التقييمات.',                  color: '#f04580', bg: 'rgba(240,69,128,0.12)' },
+const AUTOMATION_STEPS_AR: WorkflowStep[] = [
+  { num: '01', title: 'استلام الحجز',        desc: 'تصل الحجوزات إلى StayHub من قنوات الحجز المتصلة.',                    color: '#25A4E8', bg: 'rgba(37,164,232,0.14)',  stage: 'booking' },
+  { num: '02', title: 'تواصل الضيوف',        desc: 'يتم تنسيق الرسائل وتعليمات الوصول في الأوقات المناسبة.',              color: '#14c7c4', bg: 'rgba(20,199,196,0.14)', stage: 'messaging' },
+  { num: '03', title: 'إجراءات الهوية',      desc: 'يتم تنسيق خطوات التحقق من هوية الضيف قبل تسجيل الوصول.',              color: '#6a5cf5', bg: 'rgba(106,92,245,0.14)', stage: 'identity' },
+  { num: '04', title: 'تحصيل المدفوعات',     desc: 'ترتبط خطوات الدفع والإجراءات المالية بسير عمل الحجز.',                color: '#8b3ef0', bg: 'rgba(139,62,240,0.14)', stage: 'payment' },
+  { num: '05', title: 'تجهيز الوصول',        desc: 'يمكن تجهيز الوصول عبر الأقفال الذكية المتصلة لإقامة الضيف.',          color: '#ff851c', bg: 'rgba(255,133,28,0.14)', stage: 'access' },
+  { num: '06', title: 'إنشاء المهمة الميدانية', desc: 'يتم تعيين مهام التنظيف والتشغيل حول تسجيل المغادرة والوصول.',      color: '#0aad7a', bg: 'rgba(10,173,122,0.14)', stage: 'field' },
+  { num: '07', title: 'تحديث تقارير الملاك', desc: 'تنتقل معلومات التشغيل والحجوزات إلى تقارير الملاك.',                  color: '#f04580', bg: 'rgba(240,69,128,0.14)', stage: 'reporting' },
 ];
 
 const OUTCOMES_EN = [
-  { title: 'Save time',        desc: 'Reduce manual work by up to 80%' },
-  { title: 'Increase revenue', desc: 'More bookings and upsells' },
-  { title: 'Delight guests',   desc: 'Faster responses and smoother check-ins' },
-  { title: 'Stay compliant',   desc: 'Digital records for every reservation' },
+  { title: 'Simplify daily operations',   desc: 'Bring recurring tasks into one connected workflow.' },
+  { title: 'Coordinate booking channels', desc: 'Keep reservations and availability aligned across connected channels.' },
+  { title: 'Improve the guest journey',   desc: 'Connect communication, access and field operations.' },
+  { title: 'Maintain operational records',desc: 'Keep reservation and workflow information organised.' },
 ];
 const OUTCOMES_AR = [
-  { title: 'توفير الوقت',      desc: 'تقليل العمل اليدوي حتى 80%' },
-  { title: 'زيادة الإيرادات',  desc: 'المزيد من الحجوزات والبيع الإضافي' },
-  { title: 'إسعاد الضيوف',     desc: 'ردود أسرع وتسجيل وصول أكثر سلاسة' },
-  { title: 'البقاء ملتزماً',   desc: 'سجلات رقمية لكل حجز' },
+  { title: 'بسّط العمليات اليومية',   desc: 'اجمع المهام المتكررة في سير عمل مترابط.' },
+  { title: 'نسّق قنوات الحجز',        desc: 'حافظ على توافق الحجوزات والتوفر عبر القنوات المتصلة.' },
+  { title: 'حسّن رحلة الضيف',         desc: 'اربط التواصل والوصول والعمليات الميدانية.' },
+  { title: 'حافظ على السجلات التشغيلية', desc: 'نظّم معلومات الحجوزات وسير العمل.' },
 ];
 
 const FEATURES_EN = [
@@ -990,137 +991,7 @@ export default function HomepageClient() {
       </section>
 
       {/* ── 4. AUTOMATION WORKFLOW ──────────────────────────── */}
-      <section className="py-20 md:py-24 overflow-hidden" style={{ background: 'linear-gradient(135deg, #121447 0%, #4733c7 100%)' }}>
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-
-          {/* ── Header row: headline + integration panel ── */}
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start mb-12">
-
-            {/* Left: label + headline + subtitle */}
-            <motion.div {...fadeUp(0)} className="flex-1">
-              <p className="text-[#14c7c4] text-xs font-extrabold uppercase tracking-widest mb-4">
-                {isAr ? 'تدفق الأتمتة' : 'AUTOMATION FLOW'}
-              </p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-5 max-w-2xl">
-                {isAr
-                  ? 'من الحجز إلى تسجيل المغادرة، كل خطوة تسير من تلقاء نفسها.'
-                  : 'From booking to checkout, every step can run itself.'}
-              </h2>
-              <p className="text-[#d6e0ff] text-lg leading-relaxed max-w-xl">
-                {isAr
-                  ? 'يربط StayHub الرسائل والتحقق والمدفوعات والأقفال الذكية والتنظيف وطلبات التقييم في رحلة ضيف متواصلة.'
-                  : 'StayHub connects messages, verification, payments, smart locks, housekeeping, and review requests into one continuous guest journey.'}
-              </p>
-            </motion.div>
-
-            {/* Right: integration chip panel */}
-            <motion.div
-              {...fadeUp(0.12)}
-              className="shrink-0 w-full lg:w-[360px] bg-white/10 border border-white/18 rounded-xl p-6"
-            >
-              <p className="text-white font-bold text-lg mb-4">
-                {isAr ? 'تكاملات قوية' : 'Powerful integrations'}
-              </p>
-              <div className="flex flex-col gap-2.5">
-                <div className="flex gap-2 flex-wrap">
-                  {/* WhatsApp text chip */}
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#0aad7a]">
-                    <Image src="/icons/whatsapp.svg" alt="WhatsApp" width={14} height={14} className="shrink-0" />
-                    {isAr ? 'واتساب' : 'WhatsApp'}
-                  </span>
-                  <span className="px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#14c7c4]">SMS</span>
-                  {/* Tuya logo chip */}
-                  <span className="flex items-center px-2 py-2 bg-white/90 rounded-lg">
-                    <Image src="/logos/tuya.webp" alt="Tuya" width={64} height={28} className="object-contain h-7 w-auto" />
-                  </span>
-                </div>
-                <div className="flex gap-2 flex-wrap">
-                  {/* TTLock logo chip */}
-                  <span className="flex items-center px-2 py-2 bg-white/90 rounded-lg">
-                    <Image src="/logos/ttlock.webp" alt="TTLock" width={80} height={28} className="object-contain h-7 w-auto" />
-                  </span>
-                  <span className="px-3 py-1.5 bg-white/90 rounded-lg text-xs font-semibold text-[#14c7c4]">ANB</span>
-                  {/* Absher logo */}
-                  <span className="flex items-center px-2 py-2 bg-white/90 rounded-lg">
-                    <Image src="/logos/absher.png" alt="Absher" width={80} height={28} className="object-contain h-7 w-auto" />
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* ── 7 step cards ── */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
-            {automationSteps.map((step, i) => (
-              <motion.div
-                key={i}
-                {...fadeUp(i * 0.07)}
-                whileHover={{ y: -6, scale: 1.03 }}
-                transition={{ type: 'spring', stiffness: 340, damping: 22 }}
-                className="relative bg-white rounded-xl p-4 flex flex-col gap-3 border border-[#d6def0] cursor-default group overflow-hidden"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
-              >
-                {/* Hover colour wash */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"
-                  style={{ background: `linear-gradient(135deg, ${step.bg} 0%, transparent 70%)` }}
-                />
-
-                {/* Glow border on hover */}
-                <div
-                  className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{ boxShadow: `0 0 0 1.5px ${step.color}55, 0 8px 32px ${step.color}30` }}
-                />
-
-                {/* Numbered icon */}
-                <motion.div
-                  className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 relative z-10 transition-transform duration-300"
-                  style={{ backgroundColor: step.bg }}
-                  whileHover={{ rotate: [0, -8, 8, 0] }}
-                >
-                  <span className="text-lg font-extrabold leading-none" style={{ color: step.color }}>
-                    {step.num}
-                  </span>
-                </motion.div>
-
-                <p className="font-bold text-[#081133] text-[15px] leading-snug relative z-10 group-hover:transition-colors duration-200" style={{ color: undefined }}>
-                  {step.title}
-                </p>
-                <p className="text-[#5c6687] text-[12px] leading-relaxed relative z-10">{step.desc}</p>
-
-                {/* Arrow connector (hidden on last card) */}
-                {i < automationSteps.length - 1 && (
-                  <div
-                    className="hidden lg:flex absolute -right-[7px] top-1/2 -translate-y-1/2 z-20 w-3.5 h-3.5 rounded-full border-2 items-center justify-center transition-all duration-300"
-                    style={{ backgroundColor: 'white', borderColor: step.color + '80' }}
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ backgroundColor: step.color }} />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-
-          {/* ── Outcome rail ── */}
-          <motion.div
-            {...fadeUp(0.4)}
-            className="bg-white/10 border border-white/16 rounded-xl px-6 py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
-          >
-            {outcomes.map((outcome, i) => (
-              <div key={i} className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-[rgba(20,199,196,0.12)]">
-                  <CheckCircle2 size={22} className="text-[#14c7c4]" />
-                </div>
-                <div>
-                  <p className="font-bold text-white text-base leading-snug">{outcome.title}</p>
-                  <p className="text-[#d6deff] text-[13px] leading-snug mt-0.5">{outcome.desc}</p>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-
-        </div>
-      </section>
+      <ConnectedOperationsWorkflow isAr={isAr} steps={automationSteps} outcomes={outcomes} />
 
       {/* ── 5. FEATURE ECOSYSTEM — glassy carousel ──────────── */}
       <section className="py-24 relative"
