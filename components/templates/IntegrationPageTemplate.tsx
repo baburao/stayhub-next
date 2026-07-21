@@ -31,6 +31,17 @@ interface IntegrationData {
   logoAlt?: string;
   benefitsHeading?: string;
   arBenefitsHeading?: string;
+  heroCtaLabel?: string;
+  arHeroCtaLabel?: string;
+  painPointsHeading?: string;
+  arPainPointsHeading?: string;
+  workflowHeading?: string;
+  arWorkflowHeading?: string;
+  readyCtaHeading?: string;
+  arReadyCtaHeading?: string;
+  readyCtaDesc?: string;
+  arReadyCtaDesc?: string;
+  crossLink?: { label: string; arLabel?: string; href: string };
   color: string;
   stats: Stat[];
   arStats?: Stat[];
@@ -125,6 +136,15 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
   const readyCtaDesc       = t.integrations.readyCtaDesc.replace('{name}', name);
   const faqTitle           = t.integrations.faqTitle.replace('{name}', name);
 
+  // Optional per-page copy overrides — each falls back to the shared global text,
+  // so integrations that don't set them render exactly as before.
+  const heroCtaLabel     = isAr ? (integration.arHeroCtaLabel   ?? t.buttons.bookDemoShort) : (integration.heroCtaLabel   ?? t.buttons.bookDemoShort);
+  const painPointsTitle  = isAr ? (integration.arPainPointsHeading ?? manualPainfulTitle)   : (integration.painPointsHeading ?? manualPainfulTitle);
+  const workflowTitle    = isAr ? (integration.arWorkflowHeading ?? connectToday)           : (integration.workflowHeading ?? connectToday);
+  const readyCtaTitle    = isAr ? (integration.arReadyCtaHeading ?? readyCta)               : (integration.readyCtaHeading ?? readyCta);
+  const readyCtaDescription = isAr ? (integration.arReadyCtaDesc ?? readyCtaDesc)           : (integration.readyCtaDesc ?? readyCtaDesc);
+  const crossLinkLabel   = integration.crossLink ? (isAr ? (integration.crossLink.arLabel ?? integration.crossLink.label) : integration.crossLink.label) : null;
+
   return (
     <div className="bg-white">
       <script
@@ -201,7 +221,7 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
                 className="px-8 py-4 rounded-xl text-white font-semibold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-105"
                 style={{ backgroundColor: color }}
               >
-                {t.buttons.bookDemoShort}
+                {heroCtaLabel}
               </Link>
               <Link
                 href="/integrations"
@@ -211,6 +231,19 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
                 <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
               </Link>
             </motion.div>
+
+            {/* Optional page-specific cross-link (e.g. Ejar rental channel → Ejar contracts) */}
+            {integration.crossLink && (
+              <motion.div {...fadeUp(0.3)} className="mt-6">
+                <Link
+                  href={integration.crossLink.href}
+                  className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                  {crossLinkLabel}
+                  <ArrowRight size={14} className={isAr ? 'rotate-180' : ''} />
+                </Link>
+              </motion.div>
+            )}
           </div>
         </div>
       </section>
@@ -254,7 +287,7 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <motion.div {...fadeUp()} className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              {manualPainfulTitle}
+              {painPointsTitle}
             </h2>
             <p className="text-slate-400 text-lg max-w-2xl mx-auto">
               {manualPainfulDesc}
@@ -316,7 +349,7 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
           <motion.div {...fadeUp()} className="text-center mb-14">
             <Badge variant="teal">{t.sections.howItWorks}</Badge>
             <h2 className="mt-4 text-3xl md:text-4xl font-bold text-[#0F172A]">
-              {connectToday}
+              {workflowTitle}
             </h2>
           </motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -345,10 +378,10 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
         <div className="relative max-w-4xl mx-auto px-4 md:px-8 text-center">
           <motion.div {...fadeUp()}>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              {readyCta}
+              {readyCtaTitle}
             </h2>
             <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
-              {readyCtaDesc}
+              {readyCtaDescription}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/demo" className="px-8 py-4 bg-white font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-lg" style={{ color }}>

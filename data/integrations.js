@@ -5,88 +5,56 @@ const integrationsList = [
     slug: 'airbnb',
     name: 'Airbnb',
     tagline: "World's Largest Vacation Rental Platform",
-    seoTitle: 'Airbnb Integration for Property Managers in Saudi Arabia | StayHub',
+    seoTitle: 'Airbnb Integration for Property Managers in Saudi Arabia',
     metaDescription:
-      "Connect your properties to Airbnb and manage listings, calendar, pricing, and reservations from one dashboard. StayHub's Airbnb integration keeps you in sync 24/7.",
+      "Connect your properties to Airbnb and manage listings, calendar, pricing, and reservations from one dashboard. StayHub's two-way sync keeps you updated 24/7 — no double bookings.",
+    arMetaDescription:
+      'اربط عقاراتك بـ Airbnb وأدِر القوائم والتقويم والأسعار والحجوزات من لوحة تحكم واحدة. تُبقيك المزامنة ثنائية الاتجاه من StayHub محدَّثاً على مدار الساعة — بلا حجوزات مزدوجة.',
     badge: 'OTA Integration',
-    h1: 'Seamless Airbnb Integration',
-    arabicH1: 'تكامل سلس مع Airbnb',
+    h1: 'Seamless Airbnb integration, built for Saudi hosts',
+    arabicH1: 'تكامل سلس مع Airbnb، مصمم لمضيفي السعودية',
     subtitle:
-      'Sync your Airbnb listings, manage bookings, and automate guest communication — all from StayHub.',
+      'Sync your Airbnb listings, manage reservations, and automate guest communication — all from StayHub, with real-time two-way calendar sync that makes double bookings impossible.',
+    seoContent:
+      'StayHub gives Saudi property managers one place to manage Airbnb listings alongside every other booking channel. Import properties, synchronize availability, update rates, manage reservations and automate guest communication without repeatedly switching platforms. The Airbnb channel manager connection is designed for hosts and professional operators managing vacation rentals across Saudi Arabia, including multi-property teams that need consistent calendars and centralized operations. With Airbnb and StayHub connected, reservation information and day-to-day channel tasks remain accessible from one dashboard.',
+    heroCtaLabel: 'Connect Airbnb now',
+    painPointsHeading: 'Managing Airbnb manually is costing you bookings',
+    benefitsHeading: 'Everything Airbnb, automated from one dashboard',
+    workflowHeading: 'Connect Airbnb in minutes',
+    readyCtaHeading: 'Ready to connect Airbnb?',
+    logo: '/logos/airbnb.webp',
+    logoAlt: 'Airbnb',
     color: '#FF5A5F',
     stats: [
-      { value: '4M+', label: 'Active listings on Airbnb' },
-      { value: '150+', label: 'Countries supported' },
-      { value: '2-way', label: 'Real-time calendar sync' },
+      { value: '8M+', label: 'active listings on Airbnb' },
+      { value: '220+', label: 'countries and regions worldwide' },
+      { value: 'Two-way', label: 'real-time calendar sync' },
     ],
     painPoints: [
-      {
-        title: 'Double Bookings Nightmare',
-        desc: 'Managing Airbnb manually alongside other channels leads to costly double bookings and angry guests.',
-      },
-      {
-        title: 'Scattered Inbox',
-        desc: 'Airbnb messages, Booking.com messages, WhatsApp — juggling multiple inboxes burns hours every day.',
-      },
-      {
-        title: 'Manual Pricing Updates',
-        desc: 'Updating rates across Airbnb and other platforms manually is error-prone and time-consuming.',
-      },
+      { title: 'Double-booking nightmares', desc: 'Running Airbnb by hand alongside other channels leads to costly double bookings and angry guests.' },
+      { title: 'Scattered inboxes', desc: 'Airbnb messages, Booking.com messages, WhatsApp — juggling separate inboxes burns hours every day.' },
+      { title: 'Manual price updates', desc: 'Updating rates across Airbnb and every other platform by hand is slow and error-prone.' },
     ],
     benefits: [
-      {
-        title: '2-Way Calendar Sync',
-        desc: 'Real-time availability sync prevents double bookings across all your channels.',
-      },
-      {
-        title: 'Unified Inbox',
-        desc: 'All Airbnb guest messages in one place alongside messages from other platforms.',
-      },
-      {
-        title: 'Dynamic Pricing',
-        desc: 'Push optimized pricing to Airbnb automatically based on demand, seasonality, and events.',
-      },
-      {
-        title: 'Automated Messaging',
-        desc: 'Send pre-booking, check-in, and check-out messages to Airbnb guests automatically.',
-      },
-      {
-        title: 'Review Management',
-        desc: 'Get notified of new reviews and respond quickly to maintain your Airbnb rating.',
-      },
-      {
-        title: 'Reservation Sync',
-        desc: 'All Airbnb reservations appear instantly in your StayHub dashboard with guest details.',
-      },
+      { title: 'Two-way calendar sync', desc: 'Real-time availability sync prevents double bookings across all your channels.' },
+      { title: 'Unified inbox', desc: 'All Airbnb guest messages in one place, alongside every other platform.' },
+      { title: 'Dynamic pricing', desc: 'Send optimized rates to Airbnb automatically based on demand, seasonality, and events.' },
+      { title: 'Automated messaging', desc: 'Pre-booking, check-in, and check-out messages go to Airbnb guests automatically.' },
+      { title: 'Review management', desc: 'Get notified of new reviews and respond fast to protect your Airbnb rating.' },
+      { title: 'Reservation sync', desc: 'Every Airbnb booking appears instantly in your StayHub dashboard with full guest details.' },
     ],
     workflowSteps: [
-      { step: 1, title: 'Connect Your Account', desc: 'Link your Airbnb account to StayHub in 60 seconds.' },
-      { step: 2, title: 'Sync Listings', desc: 'All your Airbnb listings are imported automatically.' },
-      { step: 3, title: 'Real-Time Updates', desc: 'Calendar, pricing, and availability sync 24/7.' },
-      {
-        step: 4,
-        title: 'Manage from One Place',
-        desc: 'Handle Airbnb bookings alongside all other channels from StayHub.',
-      },
+      { step: 1, title: 'Link your account', desc: 'Connect your Airbnb account to StayHub in about 60 seconds.' },
+      { step: 2, title: 'Import your listings', desc: 'All your Airbnb listings are imported automatically.' },
+      { step: 3, title: 'Always in sync', desc: 'Calendar, rates, and availability stay synced around the clock.' },
+      { step: 4, title: 'Manage everything from StayHub', desc: 'Handle Airbnb reservations alongside every other channel in one place.' },
     ],
     relatedIntegrations: ['booking-com', 'agoda', 'gathern'],
     faq: [
-      {
-        q: "How does StayHub's Airbnb integration work?",
-        a: "StayHub connects to Airbnb via the official Channel Manager API. Once connected, your calendar, pricing, availability, and reservations sync in real-time, eliminating manual updates.",
-      },
-      {
-        q: 'Will StayHub prevent double bookings with Airbnb?',
-        a: 'Yes. StayHub syncs your calendar across all connected channels within seconds, making double bookings virtually impossible.',
-      },
-      {
-        q: 'Can I manage Airbnb messages from StayHub?',
-        a: "Yes. All Airbnb guest messages appear in StayHub's unified inbox alongside messages from Booking.com, Gathern, and other platforms.",
-      },
-      {
-        q: 'Does StayHub support Airbnb dynamic pricing?',
-        a: "Yes. StayHub's Revenue Engine can push dynamic pricing recommendations to your Airbnb listings automatically.",
-      },
+      { q: 'How does the Airbnb integration work with StayHub?', a: 'StayHub connects to your Airbnb account through a direct integration. Your listings, calendar, rates, and reservations sync automatically in both directions, and guest messages flow into your unified StayHub inbox.' },
+      { q: 'Will StayHub prevent double bookings with Airbnb?', a: 'Yes. The two-way calendar sync means any booking on any channel — Airbnb, Booking.com, or your direct site — instantly blocks those dates everywhere else.' },
+      { q: 'Can I send automated messages to Airbnb guests?', a: 'Yes. Set up automated messages for booking confirmation, pre-arrival details, check-in instructions, and check-out reminders — including WhatsApp for guests who prefer it.' },
+      { q: 'Can I manage Airbnb pricing from StayHub?', a: 'Yes. Set your rates once in StayHub and they push to Airbnb automatically. With dynamic pricing enabled, rates adjust based on demand, seasonality, and local events.' },
     ],
   },
   {
@@ -193,7 +161,8 @@ const integrationsList = [
   {
     slug: 'agoda',
     name: 'Agoda',
-    tagline: "Asia-Pacific's Premier Travel Platform",
+    tagline: "Asia-Pacific's leading travel platform",
+    arTagline: 'منصة السفر الرائدة في آسيا والمحيط الهادئ',
     seoTitle: 'Agoda Integration for Short-Term Rentals | StayHub Saudi Arabia',
     metaDescription:
       "Connect your properties to Agoda and tap into millions of Asian travelers. StayHub syncs your Agoda calendar, pricing, and reservations automatically.",
@@ -558,7 +527,8 @@ const integrationsList = [
   {
     slug: 'aqar',
     name: 'AQAR',
-    tagline: "Saudi Arabia's Leading Real Estate Marketplace",
+    tagline: "Saudi Arabia's leading real-estate marketplace",
+    arTagline: 'المنصة العقارية الرائدة في السعودية',
     seoTitle: 'Aqar Integration for Property Managers in Saudi Arabia',
     metaDescription:
       'Connect Aqar to StayHub to publish your units across Saudi Arabia, with automatic sync for availability, pricing, and inquiries from one dashboard.',
@@ -610,43 +580,58 @@ const integrationsList = [
   {
     slug: 'ejar-ota',
     name: 'Ejar',
-    tagline: "Saudi Arabia's Official Rental Network",
-    seoTitle: 'Ejar Integration for Rentals in Saudi Arabia | StayHub',
+    tagline: "Saudi Arabia's official rental network",
+    arTagline: 'شبكة الإيجار الرسمية في السعودية',
+    seoTitle: 'Ejar Integration for Monthly & Annual Rentals in Saudi Arabia',
     metaDescription:
-      'Connect Ejar with StayHub to streamline rental listings and contracts. Manage availability and tenant flow in compliance with Saudi rental regulations.',
-    badge: 'OTA Integration',
-    h1: 'Ejar Integration',
-    arabicH1: 'تكامل مع إيجار',
-    subtitle: 'Streamline Ejar listings and rental flow while keeping your calendar and bookings centralized in StayHub.',
+      'Connect Ejar to StayHub to run monthly and annual rentals alongside your short-stay channels — synced availability, tenant messaging, and REGA-compliant contract workflows in one dashboard.',
+    arMetaDescription:
+      'اربط إيجار بـ StayHub لإدارة الإيجارات الشهرية والسنوية جنباً إلى جنب مع قنوات الإقامة القصيرة — توفر متزامن وتواصل مع المستأجرين وسير عمل تعاقدي متوافق مع نظام إيجار (ريجا) من لوحة تحكم واحدة.',
+    badge: 'Official rental network integration',
+    h1: 'Run your Ejar rentals alongside every other channel',
+    arabicH1: 'أدِر إيجاراتك عبر إيجار جنباً إلى جنب مع كل قناة أخرى',
+    subtitle:
+      "Manage monthly and annual rentals through the Kingdom's official rental network without leaving StayHub — synced availability, tenant messaging, and a contract workflow that keeps you compliant with Saudi rental regulations.",
+    seoContent:
+      'Ejar is Saudi Arabia’s official rental network for managing residential leasing and documented rental relationships. By connecting Ejar with StayHub, property managers can operate monthly and annual rentals alongside short-stay channels without maintaining two disconnected systems. Availability, tenant communication and rental workflows remain accessible from one dashboard, helping teams reduce manual administration and avoid calendar conflicts. This integration is designed for Saudi property managers who manage a mix of long-term, monthly and short-stay inventory and need a more centralized Ejar property management workflow.',
+    heroCtaLabel: 'Connect Ejar now',
+    painPointsHeading: 'Running Ejar rentals in a separate system doubles your work',
+    benefitsHeading: 'Monthly rentals and short stays, finally in one place',
+    workflowHeading: 'Connect Ejar in minutes',
+    readyCtaHeading: 'Ready to connect Ejar?',
+    readyCtaDesc: 'Book a free demo and see how monthly rentals and short stays run side by side in StayHub.',
+    crossLink: {
+      label: 'Looking for official contract registration? See the Ejar contracts integration',
+      arLabel: 'تبحث عن تسجيل العقود الرسمية؟ اطّلع على تكامل عقود إيجار',
+      href: '/integrations/ejar-gov',
+    },
     color: '#1C7C54',
     stats: [
-      { value: 'Official', label: 'Saudi rental network' },
-      { value: 'Compliant', label: 'Regulated contracts' },
-      { value: 'Synced', label: 'Listings & availability' },
+      { value: '5.8M+', label: 'active users on the Ejar network' },
+      { value: '10M+', label: 'rental contracts registered' },
+      { value: 'Official', label: 'Saudi government rental network (REGA)' },
     ],
     painPoints: [
-      { title: 'Disconnected Listings', desc: 'Managing Ejar separately from your OTA channels duplicates work.' },
-      { title: 'Manual Contract Steps', desc: 'Handling rental documentation outside your PMS adds friction.' },
-      { title: 'Availability Gaps', desc: 'Ejar availability easily drifts from your live calendar.' },
+      { title: 'Two disconnected systems', desc: 'Your short-stay channels live in one place and your Ejar rentals in another — twice the logins, twice the admin.' },
+      { title: 'Manual contract steps', desc: 'Handling lease documentation outside your workflow adds friction to every new tenancy and every renewal.' },
+      { title: 'Availability blind spots', desc: 'A unit rented monthly through Ejar can still look bookable on your other channels — until it causes a conflict.' },
     ],
     benefits: [
-      { title: 'Centralized Listings', desc: 'Manage Ejar properties alongside every other channel in StayHub.' },
-      { title: 'Calendar Sync', desc: 'Availability stays aligned across Ejar and your OTAs.' },
-      { title: 'Compliant Workflow', desc: 'Keep rental processes aligned with Saudi regulatory requirements.' },
-      { title: 'Unified Reporting', desc: 'Track Ejar performance with the rest of your portfolio.' },
-      { title: 'Tenant Communication', desc: 'Automate messaging for Ejar tenants from one inbox.' },
+      { title: 'Centralized listings', desc: 'Manage your Ejar rental units alongside every other channel inside StayHub.' },
+      { title: 'Calendar sync', desc: "When a unit is leased through Ejar, it's blocked everywhere else automatically — and vice versa." },
+      { title: 'Compliant contract workflow', desc: "Keep your leasing operations aligned with Saudi rental regulations, with Ejar's documented contracts at the core." },
     ],
     workflowSteps: [
-      { step: 1, title: 'Connect Ejar', desc: 'Link your Ejar account to StayHub.' },
-      { step: 2, title: 'Import Listings', desc: 'Bring your Ejar properties into StayHub.' },
-      { step: 3, title: 'Stay in Sync', desc: 'Availability updates flow automatically.' },
-      { step: 4, title: 'Manage Centrally', desc: 'Handle the full rental flow from StayHub.' },
+      { step: 1, title: 'Link your account', desc: 'Connect your Ejar account to StayHub.' },
+      { step: 2, title: 'Import your units', desc: 'Bring your Ejar rental properties into StayHub.' },
+      { step: 3, title: 'Always in sync', desc: 'Availability updates flow automatically between Ejar and your channels.' },
+      { step: 4, title: 'Manage everything from StayHub', desc: 'Run your full rental workflow — tenants, contracts, calendars — from one dashboard.' },
     ],
     relatedIntegrations: ['ejar-gov', 'aqar', 'gathern'],
     faq: [
-      { q: 'Is this the same as the Ejar government integration?', a: 'This listing integration focuses on managing rental listings and availability. StayHub also offers an Ejar government integration for registering and verifying rental contracts.' },
-      { q: 'Does StayHub keep Ejar availability in sync?', a: 'Yes. Your calendar syncs to Ejar in real time alongside your other channels.' },
-      { q: 'Can I automate tenant messaging?', a: "Yes. StayHub's automated messaging works for Ejar tenants in Arabic and English." },
+      { q: 'Is this the same as the Ejar government contract integration?', a: 'No — they work together but do different jobs. This integration manages Ejar as a rental channel: listings, availability, and tenant flow. The Ejar contract integration handles the official side: registering and documenting REGA-compliant rental contracts. Most property managers use both.' },
+      { q: 'Does StayHub keep my Ejar availability in sync?', a: 'Yes. When a unit is leased through Ejar, StayHub blocks it across all your other channels automatically — so a monthly tenant and a weekend guest never collide.' },
+      { q: 'Can I automate tenant messaging?', a: 'Yes. Tenant communication runs through the same unified StayHub inbox you use for short-stay guests, with automated messages for key moments in the tenancy.' },
     ],
   },
   {
@@ -946,7 +931,8 @@ const integrationsList = [
   {
     slug: 'ejar-gov',
     name: 'Ejar',
-    tagline: 'Saudi Official Rental Contract Network',
+    tagline: 'Register and document official rental contracts through StayHub',
+    arTagline: 'سجّل ووثّق عقود الإيجار الرسمية عبر StayHub',
     seoTitle: 'Ejar Contract Registration Integration | StayHub Saudi Arabia',
     metaDescription:
       'Register and verify rental contracts through Ejar with StayHub. Stay compliant with Saudi rental regulations and automate documentation.',
