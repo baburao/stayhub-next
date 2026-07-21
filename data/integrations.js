@@ -92,7 +92,8 @@ const integrationsList = [
   {
     slug: 'booking-com',
     name: 'Booking.com',
-    tagline: "Europe's Largest Online Travel Agency",
+    tagline: "The world's leading online travel marketplace",
+    arTagline: 'منصة السفر الرائدة عالمياً عبر الإنترنت',
     seoTitle: 'Booking.com Integration for Property Managers | StayHub Saudi Arabia',
     metaDescription:
       'Integrate your properties with Booking.com via StayHub. Manage reservations, sync calendars, handle damage protection, and automate guest communication from one platform.',
@@ -460,7 +461,8 @@ const integrationsList = [
   {
     slug: 'gathern',
     name: 'Gathern (غثرن)',
-    tagline: "Saudi Arabia's Leading Local Rental Platform",
+    tagline: "Saudi Arabia's leading local short-term rental platform",
+    arTagline: 'منصة الإيجار المحلية الرائدة في السعودية للإيجارات قصيرة الأجل',
     seoTitle: 'Gathern Integration for Property Managers in Saudi Arabia | StayHub',
     metaDescription:
       "Connect your properties to Gathern, Saudi Arabia's top local vacation rental platform. StayHub syncs your Gathern calendar, manages reservations, and automates Arabic guest communication.",
@@ -557,9 +559,11 @@ const integrationsList = [
     slug: 'aqar',
     name: 'AQAR',
     tagline: "Saudi Arabia's Leading Real Estate Marketplace",
-    seoTitle: 'Aqar Integration for Property Managers in Saudi Arabia | StayHub',
+    seoTitle: 'Aqar Integration for Property Managers in Saudi Arabia',
     metaDescription:
-      'Connect Aqar to StayHub to list your units in front of millions of Saudi renters — with automatic sync for availability, pricing, and inquiries from one dashboard.',
+      'Connect Aqar to StayHub to publish your units across Saudi Arabia, with automatic sync for availability, pricing, and inquiries from one dashboard.',
+    arMetaDescription:
+      'اربط عقار بـ StayHub لنشر وحداتك في جميع أنحاء المملكة العربية السعودية، مع مزامنة تلقائية للتوفر والأسعار والاستفسارات من لوحة تحكم واحدة.',
     badge: 'OTA Integration',
     h1: 'Publish your units on Aqar directly from StayHub',
     arabicH1: 'انشر وحداتك على عقار مباشرة من StayHub',
@@ -568,6 +572,10 @@ const integrationsList = [
     seoContent:
       "Aqar is Saudi Arabia's leading real estate marketplace, connecting property managers with renters across the Kingdom's major cities. For short-term rental operators, Aqar's dedicated Bookings section is a key local channel alongside international platforms like Airbnb and Booking.com. StayHub's Aqar integration works as a Saudi short-term rental channel manager built for this market — keeping your Aqar listings, calendar, and pricing in sync with every other channel you manage, without manual double-entry. Whether you run a handful of units or a full multi-property portfolio, connecting Aqar to StayHub means every inquiry lands in one inbox, every booking updates your calendar in real time, and your team spends less time on admin and more time growing occupancy.",
     trustBadge: "Aqar App Company is licensed by Saudi Arabia's Ministry of Tourism — License No. 73106505",
+    logo: '/logos/aqar.webp',
+    logoAlt: 'Aqar',
+    benefitsHeading: 'Everything runs automatically from one dashboard',
+    arBenefitsHeading: 'كل شيء يعمل تلقائيًا من لوحة تحكم واحدة',
     color: '#1B5E93',
     stats: [
       { value: '145K+', label: 'active listings in major Saudi cities' },
@@ -597,7 +605,6 @@ const integrationsList = [
       { q: 'How does StayHub connect to Aqar?', a: 'StayHub connects to Aqar through a direct integration. Once your account is linked, your unit data — details, photos, rates, and availability — flows automatically from StayHub to Aqar, and inquiries arrive in your unified StayHub inbox.' },
       { q: 'Does my Aqar calendar stay in sync with my other channels?', a: 'Yes. Any booking from any channel — Airbnb, Booking.com, or your direct booking site — updates your Aqar availability in real time, and vice versa. That eliminates double bookings entirely.' },
       { q: 'Can I reply to Aqar inquiries from inside StayHub?', a: 'Yes. All Aqar inquiries land in your unified inbox alongside your other channels. Reply directly without switching platforms — and you can enable automated responses too.' },
-      { q: 'Does the Aqar integration cost extra?', a: 'No. Aqar sync is included in every StayHub plan — see our pricing page for full plan details.' },
     ],
   },
   {

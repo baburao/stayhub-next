@@ -39,6 +39,7 @@ export default async function IntegrationPage({ params }: Props) {
       slug: i.slug,
       name: i.name,
       tagline: i.tagline,
+      arTagline: i.arTagline,
       color: i.color,
     }));
 

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2, AlertTriangle, ChevronDown, ChevronRight, BadgeCheck } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
@@ -26,6 +27,10 @@ interface IntegrationData {
   arSeoContent?: string;
   trustBadge?: string;
   arTrustBadge?: string;
+  logo?: string;
+  logoAlt?: string;
+  benefitsHeading?: string;
+  arBenefitsHeading?: string;
   color: string;
   stats: Stat[];
   arStats?: Stat[];
@@ -44,6 +49,7 @@ interface RelatedIntegration {
   slug: string;
   name: string;
   tagline?: string;
+  arTagline?: string;
   color?: string;
 }
 
@@ -96,6 +102,7 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
   const subtitle     = isAr ? (integration.arSubtitle ?? integration.subtitle) : integration.subtitle;
   const seoContent   = isAr ? (integration.arSeoContent ?? integration.seoContent) : integration.seoContent;
   const trustBadge   = isAr ? (integration.arTrustBadge ?? integration.trustBadge) : integration.trustBadge;
+  const benefitsHeading = isAr ? (integration.arBenefitsHeading ?? t.integrations.whatYouGetH2) : (integration.benefitsHeading ?? t.integrations.whatYouGetH2);
   const stats        = isAr ? (integration.arStats   ?? integration.stats)  : integration.stats;
   const painPoints   = isAr ? (integration.arPainPoints ?? integration.painPoints) : integration.painPoints;
   const benefits     = isAr ? (integration.arBenefits ?? integration.benefits)    : integration.benefits;
@@ -161,12 +168,24 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
           <div className="text-center">
             <motion.div {...fadeUp(0.05)}>
               <div className="inline-flex items-center gap-3 mb-6">
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg"
-                  style={{ backgroundColor: color }}
-                >
-                  {integration.name.charAt(0)}
-                </div>
+                {integration.logo ? (
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white border border-slate-100 shadow-lg p-2.5">
+                    <Image
+                      src={integration.logo}
+                      alt={integration.logoAlt ?? integration.name}
+                      width={56}
+                      height={56}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg"
+                    style={{ backgroundColor: color }}
+                  >
+                    {integration.name.charAt(0)}
+                  </div>
+                )}
                 <Badge variant="custom" color={color}>{badge}</Badge>
               </div>
             </motion.div>
@@ -263,7 +282,7 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
               {t.integrations.whatYouGet.replace('{name}', name)}
             </Badge>
             <h2 className="mt-4 text-3xl md:text-4xl font-bold text-[#0F172A]">
-              {t.integrations.whatYouGetH2}
+              {benefitsHeading}
             </h2>
           </motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -352,7 +371,9 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
               <p className="text-slate-600 mt-2">{t.sections.relatedIntegrationsDesc}</p>
             </motion.div>
             <div className="grid md:grid-cols-3 gap-5">
-              {relatedData.map((ri, i) => (
+              {relatedData.map((ri, i) => {
+                const riTagline = isAr ? (ri.arTagline ?? ri.tagline) : ri.tagline;
+                return (
                 <motion.div key={ri.slug} {...fadeUp(i * 0.08)}>
                   <Link
                     href={`/integrations/${ri.slug}`}
@@ -366,14 +387,15 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors">{ri.name}</h3>
-                      {ri.tagline && <p className="text-slate-500 text-xs mt-0.5">{ri.tagline}</p>}
+                      {riTagline && <p className="text-slate-500 text-xs mt-0.5">{riTagline}</p>}
                       <div className="mt-1 flex items-center gap-1 text-xs font-semibold text-[#25A4E8]">
                         {t.buttons.viewIntegration} <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
                   </Link>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
