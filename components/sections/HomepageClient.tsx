@@ -10,6 +10,7 @@ import {
   CalendarCheck, BadgeCheck, Banknote, Sparkles, RefreshCw,
   ChevronLeft, ChevronRight, X, Flag,
   Layers, AlertTriangle, Phone, FileText, MessageCircle, BarChart3, Mail,
+  Pause, Play,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
@@ -382,61 +383,6 @@ function DashboardShowcase({ isAr }: { isAr: boolean }) {
   );
 }
 
-/* ─── Hero 3D floating card ─────────────────────────────── */
-type StepData = { num: string; title: string; desc: string; color: string; bg: string };
-
-function HeroCard3D({
-  step, floatDuration = 3.5, floatDelay = 0, entryDelay = 0, className = '',
-}: {
-  step: StepData; floatDuration?: number; floatDelay?: number; entryDelay?: number; className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const nx = (e.clientX - left) / width - 0.5;
-    const ny = (e.clientY - top) / height - 0.5;
-    setTilt({ x: -ny * 20, y: nx * 20 });
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24, scale: 0.92 }}
-      animate={{ opacity: 1, y: hovered ? -4 : [0, -9, 0], scale: hovered ? 1.04 : 1 }}
-      exit={{ opacity: 0, y: 20, scale: 0.92 }}
-      transition={{
-        opacity:  { duration: 0.45, delay: entryDelay },
-        scale:    { duration: 0.25 },
-        y: hovered
-          ? { duration: 0.25 }
-          : { duration: floatDuration, repeat: Infinity, ease: 'easeInOut', delay: floatDelay },
-      }}
-      onMouseMove={onMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(false); }}
-      style={{
-        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: hovered ? 'transform 0.08s linear' : 'transform 0.55s cubic-bezier(0.23,1,0.32,1)',
-        boxShadow: hovered
-          ? `0 20px 60px ${step.color}30, 0 8px 20px rgba(0,0,0,0.12)`
-          : '0 8px 32px rgba(0,0,0,0.10)',
-        willChange: 'transform',
-      }}
-      className={`bg-white rounded-2xl p-4 border border-white/80 cursor-default select-none ${className}`}
-    >
-      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 shrink-0" style={{ backgroundColor: step.bg }}>
-        <span className="text-base font-extrabold leading-none" style={{ color: step.color }}>{step.num}</span>
-      </div>
-      <p className="font-bold text-[#0F172A] text-[13.5px] leading-snug mb-1.5">{step.title}</p>
-      <p className="text-slate-400 text-[11.5px] leading-relaxed">{step.desc}</p>
-    </motion.div>
-  );
-}
-
 /* ─── main component ────────────────────────────────────── */
 
 export default function HomepageClient() {
@@ -473,70 +419,81 @@ export default function HomepageClient() {
     return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  /* ── Hero background video — plays full duration then switches (3-video loop) ── */
-  const [bgVideo, setBgVideo] = useState(0); // 0 = hero_video_1, 1 = hero_2_banner, 2 = hero_video_3
-  const bgVid1Ref = useRef<HTMLVideoElement>(null);
-  const bgVid2Ref = useRef<HTMLVideoElement>(null);
-  const bgVid3Ref = useRef<HTMLVideoElement>(null);
-
-  // When active video changes, reset that video to start and play it
-  useEffect(() => {
-    const refs = [bgVid1Ref, bgVid2Ref, bgVid3Ref];
-    const active = refs[bgVideo]?.current;
-    if (active) { active.currentTime = 0; active.play(); }
-  }, [bgVideo]);
-
-  /* ── Hero slider ── */
-  const [heroSlide, setHeroSlide] = useState(0);
-  const [heroDir, setHeroDir] = useState(1);
-  const heroTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
+  /* ── Hero video carousel ──────────────────────────────────
+     Three content slides, each tied to one background video. Only the active
+     slide's video is mounted at a time (desktop remounts per slide; mobile uses
+     a single fixed video). Auto-rotation runs on one interval, pauses on manual
+     navigation, when the tab is hidden, and under prefers-reduced-motion. */
   const HERO_SLIDES = [
     {
-      badge:   { en: "Saudi Arabia's Smart Hospitality Platform", ar: 'منصة الضيافة الذكية في السعودية' },
-      h1En: (<>Run Your Entire<br />Hospitality Business<br />From{' '}<span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">One Platform<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      h1Ar: (<>أدِر أعمالك في الضيافة<br />بالكامل من{' '}<span className="bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] bg-clip-text text-transparent relative inline-block">منصة واحدة<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      sub:  { en: 'Manage bookings, guests, pricing, smart locks, housekeeping, reviews and payments across Airbnb, Booking.com and direct channels.', ar: 'إدارة الحجوزات والضيوف والأسعار والأقفال الذكية والتنظيف والتقييمات والمدفوعات عبر Airbnb وBooking.com والقنوات المباشرة.' },
-      cta2: { en: 'Watch Platform Tour', ar: 'شاهد جولة المنصة' },
+      video:   '/hero_video_1.mp4',
+      eyebrow: { en: 'One connected hospitality operation', ar: 'عملية ضيافة مترابطة' },
+      heading: { en: 'Run your entire hospitality business from one platform', ar: 'أدِر أعمالك في الضيافة بالكامل من منصة واحدة' },
+      desc:    { en: 'Bring booking channels, guest communication, payments, access, housekeeping and owner reporting into one connected operation.', ar: 'اجمع قنوات الحجز وتواصل الضيوف والمدفوعات والوصول والتنظيف وتقارير الملاك في عملية تشغيل مترابطة.' },
     },
     {
-      badge:   { en: 'Full Guest Journey Automation', ar: 'أتمتة رحلة الضيف بالكامل' },
-      h1En: (<>Automate Every Step<br />of the{' '}<span className="bg-gradient-to-r from-[#10B981] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">Guest Journey<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      h1Ar: (<>أتمت كل خطوة في<br /><span className="bg-gradient-to-r from-[#10B981] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">رحلة الضيف<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      sub:  { en: 'From booking confirmation to checkout — StayHub handles messaging, ID verification, access codes, housekeeping tasks, and review requests on autopilot.', ar: 'من تأكيد الحجز حتى تسجيل المغادرة — يتولى StayHub الرسائل والتحقق من الهوية ورموز الوصول ومهام التنظيف وطلبات التقييم تلقائياً.' },
-      cta2: { en: 'Explore Features', ar: 'استكشف الميزات' },
+      video:   '/hero_2_banner.mp4',
+      eyebrow: { en: 'Connected guest operations', ar: 'عمليات ضيوف مترابطة' },
+      heading: { en: 'Coordinate every step of the guest journey', ar: 'نسّق كل خطوة في رحلة الضيف' },
+      desc:    { en: 'Keep guest messaging, verification, payments, check-in, smart-lock access and housekeeping aligned from booking to checkout.', ar: 'نسّق رسائل الضيوف والتحقق والمدفوعات وتسجيل الوصول والأقفال الذكية والتنظيف من الحجز حتى المغادرة.' },
     },
     {
-      badge:   { en: 'Built for Saudi Arabia', ar: 'مبني للسوق السعودي' },
-      h1En: (<>Built for Saudi Arabia's<br /><span className="bg-gradient-to-r from-[#7C69E8] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">Hospitality Market<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      h1Ar: (<>مبني لسوق الضيافة<br /><span className="bg-gradient-to-r from-[#7C69E8] to-[#25A4E8] bg-clip-text text-transparent relative inline-block">في المملكة العربية السعودية<span className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-[#bef264]" /></span></>),
-      sub:  { en: 'ZATCA-compliant invoicing, Absher ID verification, Ejar contracts, Gathern and AQAR integration — everything your Saudi property business needs to scale.', ar: 'فوترة متوافقة مع زاتكا، تحقق عبر أبشر، عقود إيجار، تكامل غثرن وعقار — كل ما تحتاجه للنمو في السوق السعودي.' },
-      cta2: { en: 'View Integrations', ar: 'عرض التكاملات' },
+      video:   '/hero_video_3.mp4',
+      eyebrow: { en: 'Designed for Saudi hospitality operators', ar: 'مصمم لمشغّلي الضيافة في السعودية' },
+      heading: { en: 'Support local operating needs with one connected platform', ar: 'ادعم احتياجات التشغيل المحلية عبر منصة مترابطة واحدة' },
+      desc:    { en: 'Operate in Arabic and English while coordinating local booking, payment, identity, invoicing and rental workflows.', ar: 'اعمل بالعربية والإنجليزية مع تنسيق إجراءات الحجز والدفع والهوية والفوترة والتأجير المحلية.' },
     },
   ];
+  const HERO_COUNT = HERO_SLIDES.length;
+  const HERO_INTERVAL = 6500;
 
-  const goToSlide = (idx: number) => {
-    setHeroDir(idx > heroSlide ? 1 : -1);
-    setHeroSlide(idx);
-    if (heroTimerRef.current) clearInterval(heroTimerRef.current);
-    heroTimerRef.current = setInterval(() => nextHeroSlide(), 5000);
-  };
-  const nextHeroSlide = () => {
-    setHeroDir(1);
-    setHeroSlide(s => (s + 1) % 3);
-  };
-  const prevHeroSlide = () => {
-    setHeroDir(-1);
-    setHeroSlide(s => (s + 2) % 3);
-  };
+  const [heroSlide, setHeroSlide]     = useState(0);
+  const [heroPlaying, setHeroPlaying] = useState(true);
+  const [heroReduced, setHeroReduced] = useState(false);
+  const [heroMobile, setHeroMobile]   = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Track reduced-motion + mobile viewport (client-only; keeps in sync on change).
   useEffect(() => {
-    heroTimerRef.current = setInterval(() => {
-      setHeroDir(1);
-      setHeroSlide(s => (s + 1) % 3);
-    }, 5000);
-    return () => { if (heroTimerRef.current) clearInterval(heroTimerRef.current); };
+    const rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mb = window.matchMedia('(max-width: 767px)');
+    const applyRm = () => setHeroReduced(rm.matches);
+    const applyMb = () => setHeroMobile(mb.matches);
+    applyRm(); applyMb();
+    rm.addEventListener('change', applyRm);
+    mb.addEventListener('change', applyMb);
+    return () => { rm.removeEventListener('change', applyRm); mb.removeEventListener('change', applyMb); };
   }, []);
+
+  // Single auto-rotation interval — reads latest state via a ref, never restarts,
+  // cleaned up on unmount. Paused manually, when reduced-motion is on, or tab hidden.
+  const heroTickRef = useRef<() => void>(() => {});
+  heroTickRef.current = () => {
+    if (heroPlaying && !heroReduced && !document.hidden) {
+      setHeroSlide(s => (s + 1) % HERO_COUNT);
+    }
+  };
+  useEffect(() => {
+    const id = setInterval(() => heroTickRef.current(), HERO_INTERVAL);
+    return () => clearInterval(id);
+  }, []);
+
+  // Pause the hero video when the tab is hidden; resume when visible (if allowed).
+  useEffect(() => {
+    const onVis = () => {
+      const v = heroVideoRef.current;
+      if (!v) return;
+      if (document.hidden) v.pause();
+      else if (!heroReduced && heroPlaying) v.play().catch(() => {});
+    };
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, [heroReduced, heroPlaying]);
+
+  const goToHeroSlide = (idx: number) => { setHeroSlide(idx); setHeroPlaying(false); };
+  const nextHeroSlide = () => { setHeroSlide(s => (s + 1) % HERO_COUNT); setHeroPlaying(false); };
+  const prevHeroSlide = () => { setHeroSlide(s => (s + HERO_COUNT - 1) % HERO_COUNT); setHeroPlaying(false); };
+  const heroData = HERO_SLIDES[heroSlide];
 
   const automationSteps = isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN;
   const outcomes = isAr ? OUTCOMES_AR : OUTCOMES_EN;
@@ -547,57 +504,59 @@ export default function HomepageClient() {
   return (
     <div className="bg-white overflow-x-hidden">
 
-      {/* ── 1. HERO ─────────────────────────────────────────── */}
-      <section className="relative flex items-center bg-white overflow-hidden" style={{ height: 'calc(100vh - 64px)' }}>
+      {/* ── 1. HERO — video carousel ─────────────────────────── */}
+      <section
+        className="relative flex items-center bg-white overflow-hidden"
+        style={{ height: 'calc(100svh - 64px)' }}
+        aria-roledescription="carousel"
+        aria-label={isAr ? 'أبرز ما يميّز StayHub' : 'StayHub highlights'}
+      >
+        {/* Stable semantic H1 — never rotates, anchors the page for SEO/AT */}
+        <h1 className="sr-only">{isAr ? HERO_SLIDES[0].heading.ar : HERO_SLIDES[0].heading.en}</h1>
 
-        {/* Right-side bg panel — two videos always mounted, opacity toggled per slide */}
+        {/* Video panel — full-bleed on mobile, side panel on desktop.
+            Dark backdrop stays put while the active video swaps (no white flash). */}
         <div
-          className={`absolute inset-y-0 ${isAr ? 'left-0 rounded-[0_80px_80px_0] lg:w-auto lg:[right:calc(50%_-_100px)]' : 'right-0 rounded-[80px_0_0_80px] lg:w-auto lg:[left:calc(50%_-_100px)]'} w-[58%] pointer-events-none hidden md:block overflow-hidden`}
+          className={`absolute inset-0 md:inset-y-0 md:w-[58%] bg-[#0F172A] pointer-events-none overflow-hidden ${isAr ? 'md:left-0 md:right-auto md:rounded-[0_80px_80px_0]' : 'md:right-0 md:left-auto md:rounded-[80px_0_0_80px]'}`}
+          aria-hidden="true"
         >
-          {/* Video 1 → hands off to Video 2 */}
-          <video
-            ref={bgVid1Ref}
-            src="/hero_video_1.mp4"
-            autoPlay muted playsInline
-            onEnded={() => setBgVideo(1)}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-            style={{ opacity: bgVideo === 0 ? 1 : 0 }}
-          />
-          {/* Video 2 → hands off to Video 3 */}
-          <video
-            ref={bgVid2Ref}
-            src="/hero_2_banner.mp4"
-            autoPlay muted playsInline
-            onEnded={() => setBgVideo(2)}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-            style={{ opacity: bgVideo === 1 ? 1 : 0 }}
-          />
-          {/* Video 3 → hands off back to Video 1 */}
-          <video
-            ref={bgVid3Ref}
-            src="/hero_video_3.mp4"
-            autoPlay muted playsInline
-            onEnded={() => setBgVideo(0)}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-            style={{ opacity: bgVideo === 2 ? 1 : 0 }}
-          />
-          {/* Subtle dark overlay */}
-          <div className="absolute inset-0 bg-black/15" />
+          {/* Desktop: only the active slide's video is mounted (remounts per slide) */}
+          {!heroMobile && (
+            <video
+              key={heroSlide}
+              ref={heroVideoRef}
+              src={heroData.video}
+              autoPlay={!heroReduced}
+              muted loop playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+          {/* Mobile: a single fixed video, never loads the other two */}
+          {heroMobile && (
+            <video
+              ref={heroVideoRef}
+              src="/hero_video_1.mp4"
+              autoPlay={!heroReduced}
+              muted loop playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+          {/* Legibility overlay — strong on mobile (text sits over video), subtle on desktop */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/35 md:from-black/25 md:via-black/10 md:to-transparent" />
 
-          {/* ── Marquee strip — bottom of video ── */}
-          <div className="absolute bottom-10 inset-x-0 overflow-hidden pointer-events-auto">
-            {/* Fade masks */}
+          {/* ── Marquee strip — desktop only, bottom of video ── */}
+          <div className="hidden md:block absolute bottom-10 inset-x-0 overflow-hidden">
             <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none"
               style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.6), transparent)' }} />
             <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none"
               style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.6), transparent)' }} />
-
-            {/* Scrolling track — cards duplicated for perfectly seamless loop */}
             <div className="flex gap-3 animate-marquee" style={{ width: 'max-content' }}>
-              {[...( isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN), ...( isAr ? AUTOMATION_STEPS_AR : AUTOMATION_STEPS_EN)].map((step, i) => (
+              {[...automationSteps, ...automationSteps].map((step, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-3 shrink-0 border border-white/60 shadow-lg hover:bg-white hover:shadow-xl hover:scale-[1.03] transition-all duration-200 cursor-default"
+                  className="flex items-start gap-3 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-3 shrink-0 border border-white/60 shadow-lg"
                   style={{ width: '190px' }}
                 >
                   <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: step.bg }}>
@@ -611,151 +570,163 @@ export default function HomepageClient() {
               ))}
             </div>
           </div>
-
         </div>
 
-        {/* ── MOBILE: full-screen background video + overlaid hero ── */}
-        <div className="md:hidden absolute inset-0 w-full h-full overflow-hidden">
-          <video
-            src="/hero_video_1.mp4"
-            autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          {/* Legibility gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
-        </div>
-
+        {/* ── MOBILE: overlaid content ── */}
         <div className={`md:hidden relative z-10 w-full px-6 ${isAr ? 'text-right' : 'text-left'}`}>
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 backdrop-blur-sm text-white text-[11px] font-bold rounded-full border border-white/25 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
-            {isAr ? HERO_SLIDES[0].badge.ar : HERO_SLIDES[0].badge.en}
-          </span>
-
-          <h1 className="text-[34px] leading-[1.14] font-extrabold text-white tracking-tight mb-4">
-            {isAr ? HERO_SLIDES[0].h1Ar : HERO_SLIDES[0].h1En}
-          </h1>
-
-          <p className="text-white/80 text-[15px] leading-relaxed mb-8 max-w-[340px]">
-            {isAr ? HERO_SLIDES[0].sub.ar : HERO_SLIDES[0].sub.en}
-          </p>
+          <div aria-live="polite">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 backdrop-blur-sm text-white text-[11px] font-bold rounded-full border border-white/25 mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#22c55e]" aria-hidden="true" />
+              {isAr ? heroData.eyebrow.ar : heroData.eyebrow.en}
+            </span>
+            <p className="text-[32px] leading-[1.16] font-extrabold text-white tracking-tight mb-4">
+              {isAr ? heroData.heading.ar : heroData.heading.en}
+            </p>
+            <p className="text-white/80 text-[15px] leading-relaxed mb-8 max-w-[360px]">
+              {isAr ? heroData.desc.ar : heroData.desc.en}
+            </p>
+          </div>
 
           <div className="flex flex-col gap-3">
             <button
               onClick={openModal}
-              className={`inline-flex items-center justify-center gap-2.5 w-full px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-500/30`}
+              className="inline-flex items-center justify-center gap-2.5 w-full min-h-[48px] px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]"
             >
-              {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-              <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
+              {isAr ? 'احجز عرضاً مخصصاً' : 'Book a tailored demo'}
+              <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} aria-hidden="true" />
             </button>
+            <Link
+              href="/features"
+              className="inline-flex items-center justify-center gap-2.5 w-full min-h-[48px] px-7 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-bold rounded-xl text-sm transition-all hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]"
+            >
+              {isAr ? 'استكشف المنصة' : 'Explore the platform'}
+            </Link>
+          </div>
+
+          <p className="text-white/70 text-[11px] mt-4">
+            {isAr ? '20 دقيقة · مخصص لمحفظتك · بدون التزام' : '20 minutes · Tailored to your portfolio · No commitment'}
+          </p>
+
+          {/* Compact controls */}
+          <div className={`flex items-center gap-4 mt-6 ${isAr ? 'flex-row-reverse' : ''}`}>
             <button
-              onClick={openModal}
-              className="inline-flex items-center justify-center gap-2.5 w-full px-7 py-4 bg-white/10 backdrop-blur-sm border border-white/25 text-white font-bold rounded-xl text-sm transition-all hover:bg-white/20"
+              onClick={() => setHeroPlaying(p => !p)}
+              aria-label={heroPlaying ? (isAr ? 'إيقاف العرض التلقائي' : 'Pause slideshow') : (isAr ? 'تشغيل العرض التلقائي' : 'Play slideshow')}
+              aria-pressed={!heroPlaying}
+              className="w-9 h-9 rounded-full bg-white/15 border border-white/25 flex items-center justify-center text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
-              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                <div className="w-0 h-0 border-l-[7px] border-l-white border-y-[4.5px] border-y-transparent ms-0.5" />
-              </div>
-              {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
+              {heroPlaying ? <Pause size={14} /> : <Play size={14} />}
             </button>
+            <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : ''}`} role="tablist" aria-label={isAr ? 'شرائح العرض' : 'Slides'}>
+              {HERO_SLIDES.map((_, i) => (
+                <button
+                  key={i}
+                  role="tab"
+                  aria-selected={heroSlide === i}
+                  onClick={() => goToHeroSlide(i)}
+                  aria-label={isAr ? `الشريحة ${i + 1}` : `Go to slide ${i + 1}`}
+                  className={`rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${heroSlide === i ? 'w-6 h-2.5 bg-white' : 'w-2.5 h-2.5 bg-white/40 hover:bg-white/60'}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="hidden md:block relative max-w-[1400px] mx-auto px-4 md:px-8 w-full">
-          <div className={`grid lg:grid-cols-[42%_58%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full`}>
+        {/* ── DESKTOP: left content column + controls ── */}
+        <div className="hidden md:block relative z-10 max-w-[1400px] mx-auto px-4 md:px-8 w-full">
+          <div className="grid lg:grid-cols-[42%_58%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full">
 
-            {/* ── LEFT: slider ── */}
             <div className={`${isAr ? 'text-right' : 'text-left'} order-2 md:order-1 flex flex-col`}>
 
-              {/* Slide content — badge + headline + subtext only */}
-              <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
-                <AnimatePresence mode="wait" custom={heroDir}>
+              {/* Rotating content — eyebrow + heading (as <p>) + description */}
+              <div className="relative overflow-hidden" style={{ minHeight: '300px' }} aria-live="polite">
+                <AnimatePresence mode="wait">
                   <motion.div
                     key={heroSlide}
-                    custom={heroDir}
-                    variants={{
-                      enter:  (d: number) => ({ opacity: 0, x: d * 48 }),
-                      center: { opacity: 1, x: 0 },
-                      exit:   (d: number) => ({ opacity: 0, x: d * -48 }),
-                    }}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    initial={heroReduced ? false : { opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={heroReduced ? { opacity: 0 } : { opacity: 0, x: -40 }}
+                    transition={{ duration: heroReduced ? 0.2 : 0.45, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {/* Badge */}
                     <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#f0fdf4] text-[#15803d] text-[11px] font-bold rounded-full border border-[#bbf7d0] mb-7">
-                      <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
-                      {isAr ? HERO_SLIDES[heroSlide].badge.ar : HERO_SLIDES[heroSlide].badge.en}
+                      <span className="w-2 h-2 rounded-full bg-[#22c55e]" aria-hidden="true" />
+                      {isAr ? heroData.eyebrow.ar : heroData.eyebrow.en}
                     </span>
-
-                    {/* Headline */}
-                    <h1 className="text-4xl md:text-5xl lg:text-[52px] font-extrabold text-[#0F172A] leading-[1.1] tracking-tight mb-5">
-                      {isAr ? HERO_SLIDES[heroSlide].h1Ar : HERO_SLIDES[heroSlide].h1En}
-                    </h1>
-
-                    {/* Sub-headline */}
-                    <p className="text-slate-500 text-sm md:text-base max-w-[360px] leading-relaxed">
-                      {isAr ? HERO_SLIDES[heroSlide].sub.ar : HERO_SLIDES[heroSlide].sub.en}
+                    <p className="text-4xl md:text-5xl lg:text-[46px] font-extrabold text-[#0F172A] leading-[1.12] tracking-tight mb-5">
+                      {isAr ? heroData.heading.ar : heroData.heading.en}
+                    </p>
+                    <p className="text-slate-500 text-sm md:text-base max-w-[400px] leading-relaxed">
+                      {isAr ? heroData.desc.ar : heroData.desc.en}
                     </p>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* ── CTAs — frozen (outside AnimatePresence) ── */}
+              {/* CTAs — frozen (outside rotation) */}
               <div className={`flex items-center gap-4 mt-8 flex-wrap ${isAr ? 'flex-row-reverse justify-end' : ''}`}>
                 <button
                   onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2.5 min-h-[48px] px-7 py-4 bg-[#25A4E8] hover:bg-[#1A8FD1] text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-blue-400/30 hover:shadow-blue-400/50 hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25A4E8] focus-visible:ring-offset-2"
                 >
-                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
-                  <ArrowRight size={15} />
+                  {isAr ? 'احجز عرضاً مخصصاً' : 'Book a tailored demo'}
+                  <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} aria-hidden="true" />
                 </button>
-                <button
-                  onClick={openModal}
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md"
+                <Link
+                  href="/features"
+                  className="inline-flex items-center gap-2.5 min-h-[48px] px-7 py-4 bg-white border border-slate-200 hover:border-slate-300 text-[#0F172A] font-bold rounded-xl text-sm transition-all hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F172A] focus-visible:ring-offset-2"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#25A4E8]/10 flex items-center justify-center shrink-0">
-                    <div className="w-0 h-0 border-l-[7px] border-l-[#25A4E8] border-y-[4.5px] border-y-transparent ms-0.5" />
-                  </div>
-                  {isAr ? 'شاهد جولة المنصة' : 'Watch Platform Tour'}
-                </button>
+                  {isAr ? 'استكشف المنصة' : 'Explore the platform'}
+                </Link>
               </div>
 
-              {/* ── Slider controls ── */}
-              <div className={`flex items-center gap-5 mt-2 ${isAr ? 'flex-row-reverse' : ''}`}>
-                {/* Arrows */}
+              {/* Microcopy */}
+              <p className="text-slate-400 text-xs mt-4">
+                {isAr ? '20 دقيقة · مخصص لمحفظتك · بدون التزام' : '20 minutes · Tailored to your portfolio · No commitment'}
+              </p>
+
+              {/* Controls — arrows + pagination + pause/play */}
+              <div className={`flex items-center gap-4 mt-6 ${isAr ? 'flex-row-reverse' : ''}`}>
                 <button
-                  onClick={() => { prevHeroSlide(); }}
-                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group"
-                  aria-label="Previous slide"
+                  onClick={prevHeroSlide}
+                  aria-label={isAr ? 'الشريحة السابقة' : 'Previous slide'}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25A4E8]"
                 >
-                  <ChevronLeft size={16} className="text-slate-500 group-hover:text-[#25A4E8] transition-colors" />
+                  <ChevronLeft size={16} className={`text-slate-500 group-hover:text-[#25A4E8] transition-colors ${isAr ? 'rotate-180' : ''}`} />
                 </button>
                 <button
-                  onClick={() => { nextHeroSlide(); }}
-                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group"
-                  aria-label="Next slide"
+                  onClick={nextHeroSlide}
+                  aria-label={isAr ? 'الشريحة التالية' : 'Next slide'}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center transition-all shadow-sm group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25A4E8]"
                 >
-                  <ChevronRight size={16} className="text-slate-500 group-hover:text-[#25A4E8] transition-colors" />
+                  <ChevronRight size={16} className={`text-slate-500 group-hover:text-[#25A4E8] transition-colors ${isAr ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* Dot indicators */}
-                <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : ''}`}>
-                  {[0, 1, 2].map(i => (
+                <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : ''}`} role="tablist" aria-label={isAr ? 'شرائح العرض' : 'Slides'}>
+                  {HERO_SLIDES.map((_, i) => (
                     <button
                       key={i}
-                      onClick={() => goToSlide(i)}
-                      className={`rounded-full transition-all duration-300 ${heroSlide === i ? 'w-6 h-2.5 bg-[#25A4E8]' : 'w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300'}`}
-                      aria-label={`Go to slide ${i + 1}`}
+                      role="tab"
+                      aria-selected={heroSlide === i}
+                      onClick={() => goToHeroSlide(i)}
+                      aria-label={isAr ? `الشريحة ${i + 1}` : `Go to slide ${i + 1}`}
+                      className={`rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25A4E8] ${heroSlide === i ? 'w-6 h-2.5 bg-[#25A4E8]' : 'w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300'}`}
                     />
                   ))}
                 </div>
+
+                <button
+                  onClick={() => setHeroPlaying(p => !p)}
+                  aria-label={heroPlaying ? (isAr ? 'إيقاف العرض التلقائي' : 'Pause slideshow') : (isAr ? 'تشغيل العرض التلقائي' : 'Play slideshow')}
+                  aria-pressed={!heroPlaying}
+                  className={`w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-[#25A4E8] flex items-center justify-center text-slate-500 hover:text-[#25A4E8] transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25A4E8] ${isAr ? 'me-auto' : 'ms-auto'}`}
+                >
+                  {heroPlaying ? <Pause size={15} /> : <Play size={15} />}
+                </button>
               </div>
-
-
             </div>
 
-            {/* ── RIGHT: empty — marquee is inside the bg panel ── */}
-            <div className="hidden md:block order-1 md:order-2 h-[600px]" />
+            {/* Right column — video shows through the panel behind */}
+            <div className="hidden md:block order-1 md:order-2 h-[600px] pointer-events-none" />
 
           </div>
         </div>
@@ -1008,7 +979,7 @@ export default function HomepageClient() {
                   onClick={openModal}
                   className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#0F172A] text-white font-bold rounded-full text-sm hover:bg-[#1e293b] transition-colors"
                 >
-                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Free Demo'}
+                  {isAr ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}
                   <ArrowRight size={15} className={isAr ? 'rotate-180' : ''} />
                 </button>
               </div>
