@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, CheckCircle2, AlertTriangle, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertTriangle, ChevronDown, ChevronRight, BadgeCheck } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { useState } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -22,6 +22,10 @@ interface IntegrationData {
   arabicH1: string;
   subtitle: string;
   arSubtitle?: string;
+  seoContent?: string;
+  arSeoContent?: string;
+  trustBadge?: string;
+  arTrustBadge?: string;
   color: string;
   stats: Stat[];
   arStats?: Stat[];
@@ -90,6 +94,8 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
   const badge        = isAr ? (integration.arBadge   ?? integration.badge)  : integration.badge;
   const h1           = isAr ? integration.arabicH1                           : integration.h1;
   const subtitle     = isAr ? (integration.arSubtitle ?? integration.subtitle) : integration.subtitle;
+  const seoContent   = isAr ? (integration.arSeoContent ?? integration.seoContent) : integration.seoContent;
+  const trustBadge   = isAr ? (integration.arTrustBadge ?? integration.trustBadge) : integration.trustBadge;
   const stats        = isAr ? (integration.arStats   ?? integration.stats)  : integration.stats;
   const painPoints   = isAr ? (integration.arPainPoints ?? integration.painPoints) : integration.painPoints;
   const benefits     = isAr ? (integration.arBenefits ?? integration.benefits)    : integration.benefits;
@@ -176,7 +182,7 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
                 className="px-8 py-4 rounded-xl text-white font-semibold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-105"
                 style={{ backgroundColor: color }}
               >
-                {isAr ? `اربط ${name} اليوم` : `Connect ${name} Today`}
+                {t.buttons.bookDemoShort}
               </Link>
               <Link
                 href="/integrations"
@@ -190,6 +196,15 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
         </div>
       </section>
 
+      {/* SEO content block — short intro paragraph explaining the integration for search + first-time readers */}
+      {seoContent && (
+        <section className="py-12 bg-white border-b border-slate-100">
+          <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
+            <p className="text-slate-600 text-base leading-relaxed">{seoContent}</p>
+          </div>
+        </section>
+      )}
+
       {/* Stats */}
       <section className="py-16 bg-white border-b border-slate-100">
         <div className="max-w-5xl mx-auto px-4 md:px-8">
@@ -201,6 +216,17 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
               </motion.div>
             ))}
           </div>
+          {trustBadge && (
+            <motion.div {...fadeUp(0.3)} className="mt-8 flex justify-center">
+              <span
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                style={{ backgroundColor: `${color}12`, color }}
+              >
+                <BadgeCheck size={14} />
+                {trustBadge}
+              </span>
+            </motion.div>
+          )}
         </div>
       </section>
 
