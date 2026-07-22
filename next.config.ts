@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    // First-party brand logos in /public/logos are provided as SVGs; next/image
+    // refuses to serve SVG unless this is enabled. Locked down with a strict CSP.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
   async redirects() {
     // Permanent redirects for feature-menu URLs that were publicly linked before the
     // navigation fix (and may be indexed). Each destination is a semantically verified

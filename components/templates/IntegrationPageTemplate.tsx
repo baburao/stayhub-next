@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2, AlertTriangle, ChevronDown, ChevronRight, BadgeCheck } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
@@ -187,20 +186,19 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
 
           <div className="text-center">
             <motion.div {...fadeUp(0.05)}>
-              <div className="inline-flex items-center gap-3 mb-6">
+              <div className="flex flex-col items-center gap-5 mb-7">
                 {integration.logo ? (
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white border border-slate-100 shadow-lg p-2.5">
-                    <Image
+                  <div className="flex items-center justify-center h-20 md:h-28">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={integration.logo}
                       alt={integration.logoAlt ?? integration.name}
-                      width={56}
-                      height={56}
-                      className="w-full h-full object-contain"
+                      className="max-h-full w-auto max-w-[320px] object-contain"
                     />
                   </div>
                 ) : (
                   <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg"
+                    className="w-20 h-20 md:w-24 md:h-24 rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-lg"
                     style={{ backgroundColor: color }}
                   >
                     {integration.name.charAt(0)}

@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShieldCheck, Rocket, Phone, Mail, Globe, Flag, Check } from 'lucide-react';
+import { ShieldCheck, Rocket, Phone, Mail, Globe, Flag, Check, MapPin } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 /* ── Social icon SVGs ──────────────────────────────────── */
@@ -174,14 +174,22 @@ export default function Footer() {
 
             {/* Contact */}
             <div className="space-y-2">
-              <a href="tel:0583999902" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
-                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Phone size={14} /></span>
-                0583999902
-              </a>
-              <a href="mailto:info@stayhub.sa" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
-                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Mail size={14} /></span>
-                info@stayhub.sa
-              </a>
+              {/* Address */}
+              <div className="flex items-center gap-2.5 text-sm text-slate-400">
+                <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-slate-300 shrink-0"><MapPin size={14} /></span>
+                {isAr ? 'الرياض 13323، المملكة العربية السعودية' : 'Riyadh 13323, Saudi Arabia'}
+              </div>
+              {/* Email + phone in one row */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <a href="mailto:info@stayhub.sa" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
+                  <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Mail size={14} /></span>
+                  info@stayhub.sa
+                </a>
+                <a href="tel:0583999902" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
+                  <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Phone size={14} /></span>
+                  0583999902
+                </a>
+              </div>
               <a href="https://www.stayhub.sa" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group">
                 <span className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#25A4E8]/20 transition-colors text-slate-300"><Globe size={14} /></span>
                 www.stayhub.sa

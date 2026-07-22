@@ -1258,12 +1258,12 @@ export default function HomepageClient() {
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { src: '/logos/airbnb.webp',                  name: 'Airbnb',                   badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'airbnb' },
-              { src: '/logos/booking-com.webp',             name: 'Booking.com',               badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'booking-com' },
-              { src: '/logos/agoda.webp',                   name: 'Agoda',                     badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'agoda' },
-              { src: '/logos/google-vacation-rentals.webp', name: 'Google Vacation Rentals',   badge_en: 'Search',  badge_ar: 'بحث',         slug: 'google-vacation-rentals' },
+              { src: '/logos/Airbnb.svg',                  name: 'Airbnb',                   badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'airbnb' },
+              { src: '/logos/Booking.com.svg',             name: 'Booking.com',               badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'booking-com' },
+              { src: '/logos/Agoda.svg',                   name: 'Agoda',                     badge_en: 'OTA',     badge_ar: 'OTA',         slug: 'agoda' },
+              { src: '/logos/GoogleVR.svg', name: 'Google Vacation Rentals',   badge_en: 'Search',  badge_ar: 'بحث',         slug: 'google-vacation-rentals' },
               { src: '/logos/gathern.webp',                 name: 'Gathern',                   badge_en: 'Local',   badge_ar: 'محلي',        slug: 'gathern' },
-              { src: '/logos/aqar.webp',                    name: 'AQAR',                      badge_en: 'Local',   badge_ar: 'محلي',        slug: 'aqar' },
+              { src: '/logos/AQAR.png',                    name: 'AQAR',                      badge_en: 'Local',   badge_ar: 'محلي',        slug: 'aqar' },
               { src: '/logos/pricelabs.webp',               name: 'PriceLabs',                 badge_en: 'Pricing', badge_ar: 'تسعير',       slug: 'pricelabs' },
               { src: '/logos/tuya.webp',                    name: 'Tuya',                      badge_en: 'IoT',     badge_ar: 'إنترنت الأشياء', slug: 'tuya' },
               { src: '/logos/ttlock.webp',                  name: 'TTLock',                    badge_en: 'Locks',   badge_ar: 'أقفال',       slug: 'ttlock' },

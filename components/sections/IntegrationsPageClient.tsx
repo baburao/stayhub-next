@@ -21,13 +21,13 @@ const fadeUp = (delay = 0) => ({
 /* ── All integrations — source of truth ─────────────────── */
 const INTEGRATIONS = [
   /* OTA */
-  { slug: 'aqar',                    en: 'AQAR',                  ar: 'عقار',              logo: '/logos/aqar.webp',                     cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#1B5E93' },
-  { slug: 'ejar-ota',                en: 'Ejar',                  ar: 'إيجار',             logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#1C7C54' },
-  { slug: 'airbnb',                  en: 'Airbnb',                ar: 'Airbnb',            logo: '/logos/airbnb.webp',                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#FF5A5F' },
-  { slug: 'booking-com',             en: 'Booking.com',           ar: 'Booking.com',       logo: '/logos/booking-com.webp',              cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#003580' },
-  { slug: 'agoda',                   en: 'AGODA',                 ar: 'أجودا',             logo: '/logos/agoda.webp',                    cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#E31837' },
-  { slug: 'google-vacation-rentals', en: 'Google VR',             ar: 'Google VR',         logo: '/logos/google-vacation-rentals.webp',  cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#4285F4' },
-  { slug: 'qotoon',                  en: 'Qotoon',                ar: 'قطون',              logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#7C4DFF' },
+  { slug: 'aqar',                    en: 'AQAR',                  ar: 'عقار',              logo: '/logos/AQAR.png',                     cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#1B5E93' },
+  { slug: 'ejar-ota',                en: 'Ejar',                  ar: 'إيجار',             logo: '/logos/EJAR.svg',                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#1C7C54' },
+  { slug: 'airbnb',                  en: 'Airbnb',                ar: 'Airbnb',            logo: '/logos/Airbnb.svg',                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#FF5A5F' },
+  { slug: 'booking-com',             en: 'Booking.com',           ar: 'Booking.com',       logo: '/logos/Booking.com.svg',              cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#003580' },
+  { slug: 'agoda',                   en: 'AGODA',                 ar: 'أجودا',             logo: '/logos/Agoda.svg',                    cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#E31837' },
+  { slug: 'google-vacation-rentals', en: 'Google VR',             ar: 'Google VR',         logo: '/logos/GoogleVR.svg',  cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#4285F4' },
+  { slug: 'qotoon',                  en: 'Qotoon',                ar: 'قطون',              logo: '/logos/QOTOON.png',                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#7C4DFF' },
   { slug: 'attiude',                 en: 'Attiude',               ar: 'Attiude',           logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#00897B' },
   { slug: 'almosafer',               en: 'Almosafer',             ar: 'المسافر',           logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#0D47A1' },
   { slug: 'darent',                  en: 'Darent',                ar: 'دارنت',             logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#546E7A' },
@@ -36,7 +36,7 @@ const INTEGRATIONS = [
   { slug: 'absher',                  en: 'Absher',                ar: 'أبشر',              logo: '/logos/absher.png',                    cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#00695C' },
   { slug: 'shmoos',                  en: 'Shmoos',                ar: 'شموس',              logo: '/logos/shomoos.webp',                  cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1565C0' },
   { slug: 'mot',                     en: 'Ministry of Tourism',   ar: 'وزارة السياحة',    logo: null,                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#6A1B9A' },
-  { slug: 'ejar-gov',                en: 'Ejar',                  ar: 'إيجار',             logo: null,                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1C7C54' },
+  { slug: 'ejar-gov',                en: 'Ejar',                  ar: 'إيجار',             logo: '/logos/EJAR.svg',                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1C7C54' },
   /* Dynamic Pricing */
   { slug: 'pricelabs',               en: 'PriceLabs',             ar: 'PriceLabs',         logo: '/logos/pricelabs.webp',                cat: 'Pricing',       badge_en: 'Pricing',      badge_ar: 'تسعير',        soon: false, color: '#E65100' },
   /* Smart Home */

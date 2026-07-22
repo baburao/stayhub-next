@@ -211,12 +211,12 @@ const FEATURE_CATEGORIES_AR = [
 
 const INTEGRATIONS = [
   /* ── OTA (order matches spreadsheet: AQAR → Ejar → Airbnb → Booking → AGODA → Google VR → Qotoon → Attiude → Soon) ── */
-  { slug: 'aqar',                    en: 'AQAR',                 ar: 'عقار',         logo: '/logos/aqar.webp',                    badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'aqar',                    en: 'AQAR',                 ar: 'عقار',         logo: '/logos/AQAR.png',                    badge_en: 'OTA',         badge_ar: 'OTA' },
   { slug: 'ejar-ota',                en: 'Ejar',                 ar: 'إيجار',        logo: null,                                  badge_en: 'OTA',         badge_ar: 'OTA' },
-  { slug: 'airbnb',                  en: 'Airbnb',               ar: 'Airbnb',       logo: '/logos/airbnb.webp',                  badge_en: 'OTA',         badge_ar: 'OTA' },
-  { slug: 'booking-com',             en: 'Booking.com',          ar: 'Booking',      logo: '/logos/booking-com.webp',             badge_en: 'OTA',         badge_ar: 'OTA' },
-  { slug: 'agoda',                   en: 'AGODA',                ar: 'أجودا',        logo: '/logos/agoda.webp',                   badge_en: 'OTA',         badge_ar: 'OTA' },
-  { slug: 'google-vacation-rentals', en: 'Google VR',            ar: 'Google VR',    logo: '/logos/google-vacation-rentals.webp', badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'airbnb',                  en: 'Airbnb',               ar: 'Airbnb',       logo: '/logos/Airbnb.svg',                  badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'booking-com',             en: 'Booking.com',          ar: 'Booking',      logo: '/logos/Booking.com.svg',             badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'agoda',                   en: 'AGODA',                ar: 'أجودا',        logo: '/logos/Agoda.svg',                   badge_en: 'OTA',         badge_ar: 'OTA' },
+  { slug: 'google-vacation-rentals', en: 'Google VR',            ar: 'Google VR',    logo: '/logos/GoogleVR.svg', badge_en: 'OTA',         badge_ar: 'OTA' },
   { slug: 'qotoon',                  en: 'Qotoon',               ar: 'قطون',         logo: null,                                  badge_en: 'OTA',         badge_ar: 'OTA' },
   { slug: 'attiude',                 en: 'Attiude',              ar: 'Attiude',      logo: null,                                  badge_en: 'OTA',         badge_ar: 'OTA' },
   { slug: 'almosafer',               en: 'Almosafer',            ar: 'المسافر',      logo: null,                                  badge_en: 'Soon',        badge_ar: 'قريباً' },

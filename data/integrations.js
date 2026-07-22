@@ -23,7 +23,7 @@ const integrationsList = [
     benefitsHeading: 'Everything Airbnb, automated from one dashboard',
     workflowHeading: 'Connect Airbnb in minutes',
     readyCtaHeading: 'Ready to connect Airbnb?',
-    logo: '/logos/airbnb.webp',
+    logo: '/logos/Airbnb.svg',
     logoAlt: 'Airbnb',
     color: '#FF5A5F',
     stats: [
@@ -79,7 +79,7 @@ const integrationsList = [
     workflowHeading: 'Connect Booking.com in minutes',
     readyCtaHeading: 'Ready to connect Booking.com?',
     readyCtaDesc: 'Book a free demo and see group inventory, VCC payment collection, and real-time sync working on your own properties in under 5 minutes.',
-    logo: '/logos/booking-com.webp',
+    logo: '/logos/Booking.com.svg',
     logoAlt: 'Booking.com',
     color: '#003580',
     stats: [
@@ -135,7 +135,7 @@ const integrationsList = [
     benefitsHeading: 'Everything Agoda, automated from one dashboard',
     workflowHeading: 'Connect Agoda in minutes',
     readyCtaHeading: 'Ready to connect Agoda?',
-    logo: '/logos/agoda.webp',
+    logo: '/logos/Agoda.svg',
     logoAlt: 'Agoda',
     color: '#E31837',
     stats: [
@@ -282,7 +282,7 @@ const integrationsList = [
     workflowHeading: 'Get on Google in minutes',
     readyCtaHeading: 'Ready to show up on Google?',
     readyCtaDesc: 'Book a free demo and see your units appear across Google Search, Maps, and Travel — with every booking commission-free.',
-    logo: '/logos/google-vacation-rentals.webp',
+    logo: '/logos/GoogleVR.svg',
     logoAlt: 'Google Vacation Rentals',
     color: '#4285F4',
     stats: [
@@ -431,7 +431,7 @@ const integrationsList = [
     seoContent:
       "Aqar is Saudi Arabia's leading real estate marketplace, connecting property managers with renters across the Kingdom's major cities. For short-term rental operators, Aqar's dedicated Bookings section is a key local channel alongside international platforms like Airbnb and Booking.com. StayHub's Aqar integration works as a Saudi short-term rental channel manager built for this market — keeping your Aqar listings, calendar, and pricing in sync with every other channel you manage, without manual double-entry. Whether you run a handful of units or a full multi-property portfolio, connecting Aqar to StayHub means every inquiry lands in one inbox, every booking updates your calendar in real time, and your team spends less time on admin and more time growing occupancy.",
     trustBadge: "Aqar App Company is licensed by Saudi Arabia's Ministry of Tourism — License No. 73106505",
-    logo: '/logos/aqar.webp',
+    logo: '/logos/AQAR.png',
     logoAlt: 'Aqar',
     benefitsHeading: 'Everything runs automatically from one dashboard',
     arBenefitsHeading: 'كل شيء يعمل تلقائيًا من لوحة تحكم واحدة',
@@ -471,6 +471,8 @@ const integrationsList = [
     name: 'Ejar',
     tagline: "Saudi Arabia's official rental network",
     arTagline: 'شبكة الإيجار الرسمية في السعودية',
+    logo: '/logos/EJAR.svg',
+    logoAlt: 'Ejar',
     seoTitle: 'Ejar Integration for Monthly & Annual Rentals in Saudi Arabia',
     metaDescription:
       'Connect Ejar to StayHub to run monthly and annual rentals alongside your short-stay channels — synced availability, tenant messaging, and REGA-compliant contract workflows in one dashboard.',
@@ -528,6 +530,8 @@ const integrationsList = [
     name: 'Qotoon',
     tagline: 'Saudi Arabia’s newest premium stay platform',
     arTagline: 'أحدث منصة إقامات فاخرة في السعودية',
+    logo: '/logos/QOTOON.png',
+    logoAlt: 'Qotoon',
     seoTitle: 'Qotoon Integration for Vacation Rentals in Saudi Arabia',
     metaDescription:
       "Connect Qotoon to StayHub and put your premium Saudi units on the Kingdom's newest hospitality platform — with calendars, rates, and Arabic guest messaging synced automatically.",
@@ -833,6 +837,8 @@ const integrationsList = [
     name: 'Ejar',
     tagline: 'Register and document official rental contracts through StayHub',
     arTagline: 'سجّل ووثّق عقود الإيجار الرسمية عبر StayHub',
+    logo: '/logos/EJAR.svg',
+    logoAlt: 'Ejar',
     seoTitle: 'Ejar Contract Registration Integration | StayHub Saudi Arabia',
     metaDescription:
       'Register and verify rental contracts through Ejar with StayHub. Stay compliant with Saudi rental regulations and automate documentation.',
