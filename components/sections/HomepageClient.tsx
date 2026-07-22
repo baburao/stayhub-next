@@ -518,7 +518,7 @@ export default function HomepageClient() {
         {/* Video panel — full-bleed on mobile, side panel on desktop.
             Dark backdrop stays put while the active video swaps (no white flash). */}
         <div
-          className={`absolute inset-0 md:inset-y-0 md:w-[58%] bg-[#0F172A] pointer-events-none overflow-hidden ${isAr ? 'md:left-0 md:right-auto md:rounded-[0_80px_80px_0]' : 'md:right-0 md:left-auto md:rounded-[80px_0_0_80px]'}`}
+          className={`absolute inset-0 md:inset-y-0 md:w-[calc(0.58*min(100%,1400px)+max(0px,(100%-1400px)/2))] bg-[#0F172A] pointer-events-none overflow-hidden ${isAr ? 'md:left-0 md:right-auto md:rounded-[0_80px_80px_0]' : 'md:right-0 md:left-auto md:rounded-[80px_0_0_80px]'}`}
           aria-hidden="true"
         >
           {/* Desktop: only the active slide's video is mounted (remounts per slide) */}
@@ -637,7 +637,7 @@ export default function HomepageClient() {
         <div className="hidden md:block relative z-10 max-w-[1400px] mx-auto px-4 md:px-8 w-full">
           <div className="grid lg:grid-cols-[42%_58%] md:grid-cols-2 gap-6 lg:gap-10 items-center h-full">
 
-            <div className={`${isAr ? 'text-right' : 'text-left'} order-2 md:order-1 flex flex-col`}>
+            <div className={`${isAr ? 'text-right' : 'text-left'} order-2 md:order-1 flex flex-col lg:pe-8`}>
 
               {/* Rotating content — eyebrow + heading (as <p>) + description */}
               <div className="relative overflow-hidden" style={{ minHeight: '300px' }} aria-live="polite">
