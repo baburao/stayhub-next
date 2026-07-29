@@ -24,13 +24,13 @@ const FEATURE_CATEGORIES_EN = [
     color: '#25A4E8',
     icon: Globe,
     items: [
-      { slug: 'channel-manager/aqar',    href: '/integrations/aqar',                    label: 'AQAR',         desc: 'Saudi local OTA platform',         icon: Building2,  isNew: false },
-      { slug: 'channel-manager/ejar',    href: '/integrations/ejar-ota',                label: 'Ejar',         desc: 'Government rental platform',       icon: FileText,   isNew: false },
-      { slug: 'channel-manager/airbnb',  href: '/integrations/airbnb',                  label: 'Airbnb',       desc: 'Global short-term rental OTA',     icon: Globe,      isNew: false },
-      { slug: 'channel-manager/booking', href: '/integrations/booking-com',             label: 'Booking.com',  desc: 'World\'s largest OTA platform',   icon: Globe,      isNew: false },
-      { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   label: 'AGODA',        desc: 'Asia-Pacific OTA leader',          icon: Globe,      isNew: false },
-      { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
-      { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  label: 'Qotoon',       desc: 'Saudi rental platform',            icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/aqar',    href: '/integrations/aqar',                    logo: '/logos/AQAR.png',        label: 'AQAR',         desc: 'Saudi local OTA platform',         icon: Building2,  isNew: false },
+      { slug: 'channel-manager/ejar',    href: '/integrations/ejar-ota',                logo: '/logos/EJAR.svg',        label: 'Ejar',         desc: 'Government rental platform',       icon: FileText,   isNew: false },
+      { slug: 'channel-manager/airbnb',  href: '/integrations/airbnb',                  logo: '/logos/Airbnb.svg',      label: 'Airbnb',       desc: 'Global short-term rental OTA',     icon: Globe,      isNew: false },
+      { slug: 'channel-manager/booking', href: '/integrations/booking-com',             logo: '/logos/Booking.com.svg', label: 'Booking.com',  desc: 'World\'s largest OTA platform',   icon: Globe,      isNew: false },
+      { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   logo: '/logos/Agoda.svg',       label: 'AGODA',        desc: 'Asia-Pacific OTA leader',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', logo: '/logos/GoogleVR.svg',    label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  logo: '/logos/QOTOON.png',      label: 'Qotoon',       desc: 'Saudi rental platform',            icon: Globe,      isNew: true  },
       { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 label: 'Attiude',      desc: 'Coming soon',                      icon: Globe,      isNew: true  },
     ],
   },
@@ -55,10 +55,10 @@ const FEATURE_CATEGORIES_EN = [
     icon: Zap,
     items: [
       { slug: 'guest-journey',         label: 'Guest Journey',  desc: '7-step automated guest flow',      icon: Zap,           isNew: false },
-      { slug: 'automated-messaging',   label: 'WhatsApp',       desc: 'Guest comms on autopilot',         icon: MessageSquare, isNew: false },
+      { slug: 'automated-messaging',   logo: '/icons/whatsapp.svg', label: 'WhatsApp',       desc: 'Guest comms on autopilot',         icon: MessageSquare, isNew: false },
       { slug: 'sms-notifications',     label: 'SMS',            desc: 'Automated SMS via VFirst',         icon: Smartphone,    isNew: false },
-      { slug: 'tuya-integration',      label: 'Tuya',           desc: 'Smart home & IoT automation',      icon: Cpu,           isNew: false },
-      { slug: 'ttlock-integration',    label: 'TTLock',         desc: 'Smart lock door access',           icon: Lock,          isNew: false },
+      { slug: 'tuya-integration',      logo: '/logos/tuya.webp',   label: 'Tuya',           desc: 'Smart home & IoT automation',      icon: Cpu,           isNew: false },
+      { slug: 'ttlock-integration',    logo: '/logos/ttlock.webp', label: 'TTLock',         desc: 'Smart lock door access',           icon: Lock,          isNew: false },
     ],
   },
   {
@@ -120,13 +120,13 @@ const FEATURE_CATEGORIES_AR = [
     color: '#25A4E8',
     icon: Globe,
     items: [
-      { slug: 'channel-manager/aqar',    href: '/integrations/aqar',                    label: 'عقار',         desc: 'منصة إيجار سعودية محلية',          icon: Building2,  isNew: false },
-      { slug: 'channel-manager/ejar',    href: '/integrations/ejar-ota',                label: 'إيجار',        desc: 'منصة الإيجار الحكومية',            icon: FileText,   isNew: false },
-      { slug: 'channel-manager/airbnb',  href: '/integrations/airbnb',                  label: 'Airbnb',       desc: 'أكبر منصة إيجار قصير المدى',      icon: Globe,      isNew: false },
-      { slug: 'channel-manager/booking', href: '/integrations/booking-com',             label: 'Booking.com',  desc: 'أكبر منصة حجز في العالم',         icon: Globe,      isNew: false },
-      { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   label: 'AGODA',        desc: 'رائدة منطقة آسيا والمحيط الهادئ', icon: Globe,      isNew: false },
-      { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
-      { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  label: 'قطون',         desc: 'منصة إيجار سعودية',               icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/aqar',    href: '/integrations/aqar',                    logo: '/logos/AQAR.png',        label: 'عقار',         desc: 'منصة إيجار سعودية محلية',          icon: Building2,  isNew: false },
+      { slug: 'channel-manager/ejar',    href: '/integrations/ejar-ota',                logo: '/logos/EJAR.svg',        label: 'إيجار',        desc: 'منصة الإيجار الحكومية',            icon: FileText,   isNew: false },
+      { slug: 'channel-manager/airbnb',  href: '/integrations/airbnb',                  logo: '/logos/Airbnb.svg',      label: 'Airbnb',       desc: 'أكبر منصة إيجار قصير المدى',      icon: Globe,      isNew: false },
+      { slug: 'channel-manager/booking', href: '/integrations/booking-com',             logo: '/logos/Booking.com.svg', label: 'Booking.com',  desc: 'أكبر منصة حجز في العالم',         icon: Globe,      isNew: false },
+      { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   logo: '/logos/Agoda.svg',       label: 'AGODA',        desc: 'رائدة منطقة آسيا والمحيط الهادئ', icon: Globe,      isNew: false },
+      { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', logo: '/logos/GoogleVR.svg',    label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
+      { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  logo: '/logos/QOTOON.png',      label: 'قطون',         desc: 'منصة إيجار سعودية',               icon: Globe,      isNew: true  },
       { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 label: 'Attiude',      desc: 'قريباً',                           icon: Globe,      isNew: true  },
     ],
   },
@@ -151,10 +151,10 @@ const FEATURE_CATEGORIES_AR = [
     icon: Zap,
     items: [
       { slug: 'guest-journey',         label: 'رحلة الضيف',  desc: 'تدفق مؤتمت من 7 خطوات',           icon: Zap,           isNew: false },
-      { slug: 'automated-messaging',   label: 'واتساب',      desc: 'تواصل الضيوف بشكل تلقائي',       icon: MessageSquare, isNew: false },
+      { slug: 'automated-messaging',   logo: '/icons/whatsapp.svg', label: 'واتساب',      desc: 'تواصل الضيوف بشكل تلقائي',       icon: MessageSquare, isNew: false },
       { slug: 'sms-notifications',     label: 'SMS',          desc: 'رسائل SMS تلقائية عبر VFirst',    icon: Smartphone,    isNew: false },
-      { slug: 'tuya-integration',      label: 'Tuya',         desc: 'أتمتة المنزل الذكي وإنترنت الأشياء', icon: Cpu,        isNew: false },
-      { slug: 'ttlock-integration',    label: 'TTLock',       desc: 'التحكم في الأقفال الذكية',        icon: Lock,          isNew: false },
+      { slug: 'tuya-integration',      logo: '/logos/tuya.webp',   label: 'Tuya',         desc: 'أتمتة المنزل الذكي وإنترنت الأشياء', icon: Cpu,        isNew: false },
+      { slug: 'ttlock-integration',    logo: '/logos/ttlock.webp', label: 'TTLock',       desc: 'التحكم في الأقفال الذكية',        icon: Lock,          isNew: false },
     ],
   },
   {
@@ -602,12 +602,18 @@ export default function Navbar() {
                                 href={resolveFeatureHref(item)!}
                                 className="group flex items-start gap-3 p-3.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
                               >
-                                <div
-                                  className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
-                                  style={{ backgroundColor: `${activeCat.color}14` }}
-                                >
-                                  <item.icon size={16} style={{ color: activeCat.color }} />
-                                </div>
+                                {(item as { logo?: string }).logo ? (
+                                  <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-white border border-slate-100 p-1 transition-all group-hover:scale-110">
+                                    <Image src={(item as { logo?: string }).logo!} alt={item.label} width={48} height={48} className="w-full h-full object-contain" />
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
+                                    style={{ backgroundColor: `${activeCat.color}14` }}
+                                  >
+                                    <item.icon size={16} style={{ color: activeCat.color }} />
+                                  </div>
+                                )}
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5">
                                     <p className="text-[13px] font-semibold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors leading-tight">
@@ -1028,9 +1034,15 @@ export default function Navbar() {
                                           <div className={clsx('pb-1 space-y-0.5', isAr ? 'pr-3' : 'pl-3')}>
                                             {cat.items.map(item => (
                                               <Link key={item.slug} href={resolveFeatureHref(item)!} className="flex items-start gap-3 px-3 py-2 rounded-lg hover:bg-blue-50">
-                                                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${cat.color}14` }}>
-                                                  <item.icon size={13} style={{ color: cat.color }} />
-                                                </div>
+                                                {(item as { logo?: string }).logo ? (
+                                                  <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 mt-0.5 bg-white border border-slate-100 p-1">
+                                                    <Image src={(item as { logo?: string }).logo!} alt={item.label} width={40} height={40} className="w-full h-full object-contain" />
+                                                  </div>
+                                                ) : (
+                                                  <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${cat.color}14` }}>
+                                                    <item.icon size={13} style={{ color: cat.color }} />
+                                                  </div>
+                                                )}
                                                 <div className="flex-1 min-w-0">
                                                   <div className="flex items-center gap-1.5">
                                                     <p className="text-[13px] font-semibold text-slate-700 leading-tight">{item.label}</p>

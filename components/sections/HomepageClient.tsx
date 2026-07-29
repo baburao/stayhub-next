@@ -762,14 +762,27 @@ export default function HomepageClient() {
               {/* app pills */}
               <div className={`absolute top-7 ${isAr ? 'left-6' : 'right-6'} flex flex-col gap-2 items-stretch z-10 w-[180px]`} style={{ transform: 'translateZ(60px)' }}>
                 {[
-                  { name: 'Airbnb',      initial: 'A', color: '#FF5A5F' },
-                  { name: 'Booking.com', initial: 'B', color: '#1D4ED8' },
-                  { name: 'WhatsApp',    initial: 'W', color: '#25D366' },
-                  { name: 'Excel',       initial: 'X', color: '#107C41' },
+                  { name: 'Airbnb',      color: '#FF5A5F', logo: '/logos/Airbnb.svg',      logoW: 54 },
+                  { name: 'Booking.com', color: '#1D4ED8', logo: '/logos/Booking.com.svg', logoW: 92 },
+                  { name: 'WhatsApp',    color: '#25D366', icon: '/icons/whatsapp.svg' },
+                  { name: 'Excel',       color: '#107C41', initial: 'X' },
                 ].map((a) => (
-                  <div key={a.name} className="flex items-center gap-2.5 bg-white border border-slate-100 rounded-xl px-3 py-2 shadow-sm">
-                    <span className="w-5 h-5 rounded-md flex items-center justify-center text-white text-[10px] font-black shrink-0" style={{ backgroundColor: a.color }}>{a.initial}</span>
-                    <span className="text-[12px] font-bold" style={{ color: a.color }}>{a.name}</span>
+                  <div key={a.name} className="flex items-center gap-2.5 bg-white border border-slate-100 rounded-xl px-3 py-2 shadow-sm h-9">
+                    {a.logo ? (
+                      <Image src={a.logo} alt={a.name} width={a.logoW} height={16} className="h-4 w-auto object-contain" />
+                    ) : (
+                      <>
+                        <span
+                          className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${a.icon ? 'bg-white' : 'text-white text-[10px] font-black'}`}
+                          style={a.icon ? undefined : { backgroundColor: a.color }}
+                        >
+                          {a.icon
+                            ? <Image src={a.icon} alt="" width={18} height={18} className="w-[18px] h-[18px] object-contain" />
+                            : a.initial}
+                        </span>
+                        <span className="text-[12px] font-bold" style={{ color: a.color }}>{a.name}</span>
+                      </>
+                    )}
                   </div>
                 ))}
                 <div className="flex items-center justify-center bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5">
