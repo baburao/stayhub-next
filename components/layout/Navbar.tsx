@@ -454,7 +454,10 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center shrink-0">
-              <Image src="/stayhub-logo.svg" alt="StayHub" width={140} height={36} className="h-9 w-auto" priority />
+              {/* h-11 in the h-16 bar = 69% of bar height (was h-9 / 56%).
+                  width/height match the SVG's true 174x50 ratio (3.48) so next/image
+                  doesn't warn and there's no layout shift. */}
+              <Image src="/stayhub-logo.svg" alt="StayHub" width={153} height={44} className="h-11 w-auto" priority />
             </Link>
 
             {/* Desktop nav */}
