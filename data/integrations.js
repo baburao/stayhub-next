@@ -329,6 +329,8 @@ const integrationsList = [
     arabicH1: 'تكامل مع غثرن للعقارات السعودية',
     subtitle:
       "Reach Saudi travelers on their preferred local platform while managing everything from StayHub.",
+    logo: '/logos/gathern.webp',
+    logoAlt: 'Gathern (غثرن)',
     color: '#00A651',
     stats: [
       { value: '#1', label: 'Vacation rental platform in KSA' },
@@ -717,6 +719,8 @@ const integrationsList = [
     h1: 'Absher Identity Verification',
     arabicH1: 'التحقق من الهوية عبر أبشر',
     subtitle: 'Verify guest identities through Absher automatically and stay compliant with Saudi check-in regulations.',
+    logo: '/logos/Absher.png',
+    logoAlt: 'Absher',
     color: '#00695C',
     stats: [
       { value: 'National', label: 'Saudi e-gov identity' },
@@ -759,6 +763,8 @@ const integrationsList = [
     h1: 'Shomoos Guest Registration',
     arabicH1: 'تسجيل الضيوف عبر شموس',
     subtitle: 'Automatically register guest stays with Shomoos and stay compliant with Saudi hospitality reporting rules.',
+    logo: '/logos/shomoos.webp',
+    logoAlt: 'Shomoos',
     color: '#1565C0',
     stats: [
       { value: 'Official', label: 'Guest registration' },
@@ -888,6 +894,8 @@ const integrationsList = [
     h1: 'PriceLabs Dynamic Pricing',
     arabicH1: 'تسعير ديناميكي مع PriceLabs',
     subtitle: 'Automatically optimize your rates with PriceLabs and push them to every channel through StayHub.',
+    logo: '/logos/pricelabs.webp',
+    logoAlt: 'PriceLabs',
     color: '#E65100',
     stats: [
       { value: 'Daily', label: 'Rate optimization' },
@@ -930,6 +938,8 @@ const integrationsList = [
     h1: 'Tuya Smart Home Integration',
     arabicH1: 'تكامل المنزل الذكي مع Tuya',
     subtitle: 'Automate Tuya smart devices around the guest journey — locks, lighting, and climate — from StayHub.',
+    logo: '/logos/tuya.webp',
+    logoAlt: 'Tuya',
     color: '#FF6F00',
     stats: [
       { value: 'IoT', label: 'Smart device control' },
@@ -972,6 +982,8 @@ const integrationsList = [
     h1: 'TTLock Smart Lock Integration',
     arabicH1: 'تكامل الأقفال الذكية مع TTLock',
     subtitle: 'Automate keyless check-in with TTLock — unique guest codes generated and revoked automatically per booking.',
+    logo: '/logos/ttlock.webp',
+    logoAlt: 'TTLock',
     color: '#37474F',
     stats: [
       { value: 'Keyless', label: 'Guest check-in' },
@@ -1014,6 +1026,8 @@ const integrationsList = [
     h1: 'Odoo Accounting Integration',
     arabicH1: 'تكامل المحاسبة مع Odoo',
     subtitle: 'Sync bookings, revenue, and invoices to Odoo automatically and keep your books always up to date.',
+    logo: '/logos/odoo.webp',
+    logoAlt: 'Odoo',
     color: '#714B67',
     stats: [
       { value: 'ERP', label: 'Full business suite' },
@@ -1056,6 +1070,8 @@ const integrationsList = [
     h1: 'Qoyod Accounting Integration',
     arabicH1: 'تكامل المحاسبة مع قيود',
     subtitle: 'Sync your bookings to Qoyod for automated, ZATCA-compliant invoicing built for the Saudi market.',
+    logo: '/logos/qoyod.webp',
+    logoAlt: 'Qoyod',
     color: '#1A73E8',
     stats: [
       { value: 'Saudi', label: 'Cloud accounting' },
@@ -1098,6 +1114,8 @@ const integrationsList = [
     h1: 'Daftra Accounting Integration',
     arabicH1: 'تكامل المحاسبة مع دفترة',
     subtitle: 'Automate invoicing and accounting by syncing your StayHub bookings into Daftra.',
+    logo: '/logos/daftra.webp',
+    logoAlt: 'Daftra',
     color: '#00796B',
     stats: [
       { value: 'MENA', label: 'Cloud accounting' },
@@ -1184,6 +1202,8 @@ const integrationsList = [
     h1: 'WhatsApp Integration',
     arabicH1: 'تكامل مع واتساب',
     subtitle: 'Automate guest messaging on WhatsApp — confirmations, check-in details, and review requests — in Arabic and English.',
+    logo: '/icons/whatsapp.svg',
+    logoAlt: 'WhatsApp',
     color: '#25D366',
     stats: [
       { value: '#1', label: 'Messaging app in KSA' },
@@ -1226,6 +1246,8 @@ const integrationsList = [
     h1: 'VFirst SMS Integration',
     arabicH1: 'تكامل الرسائل النصية مع VFirst',
     subtitle: 'Send reliable, automated SMS to guests — confirmations, access codes, and reminders — through VFirst.',
+    logo: '/logos/chat.svg',
+    logoAlt: 'VFirst SMS',
     color: '#5C6BC0',
     stats: [
       { value: 'Reliable', label: 'SMS delivery' },

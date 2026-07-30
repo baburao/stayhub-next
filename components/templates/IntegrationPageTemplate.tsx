@@ -61,6 +61,8 @@ interface RelatedIntegration {
   tagline?: string;
   arTagline?: string;
   color?: string;
+  logo?: string;
+  logoAlt?: string;
 }
 
 interface Props {
@@ -410,12 +412,25 @@ export default function IntegrationPageTemplate({ integration, relatedData }: Pr
                     href={`/integrations/${ri.slug}`}
                     className="group flex items-center gap-4 bg-white rounded-2xl p-5 border border-slate-100 hover:border-blue-200 hover:shadow-lg transition-all hover:-translate-y-1"
                   >
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm"
-                      style={{ backgroundColor: ri.color || '#25A4E8' }}
-                    >
-                      {ri.name.charAt(0)}
-                    </div>
+                    {ri.logo ? (
+                      /* Wider than tall so 2.3–3.9:1 wordmarks aren't height-starved,
+                         matching the integrations-list tile. */
+                      <div className="w-24 h-14 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center shrink-0 p-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={ri.logo}
+                          alt={ri.logoAlt ?? ri.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm"
+                        style={{ backgroundColor: ri.color || '#25A4E8' }}
+                      >
+                        {ri.name.charAt(0)}
+                      </div>
+                    )}
                     <div>
                       <h3 className="font-bold text-[#0F172A] group-hover:text-[#25A4E8] transition-colors">{ri.name}</h3>
                       {riTagline && <p className="text-slate-500 text-xs mt-0.5">{riTagline}</p>}

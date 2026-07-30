@@ -60,6 +60,8 @@ export default async function IntegrationPage({ params }: Props) {
       tagline: i.tagline,
       arTagline: i.arTagline,
       color: i.color,
+      logo: i.logo,
+      logoAlt: i.logoAlt,
     }));
 
   return <IntegrationPageTemplate integration={integration} relatedData={relatedData} />;
