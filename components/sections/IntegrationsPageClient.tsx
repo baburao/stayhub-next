@@ -83,9 +83,9 @@ function IntegrationCard({ intg, isAr }: { intg: typeof INTEGRATIONS[0]; isAr: b
       {/* Wider than tall on purpose: this grid mixes square app-icons with 2.3–3.9:1
           wordmarks (daftra, odoo, quyood, ttlock…). Only the width grows, so wide marks
           gain room while square/portrait marks (pricelabs, Absher) are unchanged. */}
-      <div className="w-20 h-16 sm:w-28 sm:h-24 rounded-[18px] sm:rounded-[24px] bg-white border border-slate-100 shadow-sm flex items-center justify-center mb-3 sm:mb-5 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md p-2.5 sm:p-3">
+      <div className="w-28 h-16 sm:w-40 sm:h-24 rounded-[18px] sm:rounded-[24px] bg-white border border-slate-100 shadow-sm flex items-center justify-center mb-3 sm:mb-5 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md px-3 py-2.5 sm:p-3">
         {intg.logo ? (
-          <Image src={intg.logo} alt={intg.en} width={88} height={72} className="object-contain w-full h-full" />
+          <Image src={intg.logo} alt={intg.en} width={136} height={72} className="object-contain w-full h-full" />
         ) : (
           <span className="text-lg sm:text-xl font-extrabold tracking-tight" style={{ color: intg.color }}>
             {intg.en.slice(0, 3).toUpperCase()}
