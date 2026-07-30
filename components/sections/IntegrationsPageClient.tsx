@@ -33,7 +33,7 @@ const INTEGRATIONS = [
   { slug: 'darent',                  en: 'Darent',                ar: 'دارنت',             logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#546E7A' },
   { slug: 'gathern',                 en: 'Gathern',               ar: 'غثرن',              logo: '/logos/gathern.webp',                  cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#00A651' },
   /* Government */
-  { slug: 'absher',                  en: 'Absher',                ar: 'أبشر',              logo: '/logos/absher.png',                    cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#00695C' },
+  { slug: 'absher',                  en: 'Absher',                ar: 'أبشر',              logo: '/logos/Absher.png',                    cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#00695C' },
   { slug: 'shmoos',                  en: 'Shmoos',                ar: 'شموس',              logo: '/logos/shomoos.webp',                  cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1565C0' },
   { slug: 'mot',                     en: 'Ministry of Tourism',   ar: 'وزارة السياحة',    logo: null,                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#6A1B9A' },
   { slug: 'ejar-gov',                en: 'Ejar',                  ar: 'إيجار',             logo: '/logos/EJAR.svg',                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1C7C54' },

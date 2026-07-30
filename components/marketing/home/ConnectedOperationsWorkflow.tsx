@@ -133,7 +133,7 @@ export default function ConnectedOperationsWorkflow({
                 </IntegrationChip>
                 <IntegrationChip active={stageActive('payment')} accent="#8b3ef0">ANB</IntegrationChip>
                 <IntegrationChip active={stageActive('identity')} accent="#6a5cf5" imageOnly>
-                  <Image src="/logos/absher.png" alt="Absher" width={80} height={28} className="object-contain h-7 w-auto" />
+                  <Image src="/logos/Absher.png" alt="Absher" width={19} height={28} className="object-contain h-7 w-auto" />
                 </IntegrationChip>
               </div>
             </div>

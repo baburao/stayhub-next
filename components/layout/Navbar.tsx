@@ -56,9 +56,9 @@ const FEATURE_CATEGORIES_EN = [
     items: [
       { slug: 'guest-journey',         label: 'Guest Journey',  desc: '7-step automated guest flow',      icon: Zap,           isNew: false },
       { slug: 'automated-messaging',   logo: '/icons/whatsapp.svg', label: 'WhatsApp',       desc: 'Guest comms on autopilot',         icon: MessageSquare, isNew: false },
-      { slug: 'sms-notifications',     label: 'SMS',            desc: 'Automated SMS via VFirst',         icon: Smartphone,    isNew: false },
-      { slug: 'tuya-integration',      logo: '/logos/tuya.webp',   label: 'Tuya',           desc: 'Smart home & IoT automation',      icon: Cpu,           isNew: false },
-      { slug: 'ttlock-integration',    logo: '/logos/ttlock.webp', label: 'TTLock',         desc: 'Smart lock door access',           icon: Lock,          isNew: false },
+      { slug: 'sms-notifications',     logo: '/logos/chat.svg',    label: 'SMS',            desc: 'Automated SMS via VFirst',         icon: Smartphone,    isNew: false },
+      { slug: 'tuya-integration',      logo: '/logos/Tuya.png',    label: 'Tuya',           desc: 'Smart home & IoT automation',      icon: Cpu,           isNew: false },
+      { slug: 'ttlock-integration',    logo: '/logos/TTLock.png',  label: 'TTLock',         desc: 'Smart lock door access',           icon: Lock,          isNew: false },
     ],
   },
   {
@@ -152,9 +152,9 @@ const FEATURE_CATEGORIES_AR = [
     items: [
       { slug: 'guest-journey',         label: 'رحلة الضيف',  desc: 'تدفق مؤتمت من 7 خطوات',           icon: Zap,           isNew: false },
       { slug: 'automated-messaging',   logo: '/icons/whatsapp.svg', label: 'واتساب',      desc: 'تواصل الضيوف بشكل تلقائي',       icon: MessageSquare, isNew: false },
-      { slug: 'sms-notifications',     label: 'SMS',          desc: 'رسائل SMS تلقائية عبر VFirst',    icon: Smartphone,    isNew: false },
-      { slug: 'tuya-integration',      logo: '/logos/tuya.webp',   label: 'Tuya',         desc: 'أتمتة المنزل الذكي وإنترنت الأشياء', icon: Cpu,        isNew: false },
-      { slug: 'ttlock-integration',    logo: '/logos/ttlock.webp', label: 'TTLock',       desc: 'التحكم في الأقفال الذكية',        icon: Lock,          isNew: false },
+      { slug: 'sms-notifications',     logo: '/logos/chat.svg',    label: 'SMS',          desc: 'رسائل SMS تلقائية عبر VFirst',    icon: Smartphone,    isNew: false },
+      { slug: 'tuya-integration',      logo: '/logos/Tuya.png',    label: 'Tuya',         desc: 'أتمتة المنزل الذكي وإنترنت الأشياء', icon: Cpu,        isNew: false },
+      { slug: 'ttlock-integration',    logo: '/logos/TTLock.png',  label: 'TTLock',       desc: 'التحكم في الأقفال الذكية',        icon: Lock,          isNew: false },
     ],
   },
   {
@@ -223,7 +223,7 @@ const INTEGRATIONS = [
   { slug: 'darent',                  en: 'Darent',               ar: 'دارنت',        logo: null,                                  badge_en: 'Soon',        badge_ar: 'قريباً' },
   { slug: 'gathern',                 en: 'Gathern',              ar: 'غثرن',         logo: '/logos/gathern.webp',                 badge_en: 'Soon',        badge_ar: 'قريباً' },
   /* ── Government: Absher → Shmoos → Ministry of Tourism → Ejar ── */
-  { slug: 'absher',                  en: 'Absher',               ar: 'أبشر',         logo: '/logos/absher.png',                   badge_en: 'Gov',         badge_ar: 'حكومي' },
+  { slug: 'absher',                  en: 'Absher',               ar: 'أبشر',         logo: '/logos/Absher.png',                   badge_en: 'Gov',         badge_ar: 'حكومي' },
   { slug: 'shmoos',                  en: 'Shmoos',               ar: 'شموس',         logo: '/logos/shomoos.webp',                 badge_en: 'Gov',         badge_ar: 'حكومي' },
   { slug: 'mot',                     en: 'Ministry of Tourism',  ar: 'وزارة السياحة',logo: null,                                  badge_en: 'Gov',         badge_ar: 'حكومي' },
   { slug: 'ejar-gov',                en: 'Ejar',                 ar: 'إيجار',        logo: null,                                  badge_en: 'Gov',         badge_ar: 'حكومي' },
@@ -603,8 +603,10 @@ export default function Navbar() {
                                 className="group flex items-start gap-3 p-3.5 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
                               >
                                 {(item as { logo?: string }).logo ? (
-                                  <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-white border border-slate-100 p-1 transition-all group-hover:scale-110">
-                                    <Image src={(item as { logo?: string }).logo!} alt={item.label} width={48} height={48} className="w-full h-full object-contain" />
+                                  /* Wider than tall: holds both square app-icons and 2.6:1
+                                     wordmarks (Tuya/TTLock), which a square tile shrank badly. */
+                                  <div className="w-20 h-16 rounded-xl flex items-center justify-center shrink-0 bg-white border border-slate-100 p-1.5 transition-all group-hover:scale-110">
+                                    <Image src={(item as { logo?: string }).logo!} alt={item.label} width={68} height={52} className="w-full h-full object-contain" />
                                   </div>
                                 ) : (
                                   <div
@@ -1035,8 +1037,8 @@ export default function Navbar() {
                                             {cat.items.map(item => (
                                               <Link key={item.slug} href={resolveFeatureHref(item)!} className="flex items-start gap-3 px-3 py-2 rounded-lg hover:bg-blue-50">
                                                 {(item as { logo?: string }).logo ? (
-                                                  <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 mt-0.5 bg-white border border-slate-100 p-1">
-                                                    <Image src={(item as { logo?: string }).logo!} alt={item.label} width={40} height={40} className="w-full h-full object-contain" />
+                                                  <div className="w-16 h-14 rounded-lg flex items-center justify-center shrink-0 mt-0.5 bg-white border border-slate-100 p-1.5">
+                                                    <Image src={(item as { logo?: string }).logo!} alt={item.label} width={52} height={44} className="w-full h-full object-contain" />
                                                   </div>
                                                 ) : (
                                                   <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${cat.color}14` }}>

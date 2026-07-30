@@ -81,21 +81,45 @@ const FEATURES_AR = [
 ];
 
 const COMPLIANCE_ITEMS_EN = [
-  { icon: BadgeCheck, title: 'ZATCA-Compliant Invoicing', desc: 'e-invoices that satisfy Saudi tax authority requirements out of the box.' },
-  { icon: Shield,     title: 'Absher ID Verification',    desc: 'Verify every guest identity via Saudi National ID — Absher-integrated.' },
-  { icon: Building2,  title: 'Ejar Contract Signing',     desc: 'Legally binding rental contracts via the official Ejar platform.' },
-  { icon: Lock,       title: 'NTMP Smart Lock Ready',     desc: 'Natively compatible with Saudi National Tourism Marketplace standards.' },
-  { icon: Banknote,   title: 'ANB & Local Bank Support',  desc: 'Collect payments in SAR via ANB, Mada, and all major Saudi banks.' },
-  { icon: Globe,      title: 'Arabic-First Platform',     desc: 'Fully bilingual EN/AR interface with RTL support for every screen.' },
+  { id: 'zatca',     icon: BadgeCheck, title: 'ZATCA-Compliant Invoicing', desc: 'e-invoices that satisfy Saudi tax authority requirements out of the box.' },
+  { id: 'absher',    icon: Shield,     title: 'Absher ID Verification',    desc: 'Verify every guest identity via Saudi National ID — Absher-integrated.' },
+  { id: 'ejar',      icon: Building2,  title: 'Ejar Contract Signing',     desc: 'Legally binding rental contracts via the official Ejar platform.' },
+  { id: 'smartlock', icon: Lock,       title: 'NTMP Smart Lock Ready',     desc: 'Natively compatible with Saudi National Tourism Marketplace standards.' },
+  { id: 'banks',     icon: Banknote,   title: 'ANB & Local Bank Support',  desc: 'Collect payments in SAR via ANB, Mada, and all major Saudi banks.' },
+  { id: 'bilingual', icon: Globe,      title: 'Arabic-First Platform',     desc: 'Fully bilingual EN/AR interface with RTL support for every screen.' },
 ];
 const COMPLIANCE_ITEMS_AR = [
-  { icon: BadgeCheck, title: 'فواتير متوافقة مع زاتكا',    desc: 'فواتير إلكترونية تلبي متطلبات الهيئة الزكاة والضريبة والجمارك.' },
-  { icon: Shield,     title: 'التحقق عبر أبشر',             desc: 'التحقق من هوية كل ضيف عبر الهوية الوطنية السعودية — متكامل مع أبشر.' },
-  { icon: Building2,  title: 'توقيع عقود إيجار',            desc: 'عقود إيجار ملزمة قانونياً عبر منصة إيجار الرسمية.' },
-  { icon: Lock,       title: 'جاهز للأقفال الذكية NTMP',   desc: 'متوافق أصلاً مع معايير المنصة الوطنية لتسويق السياحة.' },
-  { icon: Banknote,   title: 'دعم ANB والبنوك السعودية',    desc: 'استقبل المدفوعات بالريال السعودي عبر ANB ومدى وجميع البنوك.' },
-  { icon: Globe,      title: 'منصة عربية أولاً',            desc: 'واجهة ثنائية اللغة EN/AR مع دعم RTL لكل شاشة.' },
+  { id: 'zatca',     icon: BadgeCheck, title: 'فواتير متوافقة مع زاتكا',    desc: 'فواتير إلكترونية تلبي متطلبات الهيئة الزكاة والضريبة والجمارك.' },
+  { id: 'absher',    icon: Shield,     title: 'التحقق عبر أبشر',             desc: 'التحقق من هوية كل ضيف عبر الهوية الوطنية السعودية — متكامل مع أبشر.' },
+  { id: 'ejar',      icon: Building2,  title: 'توقيع عقود إيجار',            desc: 'عقود إيجار ملزمة قانونياً عبر منصة إيجار الرسمية.' },
+  { id: 'smartlock', icon: Lock,       title: 'جاهز للأقفال الذكية NTMP',   desc: 'متوافق أصلاً مع معايير المنصة الوطنية لتسويق السياحة.' },
+  { id: 'banks',     icon: Banknote,   title: 'دعم ANB والبنوك السعودية',    desc: 'استقبل المدفوعات بالريال السعودي عبر ANB ومدى وجميع البنوك.' },
+  { id: 'bilingual', icon: Globe,      title: 'منصة عربية أولاً',            desc: 'واجهة ثنائية اللغة EN/AR مع دعم RTL لكل شاشة.' },
 ];
+
+/* Real authority / brand marks for the compliance cards, keyed by item `id`.
+   Logos are language-neutral, so they live here instead of being duplicated across the
+   EN + AR arrays — one place to add a mark when the file lands in public/logos/.
+   `w`/`h` are the *rendered* px size, set from each file's true aspect ratio so wide
+   wordmarks and square app-icons both sit on the same plate without distortion.
+   An empty array falls back to the item's Lucide glyph on an identical plate.
+   Heights are tuned per lockup type, not uniform: stacked lockups that carry fine text
+   (ZATCA is a mark over two lines of Arabic + English) need real height to stay legible,
+   while wide wordmarks read fine short. The plate keeps them row-aligned regardless.
+   MISSING ASSET — mada, to sit beside ANB on the `banks` plate (the card copy names both).
+   Official payment-scheme marks must not be approximated by hand; drop the file in and add
+   one line below. */
+const COMPLIANCE_LOGOS: Record<string, { src: string; alt: string; w: number; h: number }[]> = {
+  zatca:     [{ src: '/logos/ZATCA.svg',  alt: 'Zakat, Tax and Customs Authority (ZATCA)', w: 101, h: 62 }],
+  absher:    [{ src: '/logos/Absher.png', alt: 'Absher', w: 36, h: 54 }],
+  ejar:      [{ src: '/logos/EJAR.svg',   alt: 'Ejar',   w: 78, h: 48 }],
+  smartlock: [
+    { src: '/logos/TTLock.png', alt: 'TTLock', w: 78, h: 30 },
+    { src: '/logos/Tuya.png',   alt: 'Tuya',   w: 78, h: 30 },
+  ],
+  banks:     [{ src: '/logos/ANB.svg', alt: 'Arab National Bank (anb)', w: 77, h: 32 }],
+  bilingual: [],
+};
 
 const TESTIMONIALS_EN = [
   { quote: 'StayHub reduced our admin time by 60%. We manage 80 units with a team of 4 — that was impossible before.', name: 'Mohammed Al-Rashid', role: 'Property Manager, Riyadh', rating: 5 },
@@ -765,24 +789,19 @@ export default function HomepageClient() {
                   { name: 'Airbnb',      color: '#FF5A5F', logo: '/logos/Airbnb.svg',      logoW: 54 },
                   { name: 'Booking.com', color: '#1D4ED8', logo: '/logos/Booking.com.svg', logoW: 92 },
                   { name: 'WhatsApp',    color: '#25D366', icon: '/icons/whatsapp.svg' },
-                  { name: 'Excel',       color: '#107C41', initial: 'X' },
+                  { name: 'Google Sheets', color: '#0F9D58', icon: '/logos/Google_Sheets.png' },
                 ].map((a) => (
                   <div key={a.name} className="flex items-center gap-2.5 bg-white border border-slate-100 rounded-xl px-3 py-2 shadow-sm h-9">
                     {a.logo ? (
                       <Image src={a.logo} alt={a.name} width={a.logoW} height={16} className="h-4 w-auto object-contain" />
-                    ) : (
+                    ) : a.icon ? (
                       <>
-                        <span
-                          className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${a.icon ? 'bg-white' : 'text-white text-[10px] font-black'}`}
-                          style={a.icon ? undefined : { backgroundColor: a.color }}
-                        >
-                          {a.icon
-                            ? <Image src={a.icon} alt="" width={18} height={18} className="w-[18px] h-[18px] object-contain" />
-                            : a.initial}
+                        <span className="w-5 h-5 rounded-md bg-white flex items-center justify-center shrink-0">
+                          <Image src={a.icon} alt="" width={18} height={18} className="w-[18px] h-[18px] object-contain" />
                         </span>
                         <span className="text-[12px] font-bold" style={{ color: a.color }}>{a.name}</span>
                       </>
-                    )}
+                    ) : null}
                   </div>
                 ))}
                 <div className="flex items-center justify-center bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5">
@@ -1125,15 +1144,41 @@ export default function HomepageClient() {
             </p>
           </motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {compliance.map((item, i) => (
-              <motion.div key={i} {...fadeUp(i * 0.07)} className="group bg-gradient-to-br from-white to-[#EFF8FF] rounded-2xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-lg transition-all">
-                <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
-                  <item.icon size={20} className="text-[#25A4E8]" />
+            {compliance.map((item, i) => {
+              const logos = COMPLIANCE_LOGOS[item.id] ?? [];
+              return (
+              <motion.div key={item.id} {...fadeUp(i * 0.07)} className="group bg-gradient-to-br from-white to-[#EFF8FF] rounded-2xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-lg transition-all">
+                {/* Logo plate — fixed height, auto width, so square app-icons and wide
+                    wordmarks line up across the grid. Falls back to the Lucide glyph on
+                    the same plate for items with no official asset yet. */}
+                <div className="h-20 mb-4 flex items-center">
+                  {logos.length > 0 ? (
+                    <div className="inline-flex items-center gap-3 h-full px-4 bg-white rounded-xl border border-slate-200 shadow-sm group-hover:border-blue-200 group-hover:shadow transition-all">
+                      {logos.map((logo, li) => (
+                        <span key={logo.src} className="inline-flex items-center gap-3">
+                          {li > 0 && <span aria-hidden className="w-px h-7 bg-slate-200" />}
+                          <Image
+                            src={logo.src}
+                            alt={logo.alt}
+                            width={logo.w}
+                            height={logo.h}
+                            style={{ height: logo.h, width: 'auto' }}
+                            className="object-contain"
+                          />
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center group-hover:border-blue-200 group-hover:shadow transition-all">
+                      <item.icon size={26} className="text-[#25A4E8]" />
+                    </div>
+                  )}
                 </div>
                 <h3 className="font-bold text-[#0F172A] mb-2 text-sm">{item.title}</h3>
                 <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -1206,18 +1251,23 @@ export default function HomepageClient() {
               </Link>
             </motion.div>
 
-            <motion.div {...fadeUp(0.15)} className="bg-gradient-to-br from-[#F3F0FF] to-white rounded-3xl border border-violet-100 p-3 sm:p-4 shadow-sm">
-              <div className="overflow-hidden rounded-2xl border border-violet-100 shadow-lg">
-                <Image
-                  src="/owner_DB.png"
-                  alt={isAr ? 'بوابة المالك — لوحة معلومات الأداء الحية' : 'Owner Portal — live performance dashboard'}
-                  width={2880}
-                  height={1600}
-                  className="w-full h-auto"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            </motion.div>
+            {/* Bare image on a 3D cursor-tilt — the old lavender card mat is replaced by a
+                soft violet glow sitting behind the image in Z, matching DashboardShowcase. */}
+            <TiltCard delay={0.15} className="relative">
+              <div
+                className="absolute -inset-5 rounded-[32px] bg-gradient-to-br from-[#7C69E8]/20 via-[#25A4E8]/10 to-transparent blur-2xl pointer-events-none"
+                style={{ transform: 'translateZ(-30px)' }}
+              />
+              <Image
+                src="/owner_DB.png"
+                alt={isAr ? 'بوابة المالك — لوحة معلومات الأداء الحية' : 'Owner Portal — live performance dashboard'}
+                width={2880}
+                height={1600}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="relative w-full h-auto rounded-2xl border border-violet-100 shadow-[0_30px_80px_rgba(17,12,46,0.18)]"
+                style={{ transform: 'translateZ(40px)' }}
+              />
+            </TiltCard>
           </div>
         </div>
       </section>
