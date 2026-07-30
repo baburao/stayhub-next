@@ -47,7 +47,7 @@ const INTEGRATIONS = [
   { slug: 'quyood',                  en: 'Quyood',                ar: 'قيود',              logo: '/logos/qoyod.webp',                    cat: 'Accounting',    badge_en: 'Accounting',   badge_ar: 'محاسبة',       soon: false, color: '#1A73E8' },
   { slug: 'daftra',                  en: 'Daftra',                ar: 'دفترة',             logo: '/logos/daftra.webp',                   cat: 'Accounting',    badge_en: 'Accounting',   badge_ar: 'محاسبة',       soon: false, color: '#00796B' },
   /* Bank */
-  { slug: 'anb',                     en: 'ANB',                   ar: 'البنك العربي',     logo: null,                                   cat: 'Bank',          badge_en: 'Bank',         badge_ar: 'بنك',          soon: false, color: '#B71C1C' },
+  { slug: 'anb',                     en: 'ANB',                   ar: 'البنك العربي',     logo: '/logos/ANB.svg',                       cat: 'Bank',          badge_en: 'Bank',         badge_ar: 'بنك',          soon: false, color: '#0073CF' },
   /* Communication */
   { slug: 'whatsapp',                en: 'WhatsApp',              ar: 'واتساب',            logo: '/icons/whatsapp.svg',                  cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#25D366' },
   { slug: 'vfirst-sms',              en: 'VFirst SMS',            ar: 'VFirst SMS',        logo: null,                                   cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#5C6BC0' },

@@ -131,7 +131,9 @@ export default function ConnectedOperationsWorkflow({
                 <IntegrationChip active={stageActive('access')} accent="#ff851c" imageOnly>
                   <Image src="/logos/ttlock.webp" alt="TTLock" width={80} height={28} className="object-contain h-7 w-auto" />
                 </IntegrationChip>
-                <IntegrationChip active={stageActive('payment')} accent="#8b3ef0">ANB</IntegrationChip>
+                <IntegrationChip active={stageActive('payment')} accent="#8b3ef0" imageOnly>
+                  <Image src="/logos/ANB.svg" alt="ANB" width={67} height={28} className="object-contain h-7 w-auto" />
+                </IntegrationChip>
                 <IntegrationChip active={stageActive('identity')} accent="#6a5cf5" imageOnly>
                   <Image src="/logos/Absher.png" alt="Absher" width={19} height={28} className="object-contain h-7 w-auto" />
                 </IntegrationChip>

@@ -1140,7 +1140,9 @@ const integrationsList = [
     h1: 'ANB Bank Integration',
     arabicH1: 'تكامل مع البنك العربي الوطني',
     subtitle: 'Collect payments and reconcile payouts securely through Arab National Bank, tracked in StayHub.',
-    color: '#B71C1C',
+    logo: '/logos/ANB.svg',
+    logoAlt: 'Arab National Bank (anb)',
+    color: '#0073CF',
     stats: [
       { value: 'Secure', label: 'Payment collection' },
       { value: 'SAR', label: 'Local settlement' },

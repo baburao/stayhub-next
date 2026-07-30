@@ -237,7 +237,7 @@ const INTEGRATIONS = [
   { slug: 'quyood',                  en: 'Quyood',               ar: 'قيود',         logo: '/logos/qoyod.webp',                   badge_en: 'Accounting',  badge_ar: 'محاسبة' },
   { slug: 'daftra',                  en: 'Daftra',               ar: 'دفترة',        logo: '/logos/daftra.webp',                  badge_en: 'Accounting',  badge_ar: 'محاسبة' },
   /* ── Bank: ANB ── */
-  { slug: 'anb',                     en: 'ANB',                  ar: 'البنك العربي', logo: null,                                  badge_en: 'Bank',        badge_ar: 'بنك' },
+  { slug: 'anb',                     en: 'ANB',                  ar: 'البنك العربي', logo: '/logos/ANB.svg',                      badge_en: 'Bank',        badge_ar: 'بنك' },
   /* ── Communication: WhatsApp → VFirst SMS ── */
   { slug: 'whatsapp',                en: 'WhatsApp',             ar: 'واتساب',       logo: '/icons/whatsapp.svg',                 badge_en: 'Messaging',   badge_ar: 'مراسلة' },
   { slug: 'vfirst-sms',              en: 'VFirst SMS',           ar: 'VFirst SMS',   logo: null,                                  badge_en: 'Messaging',   badge_ar: 'مراسلة' },
