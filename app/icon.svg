@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" fill="none">
+  <!-- StayHub mark. Source art is 38.149 x 37.8323; centred on a square canvas
+       so browsers don't stretch it. Keep this square if the art is ever replaced. -->
+  <g transform="translate(0.9255 1.0839)">
+    <path d="M15.746 26.4294L7.01015 32.7478L0 37.8248V28.2165L7.74806 22.613L9.10859 21.6292L15.746 26.4294Z" fill="#7C69E8"/>
+    <path d="M25.7154 4.80411L19.0704 9.61591L0 23.4133V13.8051L12.433 4.8118L19.0742 0L25.7154 4.80411Z" fill="#25A4E8"/>
+    <path d="M38.1482 13.8041V23.4161L32.3525 19.2231L29.0357 16.821L22.3945 12.0169L29.0357 7.20898L38.1482 13.8041Z" fill="#2CC6A3"/>
+    <path d="M38.149 28.2202V37.8323L22.3954 26.4292L19.071 24.031V24.0272L12.4336 19.2269L19.0748 14.4189L25.7122 19.2231H25.716L29.0366 21.6251L38.149 28.2202Z" fill="#ECC818"/>
+    <path d="M31.5067 37.8321L6.64062 37.8283L19.0698 28.835L31.5067 37.8321Z" fill="#F14467"/>
+  </g>
+</svg>
