@@ -1,9 +1,9 @@
 # StayHub — Session Handoff
 
-**Written:** Jul 30, 2026 · **For:** a fresh Claude session picking this up cold.
+**Written:** Jul 31, 2026 · **For:** a fresh Claude session picking this up cold.
 
-> Read order: **this file** → `CLAUDE.md` §13 (State of Play) + §6f (recent changes) → the rest of
-> `CLAUDE.md` as reference. `CODEX_KT.md` is the same material aimed at Codex.
+> Read order: **this file** → `CLAUDE.md` §13 (State of Play) → the rest of `CLAUDE.md` as
+> reference. `CODEX_KT.md` is the same material aimed at Codex.
 
 ---
 
@@ -22,194 +22,261 @@ Management System. Next.js 16.2.6 App Router + TS + Tailwind v4 + Framer Motion 
 
 ## 2. Where things stand RIGHT NOW
 
-### ✅ Clean slate — everything committed, pushed, and LIVE
+### ✅ Clean — everything committed, pushed, and LIVE
 
-`main` is **clean**, in sync with `origin/main`, and `dd87a89` is **deployed to production**
-(verified live: `/`, `/pricing`, `/integrations/attiude`, `/features/channel-manager` all 200;
-redirects returning 308 → correct destination).
-
-| Commit | What | State |
-|---|---|---|
-| `dd87a89` | Real channel/automation logos in Features menu, Attiude coming-soon page, homepage polish | LIVE |
-| `7d34701` | Footer address, hi-res channel logos, large hero logo layout | LIVE |
-| `262fd64` | Prevent hero text/video overlap on ultra-wide screens | LIVE |
-| `4ba2f55` | Align Booking.com / Agoda / Google VR / Qotoon integration content | LIVE |
+`main` is clean, in sync with `origin/main`, and **`85ec4b1` is deployed to production**.
 
 Confirm for yourself:
 ```bash
 cd /Users/baburao/Desktop/works/Claude/stayhub-next && git status -s && git log --oneline -4
 ```
 
-> ⚠ **Parallel sessions happen.** Commits `7d34701`, `262fd64`, `4ba2f55` came from other
-> sessions / the user working in the same repo while a session was open. **Always re-check
-> `git log` + `git status` at session start** — don't assume the tree matches what a doc says.
+> ⚠ **Parallel sessions happen.** Other sessions and the user commit to this repo. **Always
+> re-check `git log` + `git status` at session start** — don't assume the tree matches this doc.
 
 ---
 
-## 3. What shipped in the last session (Jul 29–30)
+## 3. What shipped in the last session (Jul 31)
 
-### Navigation 404 cleanup (the big one)
-The Features mega-menu derived links with a blind `` `/features/${slug}` `` fallback, but only 14
-feature pages exist in `data/features.js` — so **22 menu links 404'd**, in both desktop and mobile
-(plus `/contact` and `/signup` on the pricing page = 24 total). Fixed by making every destination
-explicit:
+Eight commits, all live. Theme: **every brand logo on the site is now a real logo, correctly sized.**
 
-- New **`FEATURE_NAV`** map + **`resolveFeatureHref()`** + **`visibleFeatureCats`** in `Navbar.tsx`
-  — the single source of truth for desktop **and** mobile. No blind slug fallback remains.
-- 4 feature→feature remaps (channel-management→channel-manager, unified-calendar→
-  availability-calendar, website-builder→direct-booking-website, pay-link→payment-collection) and
-  4 feature→integration remaps (ttlock / tuya / whatsapp-sms / sms-notifications).
-- **14 unresolved items hidden** pending stakeholder confirmation (see §5). The whole **CRM
-  category** is now empty and no longer renders in either menu.
-- **8 permanent redirects** added in `next.config.ts` for the old, possibly-indexed URLs.
-- Pricing CTAs: `/contact` → `/demo` ("Talk to sales" / "تحدث مع فريق المبيعات"), `/signup` →
-  `/demo` ("Book a tailored demo" / "احجز عرضاً مخصصاً"). **No** `/contact` or `/signup` route was
-  created, and `/signup` was deliberately *not* redirected to `/login`.
-- Homepage integrations grid: removed the stray **Vrbo** card (no page), fixed the
-  **`qoyod` → `quyood`** slug typo.
-- **Result: 0 clickable internal 404 links** (verified by crawler — see §7).
+| Commit | What |
+|---|---|
+| `cb6e9fb` | Compliance section real logos; bigger automation icons; 3D owner-portal image |
+| `90199ed` | ANB wired everywhere + brand colour fix |
+| `87e7473` | Cropped dead padding from 8 logo files |
+| `460dc06` | Widened the integrations logo tile |
+| `e6edcc7` | Detail-page hero + related-card logos |
+| `8d78b64` | Header logo enlarged + aspect-ratio hint fixed |
+| `0250a27` | Gathern Arabic name + 4 new brand logos |
+| `85ec4b1` | Attiude logo in the Features → Channel Manager menu |
 
-### Attiude coming-soon page
-Attiude isn't a live channel, so `/integrations/attiude` no longer renders the "connect today"
-template. New `components/sections/AttiudeComingSoonClient.tsx` (bilingual, matches the integration
-template's design language) with: hero + waitlist email capture, status bar, "what the integration
-will include", "why join the waitlist", CTA, live-integration cards, FAQ + JSON-LD. Wired via a
-`slug === 'attiude'` special-case in `app/integrations/[slug]/page.tsx` plus its own coming-soon
-metadata. No fake stats, no `[PENDING]` placeholders, no demo CTA.
+### Compliance & security section (homepage)
+Flat Lucide line-icons → **real authority marks** on a uniform 80px plate that fits square
+app-icons *and* wide wordmarks without distortion: ZATCA, Absher, Ejar, TTLock + Tuya, ANB.
+"Arabic-First Platform" deliberately keeps a Lucide glyph — it's a platform property, not a
+certification. `COMPLIANCE_LOGOS` in `HomepageClient.tsx` is the single place to add a mark.
 
-### Brand logos
-Real logos now render in the Features menu — Channel Manager (AQAR, Ejar, Airbnb, Booking.com,
-Agoda, Google VR, Qotoon) and Automation (WhatsApp, Tuya, TTLock) — on enlarged white tiles,
-desktop + mobile, with a Lucide fallback for items without an asset (Attiude, SMS). The homepage
-"5+ apps" pills use real Airbnb / Booking.com / WhatsApp marks.
+### The logo-sizing work (the big one)
+The user reported logos "looking very small" three times. Two separate root causes:
 
-### Other homepage work
-Hero left-text no longer overlaps the video panel on wide screens (video's inner edge pinned to the
-centered container, `lg:` only, RTL-mirrored). `owner_DB.png` wired into the Owner Portal section.
-Features **mobile drawer** rebuilt as collapsible category groups mirroring the desktop mega-menu.
+1. **The source files were mostly empty space.** `daftra.webp` etc. were wide wordmarks centred
+   in a **500×500 square canvas** — actual ink filled only 46–56% of the width and as little as
+   **14% of the height**. Cropped 8 files to their true ink bounds (marks untouched, ratios
+   preserved, re-encoded webp q88 so total weight stayed flat at ~63.6 KB).
+2. **The tile shape was wrong.** A 3.9:1 wordmark in a near-square box is width-capped, so it can
+   only ever be ~22px tall. Widened the integrations tile **112×96 → 160×96** (mobile 80×64 →
+   112×64). **Width only** — so square/portrait marks (pricelabs, Absher) render byte-identical
+   instead of shrinking. Fill range went from 23–73% to 36–73% of tile height.
+
+> **Lesson worth keeping:** "how big is the logo" is **% of the tile filled**, not absolute px.
+> Measuring painted px alone led to a wrong "it's fixed" claim. See §8.
+
+### Logo coverage — now complete
+- `data/integrations.js`: **24 of 25** entries carry `logo` + `logoAlt` (only `expedia` lacks an asset)
+- **Zero `logo: null`** left in `components/`
+- **Zero letter-fallback tiles** on `/integrations`
+- Detail pages render real logos in both the **hero** and the **related-integrations cards**
+  (those cards previously showed a coloured square with the brand's first letter — the logo was
+  never even passed through `relatedData`)
+- Attiude's coming-soon page had its **own** hardcoded letter-"A" placeholder; now the real logo
+
+### Other
+- **Absher** replaced with a new *portrait* mark, and its filename case corrected (see §8 — this
+  was a live-breaking bug on Linux)
+- **Features → Automation**: SMS gained a real icon (`chat.svg`); Tuya/TTLock moved to
+  tight-cropped assets; tiles widened 56×56 → 80×64 (desktop) and 48×48 → 64×56 (mobile)
+- **Homepage problem card**: Excel pill → Google Sheets (the fabricated green "X" tile is gone)
+- **Owner Portal**: lavender card mat removed, image now on the shared `TiltCard` 3D cursor-tilt
+- **Header logo** 36px → 44px (56% → 69% of the 64px bar) + width/height corrected to the SVG's
+  true 174:50 ratio
+- **Gathern Arabic** `غثرن` → `جاذر إن` across **34 occurrences in 7 files**
 
 ---
 
 ## 4. Open follow-ups — **waiting on the user**
 
-1. 🔴 **Square channel app-icons.** The channel logos we have are *wide wordmarks* (Booking.com is
-   6:1, Airbnb 3.2:1) — in square tiles they read small no matter how big the tile is. The user
-   said **they will provide square app-icon files**. Drop into `public/logos/` (suggested:
-   `airbnb-icon.svg`, `booking-icon.svg`, `agoda-icon.svg`, `aqar-icon.svg`, `ejar-icon.svg`,
-   `qotoon-icon.svg`; SVG preferred, 1:1). Then wire them in **bigger** at: Features → Channel
-   Manager (desktop + mobile), the homepage "5+ apps" pills, and optionally the integration heroes.
-   WhatsApp / Google VR / Tuya / TTLock are already square — leave them.
-2. 🟡 **SMS icon.** No VFirst/SMS asset exists anywhere; SMS still uses a Lucide fallback. User
-   hasn't decided: supply a logo, use a styled Lucide glyph, or leave it.
-3. 🟡 **Attiude waitlist has no backend.** The form captures client-side and shows a success state.
-   On launch it must be wired to a real endpoint with leads tagged **"Attiude waitlist"** in the
-   CRM. A code comment marks the spot.
-4. 🟡 **Attiude launch-day task.** When the channel goes live, replace the coming-soon page with the
-   standard integration template (use Qotoon as the model) and email the waitlist.
-5. 🟢 `public/Stayhub_db.png` and `public/owners-view.png` are committed but **used nowhere**. Ask
-   before wiring in or deleting.
+1. 🔴 **Arabic copy audit — 53 corrections validated, NOT applied.** See §5. Blocked on four
+   terminology decisions plus a fresh export of the SITE workbook.
+2. 🔴 **`mada` logo** — the compliance card copy names it beside ANB; ANB is wired, mada is not.
+3. 🟡 **Expedia logo** — the only integration without an asset.
+4. 🟡 **"Attitude" vs "Attiude" spelling.** The supplied logo file reads **ATTITUDE**; the codebase
+   says **Attiude** everywhere — slug, display name, the live URL `/integrations/attiude`, and the
+   component filename `AttiudeComingSoonClient.tsx`. Looks like a propagated typo. Options given:
+   display-name-only (safe), or name + slug + a permanent redirect alongside the 8 in
+   `next.config.ts`. **User has not decided.**
+5. 🟡 **"NTMP Smart Lock Ready"** (compliance card) — could not verify that programme exists under
+   that name, and it now sits above two real brand logos. Wording untouched pending confirmation.
+6. 🟢 **Footer logo** carries the same `140×36` aspect-ratio mismatch that was fixed in the header.
 
 ---
 
-## 5. Stakeholder decisions still required (14 hidden nav items)
+## 5. Arabic copy audit — state of play
 
-These were removed from the Features menu because they have no destination. Each needs: is it a
-real capability, what category, and should a page be authored (then add to `data/features.js` +
-`.ar.js` and un-hide in `FEATURE_NAV`) or mapped to an existing integration?
+The content writer works in a **template workbook** (`Key (do not edit)` / Section / English /
+Arabic (current) / **Arabic (corrected)** / Notes). The `Key` column maps to data paths like
+`arFaq[0].a` — **it is what makes the corrections applicable**; 9 of them are un-findable by text
+alone (`ثنائية` alone appears 15× across the data files).
 
-`campaigns` · `coupons-discounts` · `e-sign-contracts` · `expenses-model` · `extras-upsells` ·
-`guest-journey` · `guest-profiles` · `payout` · `security-deposit` · `segmentation` ·
-`task-management` · **`tawuniya`** · `unified-inbox` · `vat-model`
+**Received:** `StayHub_Arabic_Copy_Audit (1).xlsx` — 26 tabs, 1,132 rows, **53 corrections across
+7 tabs** (airbnb 15, booking-com 11, google-vacation-rentals 9, agoda 6, qotoon 6, ejar-ota 5,
+aqar 1). **All 53 "Arabic (current)" values matched the code exactly** — zero drift.
 
-⚠ **Tawuniya** is the sensitive one — confirm whether it's an integration, an insurance workflow, a
-partner, or a planned capability before it goes anywhere near the UI.
+**Still needed:** a fresh export of `StayHub_Arabic_Copy_Audit_SITE.xlsx` (36 tabs, 1,219 rows —
+homepage, i18n, 14 feature pages, 4 solution pages, 11 static pages). The copy on disk is the
+**blank template**, 0 rows filled.
 
-Minor copy note: the pricing bottom band still reads "Start Your 14-Day Free Trial / No credit card
-required," which implies self-service that doesn't exist now that the CTA is sales-led.
+**Buckets:** 25 safe to apply · 25 blocked on terminology · 3 need orthographic fixes first
+(`اضافة`→`إضافة`, `الآخرى`→`الأخرى` + missing space before an em-dash, `اردت`→`أردت`).
+
+**The blocker — every terminology swap is partial.** The old term survives in untouched rows on
+the same page, so applying as-is puts two words for one concept on 6 of 7 pages:
+
+| Swap | Removed → Introduced | Old term still present |
+|---|---|---|
+| `تكامل` → `ربط` | 4 → 13 | all 6 tabs |
+| `قناة` → `منصة` | 10 → 14 | 5 tabs |
+| `قوائم` → `عقارات` | 12 → 11 | 5 tabs |
+| `ثنائي الاتجاه` → `متبادل` | 2 → 1 | airbnb |
+| `استورد` → `اربط/أضف` | 6 → 9 | **none — clean, safe to apply** |
+
+Recommendations given: **drop** `ثنائي الاتجاه → متبادل` (one edit, contradicts itself, and it's
+the standard technical term matching the English). Keep `قائمة` for Airbnb's "8M+" stat regardless
+— that figure is *listings*, not properties. Decide the other three **globally**, then sweep
+site-wide rather than fixing 7 pages and leaving 18 inconsistent.
+
+Also flagged: `arStats[2].value` → `ربط ثنائي الاتجاه` is 3 words in a `text-3xl md:text-4xl`
+big-number slot and will likely wrap.
+
+Note the **Gathern rename already applied** produced 4 prefixed forms for the content team to
+sanity-check: `وجاذر إن` ×2, `لجاذر إن`, `بجاذر إن`.
 
 ---
 
-## 6. House rules — do not violate these
+## 6. Google Sheet lead capture — planned, not started
 
-1. **Never push or deploy without an explicit request.** Standing instruction from the user:
-   *"dont push for every change… We will push to publish in one shot."* Batch the work.
+Client wants the demo modal's **"Choose a time slot"** CTA
+([`DemoModal.tsx:431`](components/ui/DemoModal.tsx), state: `units`, `form.name`, `form.phone`)
+to write to a Google Sheet.
+
+**Agreed approach:** Google **Apps Script Web App** (client owns the Sheet and deploys the script,
+sends back a URL + secret) + a Next.js Route Handler `app/api/lead/route.ts` + a single
+`lib/saveLead.ts` so the sink is swappable for a real DB later.
+
+- ⚠ This would be the **first server-side code in the repo** — `CODEX_KT.md` rule #1 currently says
+  "No backend… don't add server logic unless asked." Update that rule when it lands.
+- Never call Google from the browser; a credential in client JS is public.
+- Don't block the UI on the write — fire-and-forget with `keepalive: true`, advance to Calendly
+  immediately.
+- Write at *this* button (not after Calendly) so people who give a phone number then vanish are
+  captured — that drop-off list is the real value. Add a `status` column and flip
+  `details_submitted` → `slot_booked` on the existing `calendly.event_scheduled` listener.
+- Needs: `leadId` for idempotency, honeypot + rate limit, phone stored **as text** (Sheets eats
+  leading `0` and mangles `+966…`).
+- **PDPL flag raised:** name + phone is personal data leaving KSA, and the site still has no
+  consent banner. Client should knowingly accept Google as processor.
+
+**Blocked on:** the client creating the Apps Script and sending the URL.
+
+**Project will move off Vercel to the client's own server after approval.** Audited — **nothing is
+Vercel-coupled**: no `@vercel/*`, no edge runtime, no `output: 'export'`; `vercel.json` is just
+build commands. Route Handlers work identically under `next start`. At migration: add
+`output: 'standalone'`, delete `vercel.json`, move env vars, set `engines.node` (currently unset),
+and note the 8 redirects live in `next.config.ts` (i.e. in the Node server, not nginx). Also budget
+time for self-hosted `next/image`: `sharp` is present (0.34.5) but glibc Linux may need
+memory-allocator tuning, and the optimizer cache needs a **persistent volume**.
+
+---
+
+## 7. House rules — do not violate these
+
+1. **Never push or deploy without an explicit request.** Standing instruction: *"dont push for
+   every change… We will push to publish in one shot."* Batch the work.
 2. **Deploy is manual.** The Vercel GitHub webhook is broken — pushing does NOT deploy:
    ```bash
    git push origin main && npx vercel deploy --prod --yes
    ```
-   Then hard-refresh (`Cmd+Shift+R`) to beat the CDN cache.
+   Then hard-refresh (`Cmd+Shift+R`).
 3. **Every string needs EN *and* AR**, and RTL must work (`isAr` flips layout; directional icons
    get `className={isAr ? 'rotate-180' : ''}`). Arabic is the **default**.
 4. **No emoji as icons — ever.** Lucide only.
 5. **Mobile changes stay scoped** with `md:`/`lg:` prefixes. Don't disturb desktop.
 6. **Every published nav item needs an explicit `href`.** Never reintroduce a blind
-   `` `/features/${slug}` `` fallback — that is exactly what created the 24 broken links.
+   `` `/features/${slug}` `` fallback — that created 24 broken links once already.
 7. **Don't invent product content.** No speculative feature pages, no unverified integration or
    compliance claims. If a mapping isn't supported by existing content, hide it and report it.
-8. **Next.js 16** — APIs differ from older versions; check `node_modules/next/dist/docs/` if
-   something surprises you.
+8. **Never approximate an official logo.** Authority / bank / payment-scheme marks (ZATCA, mada,
+   ANB…) must come from the client. A wrong official mark on a compliance section reads as a
+   forged credential. Always *look* at a supplied asset before wiring it — one file named
+   `Google_Sheets.png` turned out to be a generic green→cyan gradient, not the Sheets logo.
+9. **Next.js 16** — APIs differ from older versions; check `node_modules/next/dist/docs/`.
 
 ---
 
-## 7. Validation — how to check your work
-
-```bash
-npm run build        # also runs the TypeScript check (no lint/test scripts exist — don't invent any)
-npm run check:links  # crawls the running app; fails on any internal 404. Must stay at 0.
-```
-
-`scripts/check-links.mjs` is a zero-dependency crawler (Node global `fetch`) added last session. It
-needs the dev server running at `localhost:3001`. **Current state: 0 broken internal links — keep
-it there.** It caught two 404s that manual review missed, so run it after any nav/link change.
-
----
-
-## 8. Environment gotchas (these will bite you)
+## 8. Environment gotchas (these WILL bite you)
 
 | Gotcha | What to do |
 |---|---|
-| **Bash cwd resets** to `…/works/Claude` between calls | Always `cd /Users/baburao/Desktop/works/Claude/stayhub-next && …`, else `npm error ENOENT … package.json` |
-| **Dev servers die / go stale between turns** | Symptom: assets 404 while `/` still returns 200. Fix: `pkill -f "next dev"; lsof -ti:3001 \| xargs kill -9`, then restart. **Always restart after editing `next.config.ts`** or redirects won't load. |
-| **Browser-pane screenshots are unreliable here** | Blank or mid-animation captures are common (fadeUp + `whileInView`). Verify via `javascript_tool` DOM reads instead — check `img.complete && naturalWidth>0`, computed styles, rendered `href`s. Screenshot only once the element has settled. |
-| Synthetic hover/click on the desktop mega-menu is flaky | The panel closes or won't switch category under scripted events. The **mobile drawer** renders items inline and is the more reliable DOM to assert against. |
-| `noUnusedLocals` is **off** (only `strict: true`) | Dead code won't fail the build — clean up by hand. |
-| Multi-lockfile Turbopack warning; `next/image` logo aspect-ratio warning | Pre-existing, harmless. The logo warning is what shows as the dev overlay's "1 Issue" badge. |
-| `package-lock.json` shows a spurious diff | npm reordering the optional `@next/swc-win32-x64-msvc` entry. Harmless — leave it. |
+| **`next/image` caches optimized output IN MEMORY, keyed by URL** | Changing an image file *without* changing its path serves **stale bytes**. This produced three wrong measurements in one session. Fix: restart the dev server (`pkill -f "next dev"`), and `rm -rf .next/cache/images`. Same applies to Vercel after deploy → always hard-refresh. |
+| **macOS is case-insensitive; Vercel/Linux is not** | A logo supplied as `Absher.png` while git tracked `absher.png` would have shipped a **404 for every Absher image** — invisible locally. Fix with `git rm --cached` + `git add` at the correct case, then grep every reference. Verified live by confirming the lowercase path now 404s. |
+| **Browser pane is largely broken here** | Scrolling is dead (`window.scrollTo` no-ops), screenshots come back blank/mid-animation, and `whileInView` never fires so sections sit at `opacity: 0`. **Don't trust "opacity 0" as a bug** — verify by comparing against an already-live section as a control. |
+| **To actually *see* a component**, build a small harness | Write an HTML file into `public/`, load `localhost:3001/_name.html`, screenshot, then **delete it**. Files outside the project won't load in the pane. |
+| **Measuring a logo's rendered size** | `getBoundingClientRect()` on an `<img>` returns the **element box**, not the painted mark under `object-contain`. Compute `fit(natural → box)` manually. And judge by **% of tile filled**, not px. |
+| **Scanning deployed JS chunks proves nothing** | Client-rendered menu data lives in chunks the page HTML doesn't list. A scan returned 0 hits for `Attitude.png` — but also 0 for QOTOON/MoT/gathern, which are provably live. Always run a known-good control before believing a negative. |
+| **Bash cwd resets** to `…/works/Claude` between calls | Always `cd /Users/baburao/Desktop/works/Claude/stayhub-next && …` |
+| **`npm run build` can take 7+ minutes** when cold | Run it backgrounded and poll, or it'll blow a 300s timeout. A stale `.next/lock` blocks the next run — `rm -rf .next/lock`. |
+| `noUnusedLocals` is **off** | Dead code won't fail the build — clean up by hand. |
+| Multi-lockfile Turbopack warning | Pre-existing, harmless. |
 
 ---
 
-## 9. Key file map (the short version)
+## 9. Key file map
 
 ```
 components/layout/Navbar.tsx        ← mega menu + mobile drawer + FEATURE_NAV (nav source of truth)
-  · FEATURE_NAV / resolveFeatureHref() — explicit destinations; `hidden: true` removes an item
-  · visibleFeatureCats                — drops hidden items, then drops emptied categories
+  · FEATURE_CATEGORIES_EN/AR        — Features menu; Channel Manager items carry their OWN `logo`
+  · INTEGRATIONS (line ~213)        — Integrations mega menu; separate array, keep in sync
 components/sections/HomepageClient.tsx           ← ~1500 lines, all 14 homepage sections
-components/sections/AttiudeComingSoonClient.tsx  ← coming-soon + waitlist (Attiude only)
-components/sections/PricingPageClient.tsx        ← ⚠ still has its OWN duplicate demo modal
-components/templates/IntegrationPageTemplate.tsx ← standard integration page (the design reference)
-app/integrations/[slug]/page.tsx    ← special-cases `attiude`, else renders the template
-next.config.ts                      ← 8 permanent redirects
-scripts/check-links.mjs             ← internal-link crawler (`npm run check:links`)
-lib/LanguageContext.tsx             ← useLanguage() → { lang, setLang, t, isAr }
-lib/DemoModalContext.tsx            ← useDemoModal() → { isOpen, openModal, closeModal } (memoized — keep it)
+  · COMPLIANCE_LOGOS                — compliance-card marks, keyed by item id
+  · TiltCard                        — shared 3D cursor-tilt (dashboard + owner portal)
+components/sections/IntegrationsPageClient.tsx   ← INTEGRATIONS array = list page source of truth
+components/sections/AttiudeComingSoonClient.tsx  ← custom hero, NOT the shared template
+components/templates/IntegrationPageTemplate.tsx ← detail pages; hero + related cards
+components/ui/DemoModal.tsx         ← 4-step Calendly flow; line 431 = the Sheet hook point
+app/integrations/[slug]/page.tsx    ← special-cases `attiude`; builds relatedData
+next.config.ts                      ← 8 permanent redirects + images.dangerouslyAllowSVG
+data/integrations.js                ← ARRAY of objects (slug: prop); holds arabicH1 + logo
+data/integrations.ar.js             ← OBJECT keyed by slug — different shape, easy to trip on
 lib/i18n.ts                         ← typed EN/AR strings
-data/*.js + *.ar.js                 ← features (14) / integrations (25) / solutions (4), EN+AR pairs
-public/                             ← images served from root: public/foo.png → /foo.png
+public/logos/                       ← brand assets (mixed .svg/.png/.webp, mixed case)
 ```
 
 **Design tokens:** primary `#25A4E8`, purple `#7C69E8`, navy `#0F172A`, container `max-w-[1400px]`,
-easing `[0.22, 1, 0.36, 1]`. Attiude teal `#00897B`.
+easing `[0.22, 1, 0.36, 1]`.
 
 ---
 
 ## 10. Older backlog (unchanged)
 
-- 🔴 Demo form submits **nowhere** — needs Resend/SendGrid/HubSpot/webhook.
+- 🔴 Demo form submits **nowhere** — see §6.
 - 🔴 `PricingPageClient.tsx` has a **duplicate local modal** — should use global `useDemoModal()`.
 - 🟡 No `sitemap.xml` / `robots.txt` / OG images; no analytics; no cookie banner (Saudi PDPL).
-- 🟡 Mobile **Solutions** drawer still shows the old flat list (Features was fixed last session;
-  Solutions was not).
+- 🟡 Mobile **Solutions** drawer still shows the old flat list.
+- 🟡 **14 hidden nav items** still need stakeholder decisions (incl. **`tawuniya`** — confirm what
+  it is before it goes anywhere near the UI). Pricing band still says "14-Day Free Trial / No
+  credit card" despite the sales-led CTA.
 - 🟢 Unused logos in `public/logos/`: `vrbo.webp`, `elm.webp`, `nic.webp`, `sdaia.webp`.
-- 🟢 `/pricing` route still exists though the user said "we dont have pricing page" (mobile nav's
-  Pricing tab opens the demo modal instead).
+- 🟢 `public/Stayhub_db.png` and `public/owners-view.png` committed but used nowhere.
+- 🟢 `/pricing` route still exists though the user said "we dont have pricing page".
+
+---
+
+## 11. Validation
+
+```bash
+npm run build        # also runs the TypeScript check
+npm run check:links  # crawls the running app; fails on any internal 404. Must stay at 0.
+```
+
+There is **no lint or test script** — don't invent one (`CLAUDE.md` §11 wrongly lists `npm run lint`).
+`check:links` needs the dev server on `localhost:3001`. **Currently 0 broken internal links.**

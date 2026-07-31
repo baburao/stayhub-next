@@ -433,41 +433,52 @@ Also do a hard refresh (`Cmd + Shift + R`) on the live URL to bypass CDN cache.
 
 ---
 
-## 13. State of Play — as of Jul 3, 2026 (read this first)
+## 13. State of Play — as of Jul 31, 2026 (read this first)
 
-**Start here in a new session.** See also `HANDOFF.md` (fuller narrative) and `CODEX_KT.md` (Codex onboarding).
+**Start here in a new session**, together with `HANDOFF.md` (fuller narrative + environment
+gotchas). `CODEX_KT.md` is the Codex-facing version.
 
-### Git — ✅ CLEAN SLATE
-- Branch `main`, **working tree clean**, in sync with `origin/main`.
-- Everything from the Jul 3 session is **committed, pushed, and deployed to production**.
-- Live: https://stayhub-next.vercel.app
+### Git — ✅ CLEAN
+- Branch `main`, working tree clean, in sync with `origin/main`.
+- **`85ec4b1` is deployed to production.** Live: https://stayhub-next.vercel.app
 
 ```
-<HEAD>   Everything at a glance: light redesign + WebP dashboard image; docs   ← LIVE
-c23fdb2  Problem cards: 3D cursor-tilt, parallax depth, live micro-animations  ← LIVE
-2c770ed  Redesign problem section: polished bento with per-card illustrations  ← LIVE
-1921c9b  docs: add Codex KT onboarding doc + point AGENTS.md to it
+85ec4b1  Features > Channel Manager: add the missing Attiude logo          ← LIVE (HEAD)
+0250a27  Gathern Arabic name + wire Attitude/Almosafer/Darent/MoT logos    ← LIVE
+8d78b64  Header: enlarge logo + fix aspect-ratio hint                      ← LIVE
+e6edcc7  Detail pages: real logos in hero and related cards                ← LIVE
+460dc06  Integrations: widen logo tile                                     ← LIVE
+87e7473  Integrations: crop dead padding from 8 logos                      ← LIVE
+90199ed  Wire ANB everywhere + fix its brand colour                        ← LIVE
+cb6e9fb  Compliance logos, bigger automation icons, 3D owner-portal image  ← LIVE
 ```
 
-There is **no uncommitted or untracked work**. Nothing is pending review.
+Nothing uncommitted, nothing pending review.
 
-### Assets note
-- `public/Stayhub_calendar.webp` — 64 KB lossless WebP, rendered by `DashboardShowcase`.
-  The original `.png` was **deleted**; the WebP is the only copy. See §6f Part 3.
-- `public/Stayhub_db.png` — committed but **used nowhere yet**. The user added it without saying
-  where it goes; ask before wiring it in or deleting it.
+### Jul 31 session summary
+Every brand logo on the site is now a real logo, correctly sized. Highlights:
+- Compliance section uses real authority marks (ZATCA/Absher/Ejar/TTLock+Tuya/ANB) on an 80px plate
+- 8 logo files cropped — they were wide wordmarks in 500x500 canvases with as little as 14% ink
+- Integrations tile widened 112x96 -> 160x96 (width only, so square marks don't shrink)
+- Detail pages: hero + related cards now show logos (related cards previously showed letter squares)
+- 24 of 25 `data/integrations.js` entries carry a logo; **zero `logo: null` left in components**
+- Absher swapped + **filename case corrected** (would have 404'd on Linux — see HANDOFF §8)
+- Header logo 36 -> 44px; Gathern Arabic `غثرن` -> `جاذر إن` (34 occurrences, 7 files)
 
-### Open questions for the user
-- Where should `public/Stayhub_db.png` be used? (added, unused)
-- Optional: remove the unused `/pricing` route (user said "we dont have pricing page", but the
-  route + `PricingPageClient.tsx` still exist; the mobile nav Pricing tab opens the demo modal).
+### Waiting on the user
+- **53 Arabic corrections validated but NOT applied** — blocked on 4 terminology decisions +
+  a fresh `_SITE` workbook export. Full analysis in `HANDOFF.md` §5.
+- **`mada`** logo (compliance card names it beside ANB) and **Expedia** logo (only integration
+  without an asset).
+- **"Attitude" vs "Attiude"** — the supplied logo says ATTITUDE, the codebase says Attiude
+  everywhere including the live URL. Decision pending.
+- **Google Sheet lead capture** — approach agreed, blocked on the client's Apps Script URL.
+  See `HANDOFF.md` §6. Note this adds the **first server-side code** to the repo.
+- Project **moves off Vercel to the client's own server** after approval. Audited: nothing is
+  Vercel-coupled. Migration notes in `HANDOFF.md` §6.
 
-### Environment gotchas hit this session
-- **Preview MCP is broken here** — `preview_start` fails with `spawn …/Helpers/disclaimer ENOENT`,
-  so no browser screenshots. Verify instead with `npm run build` + `curl -o /dev/null -w "%{http_code}"`
-  against `localhost:3001`.
-- **Bash cwd resets** to the parent `…/works/Claude` between calls. Always prefix with
-  `cd /Users/baburao/Desktop/works/Claude/stayhub-next &&` or npm errors `ENOENT … package.json`.
-- Background dev servers get **killed between turns** — expect to restart `PORT=3001 npm run dev`.
-- Harmless noise: multi-lockfile Turbopack workspace-root warning (a stray `~/package-lock.json`),
-  and `next/image` width/height warnings on the logo + some `/logos/*`.
+### Doc accuracy notes
+- §11 below lists `npm run lint` — **that script does not exist.** Only `dev`, `build`, `start`,
+  `check:links`.
+- §4 "Demo Modal" describes a 3-step Email-first flow; it has been a **4-step** flow
+  (units -> name+phone -> Calendly -> success) since Jun 4 — see §6b.

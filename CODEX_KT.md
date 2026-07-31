@@ -167,7 +167,7 @@ Fonts: Latin → Manrope, Arabic → Tajawal (activated via `html[lang="ar"] *` 
 
 ## 8. Known issues / open work (pick from here)
 
-**Tree state (Jul 3, 2026):** clean — everything committed, pushed, and live. Nothing pending.
+**Tree state (Jul 31, 2026):** clean — everything committed, pushed, and live at `85ec4b1`. See `HANDOFF.md` for the full picture and the open decisions.
 `public/Stayhub_db.png` is committed but used nowhere; ask the user before wiring it in.
 
 **High**
@@ -201,7 +201,7 @@ npx vercel deploy --prod --yes      # manual production deploy
 ```
 
 - Don't deploy after every change — batch and deploy once.
-- Working tree should be clean before you start. Current baseline that is live: commit `a3480fd`.
+- Working tree should be clean before you start. Current baseline that is live: commit `85ec4b1`.
 
 ---
 
