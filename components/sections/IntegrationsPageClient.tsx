@@ -28,14 +28,14 @@ const INTEGRATIONS = [
   { slug: 'agoda',                   en: 'AGODA',                 ar: 'أجودا',             logo: '/logos/Agoda.svg',                    cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#E31837' },
   { slug: 'google-vacation-rentals', en: 'Google VR',             ar: 'Google VR',         logo: '/logos/GoogleVR.svg',  cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#4285F4' },
   { slug: 'qotoon',                  en: 'Qotoon',                ar: 'قطون',              logo: '/logos/QOTOON.png',                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#7C4DFF' },
-  { slug: 'attiude',                 en: 'Attiude',               ar: 'Attiude',           logo: null,                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#00897B' },
-  { slug: 'almosafer',               en: 'Almosafer',             ar: 'المسافر',           logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#0D47A1' },
-  { slug: 'darent',                  en: 'Darent',                ar: 'دارنت',             logo: null,                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#546E7A' },
-  { slug: 'gathern',                 en: 'Gathern',               ar: 'غثرن',              logo: '/logos/gathern.webp',                  cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#00A651' },
+  { slug: 'attiude',                 en: 'Attiude',               ar: 'Attiude',           logo: '/logos/Attitude.png',                                   cat: 'OTA',           badge_en: 'OTA',          badge_ar: 'OTA',          soon: false, color: '#00897B' },
+  { slug: 'almosafer',               en: 'Almosafer',             ar: 'المسافر',           logo: '/logos/almosafer.svg',                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#0D47A1' },
+  { slug: 'darent',                  en: 'Darent',                ar: 'دارنت',             logo: '/logos/Darent.svg',                                   cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#546E7A' },
+  { slug: 'gathern',                 en: 'Gathern',               ar: 'جاذر إن',              logo: '/logos/gathern.webp',                  cat: 'OTA',           badge_en: 'Soon',         badge_ar: 'قريباً',       soon: true,  color: '#00A651' },
   /* Government */
   { slug: 'absher',                  en: 'Absher',                ar: 'أبشر',              logo: '/logos/Absher.png',                    cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#00695C' },
   { slug: 'shmoos',                  en: 'Shmoos',                ar: 'شموس',              logo: '/logos/shomoos.webp',                  cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1565C0' },
-  { slug: 'mot',                     en: 'Ministry of Tourism',   ar: 'وزارة السياحة',    logo: null,                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#6A1B9A' },
+  { slug: 'mot',                     en: 'Ministry of Tourism',   ar: 'وزارة السياحة',    logo: '/logos/MinistryofTourism.svg',                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#6A1B9A' },
   { slug: 'ejar-gov',                en: 'Ejar',                  ar: 'إيجار',             logo: '/logos/EJAR.svg',                                   cat: 'Government',    badge_en: 'Gov',          badge_ar: 'حكومي',        soon: false, color: '#1C7C54' },
   /* Dynamic Pricing */
   { slug: 'pricelabs',               en: 'PriceLabs',             ar: 'PriceLabs',         logo: '/logos/pricelabs.webp',                cat: 'Pricing',       badge_en: 'Pricing',      badge_ar: 'تسعير',        soon: false, color: '#E65100' },
@@ -50,7 +50,7 @@ const INTEGRATIONS = [
   { slug: 'anb',                     en: 'ANB',                   ar: 'البنك العربي',     logo: '/logos/ANB.svg',                       cat: 'Bank',          badge_en: 'Bank',         badge_ar: 'بنك',          soon: false, color: '#0073CF' },
   /* Communication */
   { slug: 'whatsapp',                en: 'WhatsApp',              ar: 'واتساب',            logo: '/icons/whatsapp.svg',                  cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#25D366' },
-  { slug: 'vfirst-sms',              en: 'VFirst SMS',            ar: 'VFirst SMS',        logo: null,                                   cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#5C6BC0' },
+  { slug: 'vfirst-sms',              en: 'VFirst SMS',            ar: 'VFirst SMS',        logo: '/logos/chat.svg',                                   cat: 'Communication', badge_en: 'Messaging',    badge_ar: 'مراسلة',       soon: false, color: '#5C6BC0' },
 ];
 
 /* ── Category tabs ──────────────────────────────────────── */

@@ -179,7 +179,7 @@ export default function AttiudeComingSoonClient() {
   const others = [
     { slug: 'airbnb',      name: 'Airbnb',       color: '#FF5A5F', desc: isAr ? 'أكبر منصة لتأجير العطلات في العالم' : "The world's largest vacation rental platform" },
     { slug: 'booking-com', name: 'Booking.com',  color: '#1D4ED8', desc: isAr ? 'أكبر وكالة سفر إلكترونية في العالم' : "The world's largest online travel agency" },
-    { slug: 'gathern',     name: isAr ? 'غثرن' : 'Gathern', color: '#0F766E', desc: isAr ? 'منصة الإيجار المحلية الرائدة في السعودية للإيجارات قصيرة الأجل' : "Saudi Arabia's leading local short-term rental platform" },
+    { slug: 'gathern',     name: isAr ? 'جاذر إن' : 'Gathern', color: '#0F766E', desc: isAr ? 'منصة الإيجار المحلية الرائدة في السعودية للإيجارات قصيرة الأجل' : "Saudi Arabia's leading local short-term rental platform" },
   ];
 
   const faq = [
@@ -247,12 +247,12 @@ export default function AttiudeComingSoonClient() {
           <div className="text-center">
             <motion.div {...fadeUp(0.05)}>
               <div className="flex flex-col items-center gap-5 mb-7">
-                <div
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-lg"
-                  style={{ backgroundColor: COLOR }}
-                >
-                  A
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logos/Attitude.png"
+                  alt="Attitude"
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-3xl object-contain shadow-lg"
+                />
                 <Badge variant="custom" color={COLOR}>{isAr ? 'قريباً' : 'Coming soon'}</Badge>
               </div>
             </motion.div>

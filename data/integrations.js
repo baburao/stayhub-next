@@ -318,7 +318,7 @@ const integrationsList = [
   },
   {
     slug: 'gathern',
-    name: 'Gathern (غثرن)',
+    name: 'Gathern (جاذر إن)',
     tagline: "Saudi Arabia's leading local short-term rental platform",
     arTagline: 'منصة الإيجار المحلية الرائدة في السعودية للإيجارات قصيرة الأجل',
     seoTitle: 'Gathern Integration for Property Managers in Saudi Arabia | StayHub',
@@ -326,11 +326,11 @@ const integrationsList = [
       "Connect your properties to Gathern, Saudi Arabia's top local vacation rental platform. StayHub syncs your Gathern calendar, manages reservations, and automates Arabic guest communication.",
     badge: 'Local Platform',
     h1: 'Gathern Integration for Saudi Properties',
-    arabicH1: 'تكامل مع غثرن للعقارات السعودية',
+    arabicH1: 'تكامل مع جاذر إن للعقارات السعودية',
     subtitle:
       "Reach Saudi travelers on their preferred local platform while managing everything from StayHub.",
     logo: '/logos/gathern.webp',
-    logoAlt: 'Gathern (غثرن)',
+    logoAlt: 'Gathern (جاذر إن)',
     color: '#00A651',
     stats: [
       { value: '#1', label: 'Vacation rental platform in KSA' },
@@ -399,7 +399,7 @@ const integrationsList = [
     faq: [
       {
         q: 'What is Gathern?',
-        a: "Gathern (غثرن) is Saudi Arabia's largest local vacation rental platform, connecting Saudi property owners with domestic and regional travelers. It's the local equivalent of Airbnb for the Saudi market.",
+        a: "Gathern (جاذر إن) is Saudi Arabia's largest local vacation rental platform, connecting Saudi property owners with domestic and regional travelers. It's the local equivalent of Airbnb for the Saudi market.",
       },
       {
         q: 'Does StayHub support Arabic for Gathern guests?',
@@ -593,6 +593,8 @@ const integrationsList = [
     h1: 'Attiude Integration',
     arabicH1: 'تكامل مع Attiude',
     subtitle: 'Connect Attiude and keep your listings, calendar, and reservations synced through StayHub.',
+    logo: '/logos/Attitude.png',
+    logoAlt: 'Attiude',
     color: '#00897B',
     stats: [
       { value: 'Connected', label: 'Listings & calendar' },
@@ -635,6 +637,8 @@ const integrationsList = [
     h1: 'Almosafer Integration',
     arabicH1: 'تكامل مع المسافر',
     subtitle: 'Reach Almosafer travelers and manage listings, calendar, and reservations from StayHub — coming soon.',
+    logo: '/logos/almosafer.svg',
+    logoAlt: 'Almosafer',
     color: '#0D47A1',
     stats: [
       { value: 'Top', label: 'Saudi travel brand' },
@@ -677,6 +681,8 @@ const integrationsList = [
     h1: 'Darent Integration',
     arabicH1: 'تكامل مع دارنت',
     subtitle: 'List on Darent and manage bookings, pricing, and guest messaging from StayHub — coming soon.',
+    logo: '/logos/Darent.svg',
+    logoAlt: 'Darent',
     color: '#546E7A',
     stats: [
       { value: 'Local', label: 'Saudi marketplace' },
@@ -807,6 +813,8 @@ const integrationsList = [
     h1: 'Ministry of Tourism Integration',
     arabicH1: 'تكامل مع وزارة السياحة',
     subtitle: 'Keep your properties aligned with Ministry of Tourism licensing and compliance requirements.',
+    logo: '/logos/MinistryofTourism.svg',
+    logoAlt: 'Ministry of Tourism',
     color: '#6A1B9A',
     stats: [
       { value: 'Licensed', label: 'Tourism compliance' },
