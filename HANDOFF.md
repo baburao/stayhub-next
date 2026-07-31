@@ -22,12 +22,11 @@ Management System. Next.js 16.2.6 App Router + TS + Tailwind v4 + Framer Motion 
 
 ## 2. Where things stand RIGHT NOW
 
-### Google Sheet lead capture is BUILT — see §6
+### ✅ Clean — everything committed, pushed, and LIVE (including lead capture)
 
-`85ec4b1` is what's deployed to production. Since then: a docs-refresh commit, plus the
-**lead-capture implementation** (route handler, `lib/saveLead.ts`, Apps Script, setup guide).
-That work is **inert until `LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` are set**, so production
-behaviour is unchanged either way.
+`fb5f9a3` is deployed to production, and **Google Sheet lead capture is fully switched on** —
+`LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` are set in Vercel production, verified end-to-end
+against the real Sheet from the live URL. See §6.
 
 Confirm for yourself:
 ```bash
@@ -156,15 +155,17 @@ sanity-check: `وجاذر إن` ×2, `لجاذر إن`, `بجاذر إن`.
 
 ---
 
-## 6. Google Sheet lead capture — ✅ BUILT, awaiting configuration
+## 6. Google Sheet lead capture — ✅ LIVE in production
 
-Everything agreed in the previous session is now implemented and committed. It is **inert until
-two env vars are set** — no Sheet, no behaviour change, no risk in shipping it.
+Built, deployed, and **switched on**. Real demo submissions on https://stayhub-next.vercel.app
+write to the user's Google Sheet right now. Verified end-to-end from the live URL (not just
+locally): a write appends a row, and a second POST with the same `leadId` updates that row's
+status instead of duplicating it.
 
-**Decision change (Jul 31):** the user is creating the Sheet **himself** rather than waiting on the
-client. If the client later wants it in their own Google account, they repeat the setup guide and we
-swap two env vars — no code change. That portability is the whole reason the sink is isolated in
-`lib/saveLead.ts`.
+**Decision change (Jul 31):** the user created the Sheet **himself** rather than waiting on the
+client. If the client later wants it in their own Google account, they repeat the setup guide and
+swap two Vercel env vars — no code change. That portability is the whole reason the sink is
+isolated in `lib/saveLead.ts`.
 
 ### What exists
 
@@ -191,12 +192,16 @@ swap two env vars — no code change. That portability is the whole reason the s
   `getSheet()` reapplies the `@` number format on every call.
 - Honeypot is a `company` field positioned off-screen, **not** `display:none` — bots skip that.
 
-### To switch it on
+### How it was switched on (Jul 31)
 
-Follow `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`. Roughly: create the Sheet → paste `Code.gs` →
-set the `SHARED_SECRET` script property → deploy as a Web App with access **"Anyone"** →
-put the URL + secret in `.env.local` → add the same two vars to production and redeploy
-(env vars are baked at deploy time, so an existing deployment won't pick them up).
+Followed `docs/GOOGLE_SHEET_LEAD_CAPTURE.md` in full: user created the Sheet, pasted `Code.gs`,
+set `SHARED_SECRET`, deployed as a Web App with access **"Anyone"**. Then
+`LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` were added to Vercel **production** via
+`vercel env add` (values piped from the local `.env.local`, never pasted into chat) and a
+`vercel deploy --prod --yes` was run — **env vars are baked in at deploy time**, so the prior
+deployment didn't have them until this redeploy. If `Code.gs` is ever edited, redeploy the Apps
+Script itself too (**Manage deployments → edit → New version** — a *new* deployment would get a
+different URL and break the env var).
 
 ### ⚠ Still open
 
@@ -214,6 +219,34 @@ build commands. Route Handlers work identically under `next start`. At migration
 and note the 8 redirects live in `next.config.ts` (i.e. in the Node server, not nginx). Also budget
 time for self-hosted `next/image`: `sharp` is present (0.34.5) but glibc Linux may need
 memory-allocator tuning, and the optimizer cache needs a **persistent volume**.
+
+---
+
+## 6b. Favicon fix (Jul 31, later same session)
+
+`app/favicon.ico` was still the **create-next-app placeholder** — nobody had ever replaced it.
+The user supplied a brand-mark SVG (`StayHUB_icon.svg`, five coloured parallelograms forming a
+roof shape). Rebuilt all three icon conventions from it:
+
+| File | What |
+|---|---|
+| `app/icon.svg` | The mark centred on a square canvas — source art was 38×37.8, not square, so it would've stretched if used as-is |
+| `app/favicon.ico` | Real multi-size `.ico` (16/32/48px), packed from rasterised PNGs — replaces the placeholder |
+| `app/apple-icon.png` | 180×180 with an **opaque white background** — iOS composites transparent PNGs onto black on the home screen |
+
+No SVG→raster CLI tool was available (no `rsvg-convert`/`imagemagick`/`inkscape`); used
+`qlmanage -t` (macOS Quick Look thumbnailer) to rasterize, `sips` to resize, and a small Node
+script to hand-pack the `.ico` container (Windows icon format — header + per-size directory
+entries + raw PNG bytes; every browser and OS accepts PNG-compressed `.ico` entries since Vista).
+
+**Gotcha hit twice:** `qlmanage` renders at the SVG's own intrinsic size, not the viewport size —
+asking for a 512px thumbnail of a `width="40"` SVG still returns a 40px image pasted onto a blank
+512px canvas. Fix: bump the SVG's own `width`/`height` attributes before rasterizing, don't rely
+on the thumbnailer's `-s` flag to scale it up.
+
+Verified live, not just in the build: pulled `favicon.ico` from the deployed URL and diffed its
+md5 against the local file — byte-identical. All three `<link rel="...icon">` tags confirmed
+present in the production `<head>`.
 
 ---
 

@@ -175,19 +175,19 @@ Fonts: Latin → Manrope, Arabic → Tajawal (activated via `html[lang="ar"] *` 
 
 ## 8. Known issues / open work (pick from here)
 
-**Tree state (Jul 31, 2026):** clean — everything committed, pushed, and live at `85ec4b1`. See `HANDOFF.md` for the full picture and the open decisions.
+**Tree state (Jul 31, 2026):** clean — everything committed, pushed, and live at `fb5f9a3`. See `HANDOFF.md` for the full picture and the open decisions.
 `public/Stayhub_db.png` is committed but used nowhere; ask the user before wiring it in.
 
 **High**
-- **Lead capture is built but not switched on.** Code is complete and shipped; it stays inert until
-  `LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` are set. Follow
-  `docs/GOOGLE_SHEET_LEAD_CAPTURE.md` to create the Sheet and deploy the Apps Script.
 - `PricingPageClient.tsx` has a duplicate local modal — refactor to use global `useDemoModal()`.
-  **Note:** that duplicate modal does *not* save leads. Anyone booking from `/pricing` is lost
-  until it's folded into the global one.
+  **Note:** that duplicate modal does *not* save leads (see §0 — lead capture is live everywhere
+  else). Anyone booking from `/pricing` is lost until it's folded into the global one.
 
 **Medium**
-- SEO: no `sitemap.xml`, `robots.txt`, or per-page OG images.
+- **SEO:** no `sitemap.xml`, `robots.txt`, or per-page OG images. Bigger issue underneath: every
+  canonical URL / `metadataBase` in this repo points at `www.stayhub.sa`, which is **already live**
+  running a different (Webflow) site. Get a decision on the domain before doing sitemap/canonical
+  work — it may need to point at the Vercel URL in the meantime.
 - No analytics (GA/Plausible/Mixpanel).
 - Mobile Solutions drawer still shows the old flat list, not the 3-column structure.
 - No cookie-consent banner (needed for Saudi PDPL).
@@ -213,7 +213,9 @@ npx vercel deploy --prod --yes      # manual production deploy
 ```
 
 - Don't deploy after every change — batch and deploy once.
-- Working tree should be clean before you start. Current baseline that is live: commit `85ec4b1`.
+- Working tree should be clean before you start. Current baseline that is live: commit `fb5f9a3`.
+- Adding/changing a production env var (`vercel env add ... production`) doesn't take effect until
+  the **next** `vercel deploy --prod` — the running deployment doesn't pick it up retroactively.
 
 ---
 

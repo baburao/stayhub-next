@@ -316,14 +316,18 @@ Matched a supplied reference; swapped the hand-built mock for a real screenshot.
 
 ### 🔴 High Priority
 - [x] **Wire demo form to a sink** — writes to a Google Sheet via `app/api/lead` → `lib/saveLead.ts`.
-      Built Jul 31, 2026. **Needs `LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` to activate** —
-      see `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`.
-- [ ] **Fix pricing modal duplication** — `PricingPageClient.tsx` has local modal copy; refactor to use global `useDemoModal()`
-- [x] **Deployed to Vercel** — via `npx vercel deploy --prod` (Jun 2, 2026)
+      **Live in production since Jul 31, 2026** — env vars set in Vercel, verified end-to-end from
+      the live URL. Setup reference: `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`.
+- [ ] **Fix pricing modal duplication** — `PricingPageClient.tsx` has local modal copy; refactor to use global `useDemoModal()`.
+      Now has a real cost: that duplicate modal doesn't save leads, so `/pricing` bookings are lost.
+- [x] **Deployed to Vercel** — via `npx vercel deploy --prod` (Jun 2, 2026; latest Jul 31, 2026)
+- [x] **Favicon** — was still the create-next-app default; replaced with the real brand mark (Jul 31, 2026)
 
 ### 🟡 Medium Priority
 - [ ] **Missing pages** — `/blog`, `/help`, `/docs`, `/case-studies`, `/updates`, `/login`, `/signup`, `/demo`, `/contact` all 404
-- [ ] **SEO** — Add `sitemap.xml`, `robots.txt`, Open Graph images per page
+- [ ] **SEO** — no `sitemap.xml`, `robots.txt`, or OG images. Bigger: **`www.stayhub.sa`** (every
+      canonical URL in the codebase) is already live with a different Webflow site — needs a
+      decision before sitemap/canonical work is worth doing. See `HANDOFF.md` §13.
 - [ ] **Analytics** — No tracking yet (Google Analytics / Mixpanel / Plausible)
 - [ ] **Integration detail pages** — Only 6 OTAs have full content in `data/integrations.js`; remaining 18 need content
 - [ ] **FloatingCTA** — Review and polish the sticky CTA component
@@ -442,22 +446,30 @@ gotchas). `CODEX_KT.md` is the Codex-facing version.
 
 ### Git — ✅ CLEAN
 - Branch `main`, working tree clean, in sync with `origin/main`.
-- **`85ec4b1` is deployed to production.** Live: https://stayhub-next.vercel.app
+- **`fb5f9a3` is deployed to production.** Live: https://stayhub-next.vercel.app
 
 ```
-85ec4b1  Features > Channel Manager: add the missing Attiude logo          ← LIVE (HEAD)
-0250a27  Gathern Arabic name + wire Attitude/Almosafer/Darent/MoT logos    ← LIVE
-8d78b64  Header: enlarge logo + fix aspect-ratio hint                      ← LIVE
-e6edcc7  Detail pages: real logos in hero and related cards                ← LIVE
-460dc06  Integrations: widen logo tile                                     ← LIVE
-87e7473  Integrations: crop dead padding from 8 logos                      ← LIVE
-90199ed  Wire ANB everywhere + fix its brand colour                        ← LIVE
-cb6e9fb  Compliance logos, bigger automation icons, 3D owner-portal image  ← LIVE
+fb5f9a3  Replace default favicon with the StayHub brand mark              ← LIVE (HEAD)
+1a7f755  Add Google Sheet lead capture behind env vars                    ← LIVE
+b0d2e4f  docs: refresh handoff for the Jul 31 session                    ← LIVE
+85ec4b1  Features > Channel Manager: add the missing Attiude logo         ← LIVE
+0250a27  Gathern Arabic name + wire Attitude/Almosafer/Darent/MoT logos   ← LIVE
 ```
 
 Nothing uncommitted, nothing pending review.
 
-### Jul 31 session summary
+### Jul 31 session summary — part 2 (lead capture goes live + favicon)
+- **Google Sheet lead capture is fully LIVE**, not just built. `LEADS_WEBHOOK_URL` +
+  `LEADS_WEBHOOK_SECRET` are set in Vercel production; verified end-to-end from the live URL —
+  a write appends a row, a repeat POST with the same `leadId` updates it (no duplicate). This is
+  the **first server-side code** in the repo — `CODEX_KT.md` rule #1 updated accordingly.
+- **Favicon fixed.** `app/favicon.ico` was still the create-next-app placeholder, never replaced.
+  Rebuilt from a client-supplied SVG mark: `app/icon.svg` (squared up — source art wasn't
+  square), a real multi-size `app/favicon.ico`, and a 180px `app/apple-icon.png` with an opaque
+  background (iOS needs one). Verified byte-identical against the live deployment.
+- Full detail: `HANDOFF.md` §6 (lead capture) and §6b (favicon).
+
+### Jul 31 session summary — part 1 (logo campaign)
 Every brand logo on the site is now a real logo, correctly sized. Highlights:
 - Compliance section uses real authority marks (ZATCA/Absher/Ejar/TTLock+Tuya/ANB) on an 80px plate
 - 8 logo files cropped — they were wide wordmarks in 500x500 canvases with as little as 14% ink
@@ -474,9 +486,12 @@ Every brand logo on the site is now a real logo, correctly sized. Highlights:
   without an asset).
 - **"Attitude" vs "Attiude"** — the supplied logo says ATTITUDE, the codebase says Attiude
   everywhere including the live URL. Decision pending.
-- **Google Sheet lead capture** — ✅ **built** (Jul 31). Inert until two env vars are set; the user
-  is creating the Sheet himself. Setup: `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`. This added the
-  **first server-side code** to the repo — `CODEX_KT.md` rule #1 updated accordingly.
+- **`PricingPageClient.tsx`'s duplicate modal does not save leads** — anyone booking demo from
+  `/pricing` is lost to lead capture. Folding it into the global modal now has a real cost attached.
+- **No SEO sitemap/robots/OG-image**, and — bigger — **`www.stayhub.sa`, the domain every
+  canonical URL in this codebase points to, is already live with a different (Webflow) site.**
+  Needs a decision before any further SEO work: point `metadataBase` at the Vercel URL for now,
+  or confirm the domain is being handed over.
 - Project **moves off Vercel to the client's own server** after approval. Audited: nothing is
   Vercel-coupled. Migration notes in `HANDOFF.md` §6.
 
