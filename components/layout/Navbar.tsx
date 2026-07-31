@@ -31,7 +31,7 @@ const FEATURE_CATEGORIES_EN = [
       { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   logo: '/logos/Agoda.svg',       label: 'AGODA',        desc: 'Asia-Pacific OTA leader',          icon: Globe,      isNew: false },
       { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', logo: '/logos/GoogleVR.svg',    label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
       { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  logo: '/logos/QOTOON.png',      label: 'Qotoon',       desc: 'Saudi rental platform',            icon: Globe,      isNew: true  },
-      { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 label: 'Attiude',      desc: 'Coming soon',                      icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 logo: '/logos/Attitude.png',    label: 'Attiude',      desc: 'Coming soon',                      icon: Globe,      isNew: true  },
     ],
   },
   {
@@ -127,7 +127,7 @@ const FEATURE_CATEGORIES_AR = [
       { slug: 'channel-manager/agoda',   href: '/integrations/agoda',                   logo: '/logos/Agoda.svg',       label: 'AGODA',        desc: 'رائدة منطقة آسيا والمحيط الهادئ', icon: Globe,      isNew: false },
       { slug: 'channel-manager/google',  href: '/integrations/google-vacation-rentals', logo: '/logos/GoogleVR.svg',    label: 'Google VR',    desc: 'Google Vacation Rentals',          icon: Globe,      isNew: false },
       { slug: 'channel-manager/qotoon',  href: '/integrations/qotoon',                  logo: '/logos/QOTOON.png',      label: 'قطون',         desc: 'منصة إيجار سعودية',               icon: Globe,      isNew: true  },
-      { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 label: 'Attiude',      desc: 'قريباً',                           icon: Globe,      isNew: true  },
+      { slug: 'channel-manager/attiude', href: '/integrations/attiude',                 logo: '/logos/Attitude.png',    label: 'Attiude',      desc: 'قريباً',                           icon: Globe,      isNew: true  },
     ],
   },
   {
