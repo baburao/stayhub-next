@@ -3,12 +3,48 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { X, CheckCircle2, Home, Building2, Building, Landmark, Calendar, User, Flag, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useDemoModal } from '@/lib/DemoModalContext';
 
 // ── Replace with your real Calendly link ──────────────────────────────────────
 const CALENDLY_URL = 'https://calendly.com/stayhub-info/30min';
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Lead capture ──────────────────────────────────────────────────────────────
+// Details are saved when the visitor submits name + phone, BEFORE Calendly
+// loads — someone who gives us a phone number and then abandons the booking is
+// still a lead worth calling. The same leadId is posted again if they do book,
+// which flips the row's status instead of adding a second one.
+// Sink + setup: docs/GOOGLE_SHEET_LEAD_CAPTURE.md
+
+/** Stable per-session id, used by the sink as an idempotency key. */
+function newLeadId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `lead-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/**
+ * Fire-and-forget. Deliberately not awaited: the visitor moves straight on to
+ * picking a slot, and a slow or failed write must never block or break that.
+ * `keepalive` lets the request finish even if the page is being torn down.
+ */
+function postLead(payload: Record<string, string>) {
+  try {
+    fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(() => {
+      /* the booking flow doesn't depend on this — stay silent */
+    });
+  } catch {
+    /* ignore */
+  }
+}
 // ─────────────────────────────────────────────────────────────────────────────
 
 const UNIT_OPTIONS = [
@@ -140,6 +176,10 @@ export default function DemoModal() {
   const [step, setStep] = useState(1);
   const [units, setUnits] = useState('');
   const [form, setForm] = useState({ name: '', phone: '' });
+  /** Honeypot — hidden from humans, irresistible to bots. Must stay empty. */
+  const [company, setCompany] = useState('');
+  /** Held in a ref so the Calendly status flip reuses the same id. */
+  const leadIdRef = useRef('');
 
   // progress bar covers steps 1–3 (success has no bar)
   const progressMap: Record<number, number> = { 1: 0, 2: 50, 3: 100 };
@@ -149,7 +189,36 @@ export default function DemoModal() {
     setStep(1);
     setUnits('');
     setForm({ name: '', phone: '' });
+    setCompany('');
+    leadIdRef.current = '';
   };
+
+  /** Save the lead, then let the visitor straight through to Calendly. */
+  const submitDetails = () => {
+    const leadId = leadIdRef.current || newLeadId();
+    leadIdRef.current = leadId;
+
+    postLead({
+      leadId,
+      status: 'details_submitted',
+      name: form.name.trim(),
+      phone: form.phone,
+      units,
+      language: isAr ? 'ar' : 'en',
+      page: typeof window !== 'undefined' ? window.location.pathname : '',
+      company,
+    });
+
+    setStep(3);
+  };
+
+  /** Calendly confirmed a booking — flip the existing row, don't add one. */
+  const handleScheduled = useCallback(() => {
+    if (leadIdRef.current) {
+      postLead({ leadId: leadIdRef.current, status: 'slot_booked' });
+    }
+    setStep(4);
+  }, []);
 
   const selectUnit = (id: string) => {
     setUnits(id);
@@ -281,7 +350,7 @@ export default function DemoModal() {
                       <CalendlyEmbed
                         name={form.name}
                         phone={form.phone}
-                        onScheduled={() => setStep(4)}
+                        onScheduled={handleScheduled}
                       />
                     </div>
                   </motion.div>
@@ -412,6 +481,20 @@ export default function DemoModal() {
                               </div>
                             </div>
 
+                            {/* Honeypot — off-screen rather than display:none,
+                                which some bots know to skip. Never focusable,
+                                never announced to screen readers. */}
+                            <input
+                              type="text"
+                              name="company"
+                              value={company}
+                              onChange={e => setCompany(e.target.value)}
+                              tabIndex={-1}
+                              autoComplete="off"
+                              aria-hidden="true"
+                              className="absolute w-px h-px -left-[9999px] opacity-0 pointer-events-none"
+                            />
+
                             {/* Units summary chip */}
                             {units && (
                               <div className={`flex items-center gap-2 text-xs font-medium text-slate-500 ${isAr ? 'flex-row-reverse' : ''}`}>
@@ -428,7 +511,7 @@ export default function DemoModal() {
                             )}
 
                             <button
-                              onClick={() => setStep(3)}
+                              onClick={submitDetails}
                               disabled={!form.name.trim() || form.phone.length < 7}
                               className="w-full inline-flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[#25A4E8] to-[#7C69E8] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-sm transition-all hover:shadow-lg hover:shadow-blue-400/30 mt-2"
                             >

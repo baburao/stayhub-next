@@ -8,7 +8,10 @@
 
 ## 0. TL;DR — what you must not break
 
-1. **No backend.** Marketing site only. No auth, no DB, no API routes. Don't add server logic unless asked.
+1. **Almost no backend.** Marketing site only — no auth, no DB. The **one** piece of server code is
+   `app/api/lead/route.ts` → `lib/saveLead.ts`, which writes demo-request leads to a Google Sheet.
+   Don't add further server logic unless asked, and **never call the sink from the browser** — the
+   webhook secret must stay server-side. See `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`.
 2. **Arabic is the DEFAULT language and layout is RTL.** Every text change needs an EN *and* AR version.
 3. **No emoji as icons — ever.** Use `lucide-react` only. RTL-flip directional icons.
 4. **Mobile changes are scoped with `md:`/`lg:` prefixes.** Never alter desktop while fixing mobile.
@@ -54,6 +57,7 @@ npm run build    # production build — run before deploy to catch type errors
 app/                                 # routes (App Router)
   layout.tsx                         # Navbar + Footer + FloatingCTA + DemoModal + Providers; <main className="pt-16">
   page.tsx                           # homepage → renders HomepageClient
+  api/lead/route.ts                  # ⚠ the ONLY server code — POST, saves demo leads
   globals.css                        # Tailwind base + custom utils (dot-grid, gradient-text, container-site)
   features/page.tsx                  # features list
   features/[slug]/page.tsx           # dynamic feature detail (one segment only!)
@@ -92,6 +96,10 @@ lib/
   LanguageContext.tsx                # useLanguage() → { lang, setLang, t, isAr }
   DemoModalContext.tsx               # useDemoModal() → { isOpen, openModal, closeModal }
   i18n.ts                            # all typed EN/AR strings
+  saveLead.ts                        # server-only; the single place that knows where leads go
+
+docs/GOOGLE_SHEET_LEAD_CAPTURE.md    # lead-capture setup walkthrough
+scripts/apps-script/Code.gs          # the Apps Script deployed against the Google Sheet
 
 public/
   stayhub-logo.svg, stayhub-logo-white.svg
@@ -171,8 +179,12 @@ Fonts: Latin → Manrope, Arabic → Tajawal (activated via `html[lang="ar"] *` 
 `public/Stayhub_db.png` is committed but used nowhere; ask the user before wiring it in.
 
 **High**
-- Demo form submits nowhere — needs Resend/SendGrid/HubSpot/webhook wiring (`DemoModal.tsx`).
+- **Lead capture is built but not switched on.** Code is complete and shipped; it stays inert until
+  `LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` are set. Follow
+  `docs/GOOGLE_SHEET_LEAD_CAPTURE.md` to create the Sheet and deploy the Apps Script.
 - `PricingPageClient.tsx` has a duplicate local modal — refactor to use global `useDemoModal()`.
+  **Note:** that duplicate modal does *not* save leads. Anyone booking from `/pricing` is lost
+  until it's folded into the global one.
 
 **Medium**
 - SEO: no `sitemap.xml`, `robots.txt`, or per-page OG images.

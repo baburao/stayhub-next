@@ -315,7 +315,9 @@ Matched a supplied reference; swapped the hand-built mock for a real screenshot.
 ## 7. Current Tasks / What's Pending
 
 ### 🔴 High Priority
-- [ ] **Wire demo form to backend** — form submissions go nowhere; needs Resend/SendGrid/HubSpot/webhook
+- [x] **Wire demo form to a sink** — writes to a Google Sheet via `app/api/lead` → `lib/saveLead.ts`.
+      Built Jul 31, 2026. **Needs `LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` to activate** —
+      see `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`.
 - [ ] **Fix pricing modal duplication** — `PricingPageClient.tsx` has local modal copy; refactor to use global `useDemoModal()`
 - [x] **Deployed to Vercel** — via `npx vercel deploy --prod` (Jun 2, 2026)
 
@@ -472,8 +474,9 @@ Every brand logo on the site is now a real logo, correctly sized. Highlights:
   without an asset).
 - **"Attitude" vs "Attiude"** — the supplied logo says ATTITUDE, the codebase says Attiude
   everywhere including the live URL. Decision pending.
-- **Google Sheet lead capture** — approach agreed, blocked on the client's Apps Script URL.
-  See `HANDOFF.md` §6. Note this adds the **first server-side code** to the repo.
+- **Google Sheet lead capture** — ✅ **built** (Jul 31). Inert until two env vars are set; the user
+  is creating the Sheet himself. Setup: `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`. This added the
+  **first server-side code** to the repo — `CODEX_KT.md` rule #1 updated accordingly.
 - Project **moves off Vercel to the client's own server** after approval. Audited: nothing is
   Vercel-coupled. Migration notes in `HANDOFF.md` §6.
 

@@ -22,9 +22,12 @@ Management System. Next.js 16.2.6 App Router + TS + Tailwind v4 + Framer Motion 
 
 ## 2. Where things stand RIGHT NOW
 
-### ✅ Clean — everything committed, pushed, and LIVE
+### Google Sheet lead capture is BUILT — see §6
 
-`main` is clean, in sync with `origin/main`, and **`85ec4b1` is deployed to production**.
+`85ec4b1` is what's deployed to production. Since then: a docs-refresh commit, plus the
+**lead-capture implementation** (route handler, `lib/saveLead.ts`, Apps Script, setup guide).
+That work is **inert until `LEADS_WEBHOOK_URL` + `LEADS_WEBHOOK_SECRET` are set**, so production
+behaviour is unchanged either way.
 
 Confirm for yourself:
 ```bash
@@ -153,30 +156,56 @@ sanity-check: `وجاذر إن` ×2, `لجاذر إن`, `بجاذر إن`.
 
 ---
 
-## 6. Google Sheet lead capture — planned, not started
+## 6. Google Sheet lead capture — ✅ BUILT, awaiting configuration
 
-Client wants the demo modal's **"Choose a time slot"** CTA
-([`DemoModal.tsx:431`](components/ui/DemoModal.tsx), state: `units`, `form.name`, `form.phone`)
-to write to a Google Sheet.
+Everything agreed in the previous session is now implemented and committed. It is **inert until
+two env vars are set** — no Sheet, no behaviour change, no risk in shipping it.
 
-**Agreed approach:** Google **Apps Script Web App** (client owns the Sheet and deploys the script,
-sends back a URL + secret) + a Next.js Route Handler `app/api/lead/route.ts` + a single
-`lib/saveLead.ts` so the sink is swappable for a real DB later.
+**Decision change (Jul 31):** the user is creating the Sheet **himself** rather than waiting on the
+client. If the client later wants it in their own Google account, they repeat the setup guide and we
+swap two env vars — no code change. That portability is the whole reason the sink is isolated in
+`lib/saveLead.ts`.
 
-- ⚠ This would be the **first server-side code in the repo** — `CODEX_KT.md` rule #1 currently says
-  "No backend… don't add server logic unless asked." Update that rule when it lands.
-- Never call Google from the browser; a credential in client JS is public.
-- Don't block the UI on the write — fire-and-forget with `keepalive: true`, advance to Calendly
-  immediately.
-- Write at *this* button (not after Calendly) so people who give a phone number then vanish are
-  captured — that drop-off list is the real value. Add a `status` column and flip
-  `details_submitted` → `slot_booked` on the existing `calendly.event_scheduled` listener.
-- Needs: `leadId` for idempotency, honeypot + rate limit, phone stored **as text** (Sheets eats
-  leading `0` and mangles `+966…`).
-- **PDPL flag raised:** name + phone is personal data leaving KSA, and the site still has no
-  consent banner. Client should knowingly accept Google as processor.
+### What exists
 
-**Blocked on:** the client creating the Apps Script and sending the URL.
+| File | Role |
+|---|---|
+| `docs/GOOGLE_SHEET_LEAD_CAPTURE.md` | **Start here.** 9-step setup walkthrough + troubleshooting table |
+| `scripts/apps-script/Code.gs` | The Apps Script to paste into the Sheet's editor |
+| `lib/saveLead.ts` | Server-only sink. Reads env at call time, never throws, 10s timeout |
+| `app/api/lead/route.ts` | `POST /api/lead` — validation, honeypot, rate limit, phone normalisation |
+| `components/ui/DemoModal.tsx` | Fires the write; `leadIdRef` + `submitDetails` + `handleScheduled` |
+| `.env.example` | The two variable names (now un-ignored in `.gitignore`) |
+
+### Design decisions worth not re-litigating
+
+- **The browser never calls Google.** A credential in client JS is public. The route handler is the
+  only thing holding the secret.
+- **Fire-and-forget** (`keepalive: true`, not awaited). A slow Sheet must never stall the booking.
+- **Written at "Choose a time slot", before Calendly loads** — people who give a phone number and
+  then abandon are still leads. `status` distinguishes them: `details_submitted` → `slot_booked`,
+  flipped on the existing `calendly.event_scheduled` listener.
+- **`leadId` is the idempotency key.** Same id updates the row in place; the status flip must not
+  create a second row. Apps Script does the upsert under a `LockService` lock.
+- **Phone stored as text**, normalised to `+9665XXXXXXXX`. Sheets otherwise eats the leading `0`.
+  `getSheet()` reapplies the `@` number format on every call.
+- Honeypot is a `company` field positioned off-screen, **not** `display:none` — bots skip that.
+
+### To switch it on
+
+Follow `docs/GOOGLE_SHEET_LEAD_CAPTURE.md`. Roughly: create the Sheet → paste `Code.gs` →
+set the `SHARED_SECRET` script property → deploy as a Web App with access **"Anyone"** →
+put the URL + secret in `.env.local` → add the same two vars to production and redeploy
+(env vars are baked at deploy time, so an existing deployment won't pick them up).
+
+### ⚠ Still open
+
+- **`PricingPageClient.tsx`'s duplicate modal does NOT save leads.** Anyone who books from
+  `/pricing` is lost. Folding it into the global modal now has a real cost attached.
+- **PDPL:** name + phone is personal data landing on Google's servers outside KSA, and the site
+  still has no consent banner. The client should knowingly accept Google as processor.
+- The in-process rate limit is **per serverless instance** — a speed bump, not a real defence.
+  The shared secret is what actually protects the Sheet.
 
 **Project will move off Vercel to the client's own server after approval.** Audited — **nothing is
 Vercel-coupled**: no `@vercel/*`, no edge runtime, no `output: 'export'`; `vercel.json` is just
@@ -258,8 +287,9 @@ easing `[0.22, 1, 0.36, 1]`.
 
 ## 10. Older backlog (unchanged)
 
-- 🔴 Demo form submits **nowhere** — see §6.
+- 🔴 Demo form now saves to a Google Sheet, but **needs env vars to switch on** — see §6.
 - 🔴 `PricingPageClient.tsx` has a **duplicate local modal** — should use global `useDemoModal()`.
+  It bypasses lead capture entirely, so `/pricing` bookings are lost.
 - 🟡 No `sitemap.xml` / `robots.txt` / OG images; no analytics; no cookie banner (Saudi PDPL).
 - 🟡 Mobile **Solutions** drawer still shows the old flat list.
 - 🟡 **14 hidden nav items** still need stakeholder decisions (incl. **`tawuniya`** — confirm what
